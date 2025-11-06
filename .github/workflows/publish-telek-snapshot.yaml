@@ -29,7 +29,8 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build
-        run: ./gradlew publishMavenPublicationToWipRepository -Dtelek.version=${{ steps.ver.outputs.version }} --no-daemon
+        run: ./gradlew publishMavenPublicationToWipRepository --no-daemon
         env:
           ORG_GRADLE_PROJECT_REPOSILITE_USER: ${{ secrets.REPOSILITE_USER }}
           ORG_GRADLE_PROJECT_REPOSILITE_SECRET: ${{ secrets.REPOSILITE_SECRET }}
+          ORG_GRADLE_PROJECT_VERSION: ${{ steps.ver.outputs.version }}
