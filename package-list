@@ -1,0 +1,9 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:core
+ru.workinprogress.telek
+module:telegram
+ru.workinprogress.telek.telegram
+ru.workinprogress.telek.telegram.effect
+ru.workinprogress.telek.telegram.effect.handler
