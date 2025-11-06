@@ -31,8 +31,9 @@ fun <S : State> TransitionBuilder<S>.editMessage(
     chatId: Long,
     messageId: Long,
     text: String,
+    markup: InlineKeyboardMarkup? = null,
 ) {
-    add(EditMessageEffect(chatId, messageId, text))
+    add(EditMessageEffect(chatId, messageId, text, markup))
 }
 
 fun <S : State> TransitionBuilder<S>.editMarkup(

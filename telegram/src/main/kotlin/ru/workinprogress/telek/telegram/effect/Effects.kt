@@ -15,6 +15,7 @@ data class EditMessageEffect(
     val chatId: Long,
     val messageId: Long,
     val text: String,
+    val markup: InlineKeyboardMarkup? = null,
 ) : TelegramEffect
 
 data class EditMarkupEffect(

@@ -1,20 +1,19 @@
 package ru.workinprogress.telek
 
-interface TransitionGate {
+interface TransitionGate<S : State> {
     suspend fun post(
         chatId: Long,
-        reducer: (State) -> TransitionResult<State>,
+        reducer: (S) -> TransitionResult<S>,
     )
 }
 
-class TelekTransitionGate(
+class TelekTransitionGate<S : State>(
     private val telek: Telek,
-    private val context: ExecutionContext,
-) : TransitionGate {
+) : TransitionGate<S> {
     override suspend fun post(
         chatId: Long,
-        reducer: (State) -> TransitionResult<State>,
+        reducer: (S) -> TransitionResult<S>,
     ) {
-        telek.applyReducer(context, chatId, reducer)
+        telek.applyReducer(chatId, reducer)
     }
 }

@@ -2,11 +2,20 @@ package ru.workinprogress.telek
 
 import kotlin.reflect.KClass
 
-abstract class StateDispatcher<T : State>(
-    private val effectExecutor: EffectExecutor,
-) : Dispatcher,
+abstract class StateDispatcher<T : State> :
+    Dispatcher,
     StateMachine<T, Input> {
+    private lateinit var effectExecutor: EffectExecutor
+    protected lateinit var transitionGate: TransitionGate<T>
     abstract val stateClass: KClass<T>
+
+    fun attach(
+        effectExecutor: EffectExecutor,
+        transitionGate: TransitionGate<T>,
+    ) {
+        this.effectExecutor = effectExecutor
+        this.transitionGate = transitionGate
+    }
 
     open fun entry(input: Input): TransitionResult<T>? = null
 
@@ -27,7 +36,7 @@ abstract class StateDispatcher<T : State>(
         return result.newState
     }
 
-    suspend fun executeEffects(
+    private suspend fun executeEffects(
         context: ExecutionContext,
         effects: List<Effect>,
     ) {

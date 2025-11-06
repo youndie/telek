@@ -13,6 +13,7 @@ class EditMessageEffectHandler : TelegramEffectHandler<EditMessageEffect> {
             chatId = ChatId.fromId(effect.chatId),
             messageId = effect.messageId,
             text = effect.text,
+            replyMarkup = effect.markup,
         )
     }
 }
