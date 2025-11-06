@@ -9,8 +9,6 @@ by **FSM**
 
 > 🧩 state + input → newState + effects
 
----
-
 ### 📦 Installation
 
 Add the Reposilite snapshot repository and *telek* dependencies:
@@ -29,11 +27,10 @@ dependencies {
     implementation("ru.workinprogress.telek:telegram:<VERSION>")
 }
 ```
-
 The core module contains the FSM engine, transitions, and effect system.
 The telegram module provides integration
 with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot)
----
+
 
 ### 💬 Usage with Telegram bot
 
@@ -105,7 +102,6 @@ This example shows how *telek* lets you:
 * 🔁 Handle message and callback inputs as FSM transitions
 * ✨ Keep logic pure and testable — no Telegram API calls inside your states
 
----
 
 ### 🚀 Initialization
 
@@ -128,7 +124,6 @@ bot {
 }
 ```
 
----
 
 ### ⚡ Defining a Custom Effect
 
