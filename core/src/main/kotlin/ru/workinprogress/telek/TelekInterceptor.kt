@@ -1,20 +1,23 @@
 package ru.workinprogress.telek
 
 interface TelekInterceptor {
-    suspend fun onBeforeEvent(
+    suspend fun onBeforeInput(
         chatId: Long,
         input: Input,
-    ) {}
+    ) {
+    }
 
-    suspend fun onAfterEvent(
+    suspend fun onAfterStateChanged(
         chatId: Long,
         oldState: State?,
         newState: State,
-    ) {}
+    ) {
+    }
 
     suspend fun onError(
         chatId: Long,
-        input: Input,
+        input: Input?,
         error: Throwable,
-    ) {}
+    ) {
+    }
 }

@@ -17,14 +17,14 @@ class Telek(
         input: Input,
     ) {
         scope.launch {
-            interceptors.forEach { it.onBeforeEvent(chatId, input) }
+            interceptors.forEach { it.onBeforeInput(chatId, input) }
 
             runCatching {
                 userStateStore.update(chatId) { current ->
                     val state = current ?: stateProvider.initialState(chatId)
                     val dispatcher = findDispatcher(state, input)
                     val newState = dispatcher?.handle(context, state, input) ?: state
-                    interceptors.forEach { it.onAfterEvent(chatId, current, newState) }
+                    interceptors.forEach { it.onAfterStateChanged(chatId, current, newState) }
                     newState
                 }
             }.onFailure { e ->
@@ -32,6 +32,32 @@ class Telek(
             }
         }
     }
+
+    fun applyReducer(
+        context: ExecutionContext,
+        chatId: Long,
+        reducer: (State) -> TransitionResult<State>,
+    ) {
+        scope.launch {
+            runCatching {
+                userStateStore.update(chatId) { current ->
+                    val state = current ?: stateProvider.initialState(chatId)
+                    val result = reducer(state)
+                    val dispatcher = findDispatcher(state)
+                    dispatcher?.let {
+                        dispatcher.executeEffects(context, result.effects)
+                    }
+                    interceptors.forEach { it.onAfterStateChanged(chatId, state, result.newState) }
+                    result.newState
+                }
+            }.onFailure { e ->
+                interceptors.forEach { it.onError(chatId, null, e) }
+            }
+        }
+    }
+
+    private fun findDispatcher(state: State?): StateDispatcher<out State>? =
+        state?.let { s -> dispatchers.firstOrNull { it.stateClass.isInstance(s) } }
 
     private fun findDispatcher(
         state: State?,

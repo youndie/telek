@@ -16,15 +16,22 @@ abstract class StateDispatcher<T : State>(
         input: Input,
     ): State {
         entry(input)?.let {
-            effectExecutor.execute(context, it.effects)
+            executeEffects(context, it.effects)
             return it.newState
         }
 
         if (!stateClass.isInstance(current)) return current
         @Suppress("UNCHECKED_CAST")
         val result = transition(current as T, input)
-        effectExecutor.execute(context, result.effects)
+        executeEffects(context, result.effects)
         return result.newState
+    }
+
+    suspend fun executeEffects(
+        context: ExecutionContext,
+        effects: List<Effect>,
+    ) {
+        effectExecutor.execute(context, effects)
     }
 }
 
