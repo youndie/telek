@@ -1,0 +1,35 @@
+name: Publish telek wip snapshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish-telek:
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v5
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: 21
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Determine version
+        id: ver
+        run: |
+          VERSION=$(grep telek.version gradle.properties | cut -d'=' -f2).${{ github.run_number }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build
+        run: ./gradlew publishMavenPublicationToWipRepository -Dtelek.version=${{ steps.ver.outputs.version }} --no-daemon
+        env:
+          ORG_GRADLE_PROJECT_REPOSILITE_USER: ${{ secrets.REPOSILITE_USER }}
+          ORG_GRADLE_PROJECT_REPOSILITE_SECRET: ${{ secrets.REPOSILITE_SECRET }}
