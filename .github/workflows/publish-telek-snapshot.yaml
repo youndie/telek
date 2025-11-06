@@ -29,8 +29,15 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build
-        run: ./gradlew publishMavenPublicationToWipRepository --no-daemon
+        run: ./gradlew publishMavenPublicationToWipRepository dokkaGenerate --no-daemon
         env:
           ORG_GRADLE_PROJECT_REPOSILITE_USER: ${{ secrets.REPOSILITE_USER }}
           ORG_GRADLE_PROJECT_REPOSILITE_SECRET: ${{ secrets.REPOSILITE_SECRET }}
           ORG_GRADLE_PROJECT_VERSION: ${{ steps.ver.outputs.version }}
+
+      - name: Deploy dokka to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/dokka/html
+          full_commit_message: "📚 Deploy Dokka documentation"
