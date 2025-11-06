@@ -1,8 +1,9 @@
 # telek
 
-![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081.svg)
-![kotlin](https://camo.githubusercontent.com/3f686300866ac5df37a4223daffb3acfbf9b580619af1411286a0d55e8f96307/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6b6f746c696e2d322e322e32312d626c75652e7376673f6c6f676f3d6b6f746c696e)
-![telek core](https://reposilite.kotlin.website/api/badge/latest/snapshots/ru/workinprogress/telek/core?name=Snapshots&color=40c14a&prefix=v)
+[![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+[![kotlin](https://img.shields.io/badge/Kotlin-2.2.21-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![telek core](https://reposilite.kotlin.website/api/badge/latest/snapshots/ru/workinprogress/telek/core?name=snapshots&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/ru/workinprogress/telek)
+[![API Docs](https://img.shields.io/badge/docs-Dokka-blue?logoColor=white)](https://youndie.github.io/telek/)
 
 **type-safe kotlin toolkit** for building **Telegram bots**, **wizard-flows**, and other **interactive systems** powered
 by **FSM**
