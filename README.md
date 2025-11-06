@@ -1,14 +1,15 @@
 # telek
 
-**type-safe kotlin toolkit** for building **Telegram bots**, **wizard-flows**, and other **interactive systems** powered by **FSM**
+![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081.svg)
+![kotlin](https://camo.githubusercontent.com/3f686300866ac5df37a4223daffb3acfbf9b580619af1411286a0d55e8f96307/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6b6f746c696e2d322e322e32312d626c75652e7376673f6c6f676f3d6b6f746c696e)
+![telek core](https://reposilite.kotlin.website/api/badge/latest/snapshots/ru/workinprogress/telek/core?name=Snapshots&color=40c14a&prefix=v)
+
+**type-safe kotlin toolkit** for building **Telegram bots**, **wizard-flows**, and other **interactive systems** powered
+by **FSM**
 
 > 🧩 state + input → newState + effects
 
 ---
-
-![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081.svg)
-![kotlin](https://camo.githubusercontent.com/3f686300866ac5df37a4223daffb3acfbf9b580619af1411286a0d55e8f96307/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6b6f746c696e2d322e322e32312d626c75652e7376673f6c6f676f3d6b6f746c696e)
-![telek core](https://reposilite.kotlin.website/api/badge/latest/snapshots/ru/workinprogress/telek/core?name=Snapshots&color=40c14a&prefix=v)
 
 ### 📦 Installation
 
@@ -28,15 +29,19 @@ dependencies {
     implementation("ru.workinprogress.telek:telegram:<VERSION>")
 }
 ```
+
 The core module contains the FSM engine, transitions, and effect system.
-The telegram module provides integration with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot)
+The telegram module provides integration
+with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot)
 ---
+
 ### 💬 Usage with Telegram bot
 
 *telek* integrates seamlessly with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot)  
 Each **StateDispatcher** describes one conversational flow — for example, a multistep wizard
 
 Below is a simple dispatcher handling a confirmation dialog:
+
 ```kotlin 
 class ExampleDispatcher(
     effectExecutor: EffectExecutor,
@@ -77,7 +82,7 @@ class ExampleDispatcher(
             is ExampleState.Confirming if (input is Input.Callback) -> {
                 transition {
                     newState = ExampleState.Done
-                    
+
                     editMarkup(input.chatId, input.messageId, null)
 
                     if (input.data.contains("example_confirm")) {
@@ -92,12 +97,16 @@ class ExampleDispatcher(
         }
 }
 ```
+
 This example shows how *telek* lets you:
+
 * 🧩 Define a finite-state flow per user
 * 💬 Send messages and inline keyboards declaratively
 * 🔁 Handle message and callback inputs as FSM transitions
 * ✨ Keep logic pure and testable — no Telegram API calls inside your states
+
 ---
+
 ### 🚀 Initialization
 
 below is a minimal setup example using a parent coroutine scope, and interceptors.
@@ -118,7 +127,9 @@ bot {
     dispatch { connect(telek) }
 }
 ```
+
 ---
+
 ### ⚡ Defining a Custom Effect
 
 *telek* lets you extend its behavior with **custom effects** —  
@@ -153,6 +164,7 @@ fun <S : State> TransitionBuilder<S>.customEffect(
 ```
 
 Now register it in your EffectRegistry:
+
 ```kotlin
 val effectRegistry =
     defaultEffectRegistry().apply {
@@ -161,12 +173,15 @@ val effectRegistry =
 
 val effectExecutor = EffectExecutorImpl(effectRegistry)
 ```
+
 And use it inside a transition:
+
 ```kotlin 
 transition {
     customEffect(input.chatId, input.messageId)
 }
 ```
+
 This mechanism allows you to:
 
 * 🧩 Add new side-effects without modifying *telek* core
