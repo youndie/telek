@@ -17,7 +17,7 @@ Add the Reposilite snapshot repository and *telek* dependencies:
 
 ```kotlin
 repositories {
-    ...
+    mavenCentral()
     maven {
         name = "reposiliteRepositorySnapshots"
         url = uri("https://reposilite.kotlin.website/snapshots")
