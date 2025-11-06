@@ -5,6 +5,9 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 jobs:
   publish-telek:
     runs-on: [ ubuntu-latest ]
