@@ -19,6 +19,20 @@ fun <S : State> TransitionBuilder<S>.sendMessage(
     )
 }
 
+fun <S : State> TransitionBuilder<S>.editMessage(
+    chatId: Long,
+    messageId: Long,
+    message: TelegramTextBuilder.() -> Unit,
+    keyboard: (InlineKeyboardBuilder.() -> Unit)? = null,
+) {
+    editMessage(
+        chatId = chatId,
+        messageId = messageId,
+        text = TelegramTextBuilder().apply(message).build(),
+        markup = keyboard?.let { InlineKeyboardBuilder().apply(it).build() },
+    )
+}
+
 fun <S : State> TransitionBuilder<S>.sendMessage(
     chatId: Long,
     text: String,

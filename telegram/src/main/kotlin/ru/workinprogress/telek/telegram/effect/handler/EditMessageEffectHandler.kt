@@ -2,6 +2,7 @@ package ru.workinprogress.telek.telegram.effect.handler
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.ParseMode
 import ru.workinprogress.telek.telegram.effect.EditMessageEffect
 
 class EditMessageEffectHandler : TelegramEffectHandler<EditMessageEffect> {
@@ -13,6 +14,7 @@ class EditMessageEffectHandler : TelegramEffectHandler<EditMessageEffect> {
             chatId = ChatId.fromId(effect.chatId),
             messageId = effect.messageId,
             text = effect.text,
+            parseMode = ParseMode.MARKDOWN,
             replyMarkup = effect.markup,
         )
     }
