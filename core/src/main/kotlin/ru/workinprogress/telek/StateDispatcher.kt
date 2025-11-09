@@ -17,10 +17,13 @@ abstract class StateDispatcher<T : State> :
     fun handle(
         current: State,
         input: Input,
-    ): TransitionResult<T>? {
-        @Suppress("UNCHECKED_CAST")
-        return entry(input) ?: if (!stateClass.isInstance(current)) transition(current as T, input) else null
-    }
+    ): TransitionResult<T>? =
+        entry(input) ?: if (stateClass.isInstance(current)) {
+            @Suppress("UNCHECKED_CAST")
+            transition(current as T, input)
+        } else {
+            null
+        }
 
     open fun onEffectResult(
         state: State,
