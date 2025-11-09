@@ -5,42 +5,28 @@ import kotlin.reflect.KClass
 abstract class StateDispatcher<T : State> :
     Dispatcher,
     StateMachine<T, Input> {
-    private lateinit var effectExecutor: EffectExecutor
     protected lateinit var transitionGate: TransitionGate<T>
     abstract val stateClass: KClass<T>
 
-    fun attach(
-        effectExecutor: EffectExecutor,
-        transitionGate: TransitionGate<T>,
-    ) {
-        this.effectExecutor = effectExecutor
+    fun attach(transitionGate: TransitionGate<T>) {
         this.transitionGate = transitionGate
     }
 
     open fun entry(input: Input): TransitionResult<T>? = null
 
-    suspend fun handle(
-        context: ExecutionContext,
+    fun handle(
         current: State,
         input: Input,
-    ): State {
-        entry(input)?.let {
-            executeEffects(context, it.effects)
-            return it.newState
-        }
-
-        if (!stateClass.isInstance(current)) return current
+    ): TransitionResult<T>? {
+        if (!stateClass.isInstance(current)) return null
         @Suppress("UNCHECKED_CAST")
-        val result = transition(current as T, input)
-        executeEffects(context, result.effects)
-        return result.newState
+        return entry(input) ?: transition(current as T, input)
     }
 
-    private suspend fun executeEffects(
-        context: ExecutionContext,
-        effects: List<Effect>,
+    open fun onEffectResult(
+        state: State,
+        effectResult: EffectResult,
     ) {
-        effectExecutor.execute(context, effects)
     }
 }
 

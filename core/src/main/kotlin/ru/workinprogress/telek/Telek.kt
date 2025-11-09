@@ -34,9 +34,13 @@ class Telek(
                 userStateStore.update(chatId) { current ->
                     val state = current ?: stateProvider.initialState(chatId)
                     val dispatcher = findDispatcher(state, input)
-                    val newState = dispatcher?.handle(context, state, input) ?: state
-                    interceptors.forEach { it.onAfterStateChanged(chatId, current, newState) }
-                    newState
+                    val transitionResult = dispatcher?.handle(state, input) ?: TransitionResult(state)
+                    val effectResults = effectExecutor.execute(context, transitionResult.effects)
+                    effectResults.forEach { result ->
+                        dispatcher?.onEffectResult(transitionResult.newState, result)
+                    }
+                    interceptors.forEach { it.onAfterStateChanged(chatId, current, transitionResult.newState) }
+                    transitionResult.newState
                 }
             }.onFailure { e ->
                 interceptors.forEach { it.onError(chatId, input, e) }
@@ -54,10 +58,14 @@ class Telek(
                     val state = current ?: stateProvider.initialState(chatId)
 
                     @Suppress("UNCHECKED_CAST")
-                    val result = reducer(state as S)
-                    effectExecutor.execute(context, result.effects)
-                    interceptors.forEach { it.onAfterStateChanged(chatId, state, result.newState) }
-                    result.newState
+                    val transitionResult = reducer(state as S)
+                    val effectResults = effectExecutor.execute(context, transitionResult.effects)
+                    val dispatcher = findDispatcher(state)
+                    effectResults.forEach { result ->
+                        dispatcher?.onEffectResult(transitionResult.newState, result)
+                    }
+                    interceptors.forEach { it.onAfterStateChanged(chatId, state, transitionResult.newState) }
+                    transitionResult.newState
                 }
             }.onFailure { e ->
                 interceptors.forEach { it.onError(chatId, null, e) }
@@ -68,7 +76,6 @@ class Telek(
     private fun registerDispatcher(dispatcher: StateDispatcher<out State>) {
         effectExecutor.let { executor ->
             dispatcher.attach(
-                effectExecutor = executor,
                 transitionGate = TelekTransitionGate(this),
             )
         }

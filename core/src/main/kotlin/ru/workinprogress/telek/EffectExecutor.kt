@@ -7,7 +7,7 @@ interface EffectExecutor {
     suspend fun execute(
         context: ExecutionContext,
         effects: List<Effect>,
-    )
+    ): List<EffectResult>
 }
 
 class EffectExecutorImpl(
@@ -18,14 +18,16 @@ class EffectExecutorImpl(
     override suspend fun execute(
         context: ExecutionContext,
         effects: List<Effect>,
-    ) {
-        for (effect in effects) {
+    ): List<EffectResult> =
+        effects.map { effect ->
             runCatching {
                 @Suppress("UNCHECKED_CAST")
                 (effectRegistry.get(effect::class) as? EffectHandler<Effect>)?.handle(context, effect)
-            }.onFailure { e ->
+            }.fold({
+                it ?: EffectFailed(IllegalStateException("EffectHandler not found for ${effect::class.simpleName}"))
+            }, { e ->
                 logger.log(Level.SEVERE, "Effect ${effect::class.simpleName} failed: ${e.message}", e)
-            }
+                EffectFailed(e)
+            })
         }
-    }
 }
