@@ -31,17 +31,26 @@ class Telek(
             interceptors.forEach { it.onBeforeInput(chatId, input) }
 
             runCatching {
+                var effectResults: List<EffectResult> = emptyList()
+                var dispatcher: StateDispatcher<out State>? = null
+                var newState: State? = null
+                var oldState: State? = null
+
                 userStateStore.update(chatId) { current ->
+                    oldState = current
                     val state = current ?: stateProvider.initialState(chatId)
-                    val dispatcher = findDispatcher(state, input)
+                    dispatcher = findDispatcher(state, input)
                     val transitionResult = dispatcher?.handle(state, input) ?: TransitionResult(state)
-                    val effectResults = effectExecutor.execute(context, transitionResult.effects)
-                    effectResults.forEach { result ->
-                        dispatcher?.onEffectResult(transitionResult.newState, result)
-                    }
-                    interceptors.forEach { it.onAfterStateChanged(chatId, current, transitionResult.newState) }
+                    effectResults = effectExecutor.execute(context, transitionResult.effects)
+                    newState = transitionResult.newState
                     transitionResult.newState
                 }
+
+                effectResults.forEach { result ->
+                    dispatcher?.onEffectResult(newState ?: return@forEach, result)
+                }
+
+                interceptors.forEach { it.onAfterStateChanged(chatId, oldState, newState!!) }
             }.onFailure { e ->
                 interceptors.forEach { it.onError(chatId, input, e) }
             }
