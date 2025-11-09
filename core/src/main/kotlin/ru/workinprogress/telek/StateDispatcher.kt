@@ -18,9 +18,8 @@ abstract class StateDispatcher<T : State> :
         current: State,
         input: Input,
     ): TransitionResult<T>? {
-        if (!stateClass.isInstance(current)) return null
         @Suppress("UNCHECKED_CAST")
-        return entry(input) ?: transition(current as T, input)
+        return entry(input) ?: if (!stateClass.isInstance(current)) transition(current as T, input) else null
     }
 
     open fun onEffectResult(
