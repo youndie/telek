@@ -2,6 +2,7 @@
 dokka = "2.1.0"
 kotlin = "2.2.21"
 kotlinxCoroutines = "1.10.2"
+kotlinxSerializationJson = "1.9.0"
 ktlint = "13.1.0"
 kotlinTelegramBot = "6.0.7"
 
@@ -9,7 +10,9 @@ kotlinTelegramBot = "6.0.7"
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinTelegramBot = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "kotlinTelegramBot" }
+kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 dokkaPlugin = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 ktlintPlugin = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+serializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

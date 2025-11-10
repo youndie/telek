@@ -14,5 +14,6 @@ plugins {
 
 include(":core")
 include(":telegram")
-
+include(":persistence")
+include(":router")
 rootProject.name = "telek"
