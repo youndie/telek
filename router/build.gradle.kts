@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    runtimeOnly(kotlin("reflect"))
+    implementation(kotlin("reflect"))
 
     implementation(projects.core)
     implementation(projects.telegram)
