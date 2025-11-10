@@ -19,7 +19,10 @@ class DefaultUserStateStore : UserStateStore {
     private val states = ConcurrentHashMap<Long, State>()
     private val mutexes = ConcurrentHashMap<Long, Mutex>()
 
-    override suspend fun get(chatId: Long): State? = states[chatId]
+    override suspend fun get(chatId: Long): State? =
+        mutexes.computeIfAbsent(chatId) { Mutex() }.withLock {
+            states[chatId]
+        }
 
     override suspend fun update(
         chatId: Long,

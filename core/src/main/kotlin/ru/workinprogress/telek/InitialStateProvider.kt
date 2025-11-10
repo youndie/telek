@@ -1,5 +1,5 @@
 package ru.workinprogress.telek
 
-fun interface StateProvider {
+fun interface InitialStateProvider {
     fun initialState(chatId: Long): State
 }
