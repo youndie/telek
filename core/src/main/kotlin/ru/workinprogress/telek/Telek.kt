@@ -11,6 +11,7 @@ class Telek(
     private val initialStateProvider: InitialStateProvider = InitialStateProvider { EmptyState },
     private val interceptors: List<TelekInterceptor> = emptyList(),
     private val effectExecutor: EffectExecutor,
+    private val findDispatcherStrategy: FindDispatcherStrategy = DefaultFindDispatcherStrategy(dispatchers),
 ) {
     private lateinit var context: ExecutionContext
 
@@ -67,7 +68,7 @@ class Telek(
         input: Input,
     ) {
         processTransition(chatId, input) { state ->
-            val dispatcher = findDispatcher(state, input)
+            val dispatcher = findDispatcherStrategy.findDispatcher(state, input)
             val transitionResult = dispatcher?.handle(state, input) ?: TransitionResult(state)
             TransitionComputation(transitionResult, dispatcher)
         }
@@ -80,7 +81,7 @@ class Telek(
         processTransition(chatId, null) { state ->
             @Suppress("UNCHECKED_CAST")
             val transitionResult = reducer(state as S)
-            val dispatcher = findDispatcher(state)
+            val dispatcher = findDispatcherStrategy.findDispatcher(state)
             TransitionComputation(transitionResult, dispatcher)
         }
     }
@@ -97,20 +98,28 @@ class Telek(
         val transitionResult: TransitionResult<out State>,
         val dispatcher: StateDispatcher<out State>?,
     )
+}
 
-    private fun findDispatcher(state: State?): StateDispatcher<out State>? =
-        state?.let { s -> dispatchers.firstOrNull { it.stateClass.isInstance(s) } }
-
-    private fun findDispatcher(
+class DefaultFindDispatcherStrategy(
+    private val dispatchers: List<StateDispatcher<out State>>,
+) : FindDispatcherStrategy {
+    override fun findDispatcher(
         state: State?,
-        input: Input,
+        input: Input?,
     ): StateDispatcher<out State>? {
-        if (input is Input.Message && input.text.startsWith("/")) {
+        if (input != null && input is Input.Message && input.text.startsWith("/")) {
             val cmd = input.text.removePrefix("/")
             return dispatchers.firstOrNull { it.startCommand == cmd }
-                ?: dispatchers.firstOrNull { it.startCommand == "*" } // global
+                ?: dispatchers.firstOrNull { it.startCommand == "*" }
         }
 
         return state?.let { s -> dispatchers.firstOrNull { it.stateClass.isInstance(s) } }
     }
+}
+
+interface FindDispatcherStrategy {
+    fun findDispatcher(
+        state: State?,
+        input: Input? = null,
+    ): StateDispatcher<out State>?
 }
