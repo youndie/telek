@@ -101,10 +101,12 @@ class RouteRegistry {
         return decoder.decode(raw) as T
     }
 
-    fun canDecode(raw: String): Boolean {
-        val (scope, action) = parseCommonRoute(raw)
-        return decoders.containsKey(scope to action)
-    }
+    fun canDecode(raw: String): Boolean =
+        runCatching {
+            parseCommonRoute(raw)
+        }.fold({ (scope, action) ->
+            decoders.containsKey(scope to action)
+        }, { false })
 
     internal fun clear() = decoders.clear()
 }
