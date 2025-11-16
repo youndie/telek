@@ -8,7 +8,7 @@ abstract class StateDispatcher<T : State> :
     protected lateinit var transitionGate: TransitionGate<T>
     abstract val stateClass: KClass<T>
 
-    open fun canHandleCallback(data: String): Boolean = false
+    open fun canHandleCallback(data: String): Boolean = startCommand == data
 
     fun attach(transitionGate: TransitionGate<T>) {
         this.transitionGate = transitionGate
