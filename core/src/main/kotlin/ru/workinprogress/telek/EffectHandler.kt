@@ -1,7 +1,7 @@
 package ru.workinprogress.telek
 
 interface EffectHandler<E : Effect> {
-    suspend fun handle(
+    fun handle(
         context: ExecutionContext,
         effect: E,
     ): EffectResult

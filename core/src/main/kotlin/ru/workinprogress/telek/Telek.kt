@@ -52,9 +52,7 @@ class Telek(
                 }
 
                 newState?.let { s ->
-                    effectResults.forEach { result ->
-                        dispatcher?.onEffectResult(s, result)
-                    }
+                    dispatcher?.onEffectResults(s, effectResults)
                     interceptors.forEach { it.onAfterStateChanged(chatId, oldState, s) }
                 }
             }.onFailure { e ->

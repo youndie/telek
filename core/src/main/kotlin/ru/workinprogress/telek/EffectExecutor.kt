@@ -4,7 +4,7 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 interface EffectExecutor {
-    suspend fun execute(
+    fun execute(
         context: ExecutionContext,
         effects: List<Effect>,
     ): List<EffectResult>
@@ -15,7 +15,7 @@ class EffectExecutorImpl(
 ) : EffectExecutor {
     private val logger = Logger.getLogger("EffectRegistry")
 
-    override suspend fun execute(
+    override fun execute(
         context: ExecutionContext,
         effects: List<Effect>,
     ): List<EffectResult> =

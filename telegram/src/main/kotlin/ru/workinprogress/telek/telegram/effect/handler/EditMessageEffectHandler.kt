@@ -7,7 +7,7 @@ import ru.workinprogress.telek.EffectFailed
 import ru.workinprogress.telek.telegram.effect.EditMessageEffect
 
 class EditMessageEffectHandler : TelegramEffectHandler<EditMessageEffect> {
-    override suspend fun handle(
+    override fun handle(
         bot: Bot,
         effect: EditMessageEffect,
     ) = bot

@@ -25,6 +25,13 @@ abstract class StateDispatcher<T : State> :
             null
         }
 
+    open fun onEffectResults(
+        state: State,
+        effectResults: List<EffectResult>,
+    ) {
+        effectResults.lastOrNull()?.let { onEffectResult(state, it) }
+    }
+
     open fun onEffectResult(
         state: State,
         effectResult: EffectResult,
