@@ -19,8 +19,8 @@ dependencies {
     implementation(libs.kotlinxSerializationJson)
     implementation(libs.kotlinTelegramBot)
 
-    implementation("io.ktor:ktor-client-core:3.3.1")
-    implementation("io.ktor:ktor-client-okhttp:3.3.1")
-    implementation("io.ktor:ktor-client-content-negotiation:3.3.1")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:3.3.1")
+    implementation(ktorLibs.client.core)
+    implementation(ktorLibs.client.okhttp)
+    implementation(ktorLibs.client.contentNegotiation)
+    implementation(ktorLibs.serialization.kotlinx.json)
 }
