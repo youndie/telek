@@ -3,8 +3,10 @@ package ru.workinprogress.telek.example
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.workinprogress.telek.Callback
 import ru.workinprogress.telek.EffectResult
 import ru.workinprogress.telek.Input
+import ru.workinprogress.telek.Message
 import ru.workinprogress.telek.State
 import ru.workinprogress.telek.StateDispatcher
 import ru.workinprogress.telek.TransitionResult
@@ -17,6 +19,7 @@ import ru.workinprogress.telek.telegram.editMessage
 import ru.workinprogress.telek.telegram.effect.handler.SendMessageEffectResult
 import ru.workinprogress.telek.telegram.inlineKeyboard
 import ru.workinprogress.telek.telegram.sendMessage
+import ru.workinprogress.telek.transition
 
 class ExampleDispatcher(
     private val networkUseCase: ExampleNetworkUseCase,
@@ -33,8 +36,8 @@ class ExampleDispatcher(
         }
 
     override fun entry(input: Input): TransitionResult<ExampleState>? =
-        if (input is Input.Message && input.text == "/$startCommand") {
-            ru.workinprogress.telek.transition {
+        if (input is Message && input.text == "/$startCommand") {
+            transition {
                 newState = ExampleState.WaitingString
 
                 sendMessage(
@@ -53,8 +56,8 @@ class ExampleDispatcher(
         input: Input,
     ): TransitionResult<ExampleState> =
         when (state) {
-            is ExampleState.WaitingString if (input is Input.Message) -> {
-                ru.workinprogress.telek.transition {
+            is ExampleState.WaitingString if (input is Message) -> {
+                transition {
                     newState =
                         ExampleState.SelectingNumber(
                             string = input.text,
@@ -79,7 +82,7 @@ class ExampleDispatcher(
             }
 
             is ExampleState.SelectingNumber if (
-                input is Input.Callback &&
+                input is Callback &&
                     routeRegistry.typeIs<ExampleRouteSelect>(input.data)
             ) -> {
                 val numberValue =
@@ -90,7 +93,7 @@ class ExampleDispatcher(
                         transitionGate.post(input.chatId) { currentState ->
                             val loadingMessageId = (currentState as? ExampleState.LoadingCatFact)?.messageId
 
-                            ru.workinprogress.telek.transition {
+                            transition {
                                 newState =
                                     ExampleState.Confirming(
                                         number = numberValue,
@@ -117,7 +120,7 @@ class ExampleDispatcher(
                         }
                     }, { error ->
                         transitionGate.post(input.chatId) { currentState ->
-                            ru.workinprogress.telek.transition {
+                            transition {
                                 newState =
                                     ExampleState.Error(
                                         errorMessage = error.message ?: "Unknown error",
@@ -127,7 +130,7 @@ class ExampleDispatcher(
                     })
                 }
 
-                ru.workinprogress.telek.transition {
+                transition {
                     newState =
                         ExampleState.LoadingCatFact(
                             number = numberValue,
@@ -152,10 +155,10 @@ class ExampleDispatcher(
                 }
             }
 
-            is ExampleState.Confirming if (input is Input.Callback) -> {
+            is ExampleState.Confirming if (input is Callback) -> {
                 when {
                     routeRegistry.typeIs<ExampleRouteConfirm>(input.data) -> {
-                        ru.workinprogress.telek.transition {
+                        transition {
                             newState = ExampleState.Done
                             editMarkup(input.chatId, input.messageId, markup = null)
                             sendMessage(input.chatId, "Confirmed")
@@ -163,7 +166,7 @@ class ExampleDispatcher(
                     }
 
                     routeRegistry.typeIs<ExampleRouteCancel>(input.data) -> {
-                        ru.workinprogress.telek.transition {
+                        transition {
                             newState = ExampleState.Done
                             editMarkup(input.chatId, input.messageId, markup = null)
                             sendMessage(input.chatId, "Canceled")
@@ -184,7 +187,7 @@ class ExampleDispatcher(
         if (state is ExampleState.LoadingCatFact && effectResult is SendMessageEffectResult) {
             transitionGate.post(effectResult.chatId) { currentState ->
                 if (currentState is ExampleState.LoadingCatFact) {
-                    ru.workinprogress.telek.transition {
+                    transition {
                         newState = currentState.copy(messageId = effectResult.messageId)
                     }
                 } else {

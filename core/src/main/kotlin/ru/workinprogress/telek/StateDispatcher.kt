@@ -45,7 +45,7 @@ interface Dispatcher {
     val startCommand: String
 }
 
-interface StateMachine<S : State, I> {
+interface StateMachine<S : State, I : Input> {
     fun transition(
         state: S,
         input: I,

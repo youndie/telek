@@ -3,6 +3,8 @@ package ru.workinprogress.telek
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.reflect.KClass
 
 class Telek(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
@@ -33,29 +35,27 @@ class Telek(
             if (input != null) interceptors.forEach { it.onBeforeInput(chatId, input) }
 
             runCatching {
-                var dispatcher: StateDispatcher<out State>? = null
-                var effectResults: List<EffectResult> = emptyList()
-                var oldState: State? = null
-                var newState: State? = null
+                val result =
+                    userStateStore.update(chatId) { current ->
+                        val state = current ?: initialStateProvider.initialState(chatId)
+                        val computation = reducerProvider(state)
+                        val transResult = computation.transitionResult
 
-                userStateStore.update(chatId) { current ->
-                    oldState = current
-                    val state = current ?: initialStateProvider.initialState(chatId)
-                    val computation = reducerProvider(state)
-                    val transitionResult = computation.transitionResult
-                    val foundDispatcher = computation.dispatcher
-                    dispatcher = foundDispatcher
+                        UpdateResult(
+                            oldState = current,
+                            newState = transResult.newState,
+                            effects = transResult.effects,
+                            dispatcher = computation.dispatcher,
+                        )
+                    }
 
-                    effectResults = effectExecutor.execute(context, transitionResult.effects)
-                    newState = transitionResult.newState
-                    transitionResult.newState
-                }
-
-                newState?.let { s ->
-                    dispatcher?.onEffectResults(s, effectResults)
-                    interceptors.forEach { it.onAfterStateChanged(chatId, oldState, s) }
+                val effectResults = effectExecutor.execute(context, result.effects)
+                result.dispatcher?.onEffectResults(result.newState, effectResults)
+                interceptors.forEach {
+                    it.onAfterStateChanged(chatId, result.oldState, result.newState)
                 }
             }.onFailure { e ->
+                if (e is CancellationException) throw e
                 interceptors.forEach { it.onError(chatId, input, e) }
             }
         }
@@ -72,22 +72,27 @@ class Telek(
         }
     }
 
-    fun <S : State> applyReducer(
+    internal fun <S : State> applyReducer(
         chatId: Long,
+        expectedStateType: KClass<S>,
         reducer: (S) -> TransitionResult<S>,
     ) {
         processTransition(chatId, null) { state ->
             @Suppress("UNCHECKED_CAST")
-            val transitionResult = reducer(state as S)
-            val dispatcher = findDispatcherStrategy.findDispatcher(state)
-            TransitionComputation(transitionResult, dispatcher)
+            if (expectedStateType.isInstance(state)) {
+                val transitionResult = reducer(state as S)
+                val dispatcher = findDispatcherStrategy.findDispatcher(state)
+                TransitionComputation(transitionResult, dispatcher)
+            } else {
+                throw IllegalStateException("State mismatch: expected $expectedStateType but got ${state::class}")
+            }
         }
     }
 
-    private fun registerDispatcher(dispatcher: StateDispatcher<out State>) {
+    private fun <T : State> registerDispatcher(dispatcher: StateDispatcher<T>) {
         effectExecutor.let { executor ->
             dispatcher.attach(
-                transitionGate = TelekTransitionGate(this),
+                transitionGate = TelekTransitionGate(this, dispatcher.stateClass),
             )
         }
     }
@@ -105,7 +110,7 @@ class DefaultFindDispatcherStrategy(
         state: State?,
         input: Input?,
     ): StateDispatcher<out State>? {
-        if (input != null && input is Input.Message && input.text.startsWith("/")) {
+        if (input != null && input is Message && input.text.startsWith("/")) {
             val cmd = input.text.removePrefix("/")
             return dispatchers.firstOrNull { it.startCommand == cmd }
                 ?: dispatchers.firstOrNull { it.startCommand == "*" }
@@ -114,6 +119,13 @@ class DefaultFindDispatcherStrategy(
         return state?.let { s -> dispatchers.firstOrNull { it.stateClass.isInstance(s) } }
     }
 }
+
+data class UpdateResult(
+    val oldState: State?,
+    val newState: State,
+    val effects: List<Effect>,
+    val dispatcher: StateDispatcher<out State>?,
+)
 
 interface FindDispatcherStrategy {
     fun findDispatcher(

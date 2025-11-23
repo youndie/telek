@@ -7,7 +7,7 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.properties.Properties
 import kotlinx.serialization.properties.decodeFromStringMap
 import kotlinx.serialization.properties.encodeToStringMap
-import ru.workinprogress.telek.Input
+import ru.workinprogress.telek.Callback
 import ru.workinprogress.telek.router.RouteUtils.requireContext
 import ru.workinprogress.telek.telegram.RowBuilder
 
@@ -18,9 +18,9 @@ fun RowBuilder.callback(
     callback(name, route.encode())
 }
 
-inline fun <reified T : Route> Input.Callback.isRouteOf(registry: RouteRegistry): Boolean = registry.typeIs<T>(data)
+inline fun <reified T : Route> Callback.isRouteOf(registry: RouteRegistry): Boolean = registry.typeIs<T>(data)
 
-inline fun <reified T : Route> Input.Callback.tryDecode(registry: RouteRegistry): T? =
+inline fun <reified T : Route> Callback.tryDecode(registry: RouteRegistry): T? =
     if (registry.typeIs<T>(data)) registry.decode(data) else null
 
 @Target(AnnotationTarget.CLASS)

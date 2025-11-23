@@ -9,8 +9,8 @@ interface UserStateStore {
 
     suspend fun update(
         chatId: Long,
-        block: suspend (State?) -> State,
-    )
+        block: suspend (State?) -> UpdateResult,
+    ): UpdateResult
 
     suspend fun clear(chatId: Long)
 }
@@ -26,20 +26,21 @@ class DefaultUserStateStore : UserStateStore {
 
     override suspend fun update(
         chatId: Long,
-        block: suspend (State?) -> State,
-    ) {
+        block: suspend (State?) -> UpdateResult,
+    ): UpdateResult {
         val current = get(chatId)
         val mutex = mutexes.computeIfAbsent(chatId) { Mutex() }
 
         mutex.withLock {
-            val newState = block(current)
+            val updateResult = block(current)
 
-            if (newState is FinalState) {
+            if (updateResult.newState is FinalState) {
                 clear(chatId)
-                return
+            } else {
+                states[chatId] = updateResult.newState
             }
 
-            states[chatId] = newState
+            return updateResult
         }
     }
 

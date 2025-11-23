@@ -3,7 +3,8 @@ package ru.workinprogress.telek.telegram
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.dispatcher.callbackQuery
 import com.github.kotlintelegrambot.dispatcher.message
-import ru.workinprogress.telek.Input
+import ru.workinprogress.telek.Callback
+import ru.workinprogress.telek.Message
 import ru.workinprogress.telek.Telek
 
 fun com.github.kotlintelegrambot.dispatcher.Dispatcher.connect(telek: Telek) {
@@ -16,7 +17,7 @@ fun com.github.kotlintelegrambot.dispatcher.Dispatcher.connect(telek: Telek) {
         telek.onInput(
             chatId = message.chat.id,
             input =
-                Input.Message(
+                Message(
                     chatId = message.chat.id,
                     text = message.text.orEmpty(),
                 ),
@@ -29,7 +30,7 @@ fun com.github.kotlintelegrambot.dispatcher.Dispatcher.connect(telek: Telek) {
         telek.onInput(
             chatId = msg.chat.id,
             input =
-                Input.Callback(
+                Callback(
                     chatId = msg.chat.id,
                     messageId = msg.messageId,
                     data = callbackQuery.data,
