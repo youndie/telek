@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>DefaultUserStateStore</title>
+    <title>UpdateResult</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -90,77 +90,92 @@
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" data-page-type="classlike" id="content" pageids="core::ru.workinprogress.telek/DefaultUserStateStore///PointingToDeclaration//-431355489">
-  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">ru.workinprogress.telek</a><span class="delimiter">/</span><span class="current">DefaultUserStateStore</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageids="core::ru.workinprogress.telek/UpdateResult///PointingToDeclaration//-431355489">
+  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">ru.workinprogress.telek</a><span class="delimiter">/</span><span class="current">UpdateResult</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Default</span><wbr><span>User</span><wbr><span>State</span><wbr><span><span>Store</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">DefaultUserStateStore</a> : <a href="../-user-state-store/index.html">UserStateStore</a></div></div></div>
+    <h1 class="cover"><span>Update</span><wbr><span><span>Result</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">UpdateResult</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>oldState<span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>newState<span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>effects<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-effect/index.html">Effect</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>dispatcher<span class="token operator">: </span><a href="../-state-dispatcher/index.html">StateDispatcher</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../-state/index.html">State</a><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="tableheader">Constructors</h2>
-        <div class="table"><a data-name="-696671038%2FConstructors%2F-431355489" anchor-label="DefaultUserStateStore" id="-696671038%2FConstructors%2F-431355489" data-filterable-set=":core/main"></a>
+        <div class="table"><a data-name="1183939016%2FConstructors%2F-431355489" anchor-label="UpdateResult" id="1183939016%2FConstructors%2F-431355489" data-filterable-set=":core/main"></a>
           <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":core/main" data-filterable-set=":core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="-default-user-state-store.html"><span>Default</span><wbr><span>User</span><wbr><span>State</span><wbr><span><span>Store</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-696671038%2FConstructors%2F-431355489"></span>
+                  <div><a href="-update-result.html"><span>Update</span><wbr><span><span>Result</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1183939016%2FConstructors%2F-431355489"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">oldState<span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">newState<span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token punctuation">, </span></span><span class="parameter ">effects<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-effect/index.html">Effect</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">dispatcher<span class="token operator">: </span><a href="../-state-dispatcher/index.html">StateDispatcher</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../-state/index.html">State</a><span class="token operator">&gt;</span><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div data-togglable="FUNCTION">
-        <h2 class="tableheader">Functions</h2>
-        <div class="table"><a data-name="-1509826680%2FFunctions%2F-431355489" anchor-label="clear" id="-1509826680%2FFunctions%2F-431355489" data-filterable-set=":core/main"></a>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1979522267%2FProperties%2F-431355489" anchor-label="dispatcher" id="1979522267%2FProperties%2F-431355489" data-filterable-set=":core/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="clear.html"><span><span>clear</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1509826680%2FFunctions%2F-431355489"></span>
+                  <div><a href="dispatcher.html"><span><span>dispatcher</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1979522267%2FProperties%2F-431355489"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">suspend override </span><span class="token keyword">fun </span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="dispatcher.html">dispatcher</a><span class="token operator">: </span><a href="../-state-dispatcher/index.html">StateDispatcher</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../-state/index.html">State</a><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-1623903279%2FFunctions%2F-431355489" anchor-label="get" id="-1623903279%2FFunctions%2F-431355489" data-filterable-set=":core/main"></a>
+<a data-name="-1246058186%2FProperties%2F-431355489" anchor-label="effects" id="-1246058186%2FProperties%2F-431355489" data-filterable-set=":core/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="get.html"><span><span>get</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1623903279%2FFunctions%2F-431355489"></span>
+                  <div><a href="effects.html"><span><span>effects</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1246058186%2FProperties%2F-431355489"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">suspend override </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token operator">?</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="effects.html">effects</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-effect/index.html">Effect</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1287389240%2FFunctions%2F-431355489" anchor-label="update" id="1287389240%2FFunctions%2F-431355489" data-filterable-set=":core/main"></a>
+<a data-name="-1729797839%2FProperties%2F-431355489" anchor-label="newState" id="-1729797839%2FProperties%2F-431355489" data-filterable-set=":core/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="update.html"><span><span>update</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1287389240%2FFunctions%2F-431355489"></span>
+                  <div><a href="new-state.html"><span>new</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1729797839%2FProperties%2F-431355489"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">suspend override </span><span class="token keyword">fun </span><a href="update.html"><span class="token function">update</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token punctuation">(</span><a href="../-state/index.html">State</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../-update-result/index.html">UpdateResult</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-update-result/index.html">UpdateResult</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="new-state.html">newState</a><span class="token operator">: </span><a href="../-state/index.html">State</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1120403320%2FProperties%2F-431355489" anchor-label="oldState" id="1120403320%2FProperties%2F-431355489" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="old-state.html"><span>old</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1120403320%2FProperties%2F-431355489"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="old-state.html">oldState</a><span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
