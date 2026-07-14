@@ -26,5 +26,5 @@ class EditMarkupEffectResult(
 
 class TelegramEffectError(
     val chatId: Long,
-    val error: TelegramBotResult.Error<Message>,
+    val error: TelegramBotResult.Error,
 ) : EffectResult

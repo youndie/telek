@@ -9,4 +9,8 @@ dependencies {
     implementation(projects.core)
     implementation(libs.kotlinxSerializationJson)
     implementation(libs.kotlinxCoroutines)
+
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit5"))
+    testImplementation(libs.kotlinxCoroutinesTest)
 }

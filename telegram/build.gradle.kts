@@ -7,4 +7,10 @@ plugins {
 dependencies {
     implementation(projects.core)
     implementation(libs.kotlinTelegramBot)
+    implementation(libs.retrofitCore)
+
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit5"))
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinxCoroutines)
 }

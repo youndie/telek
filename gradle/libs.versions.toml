@@ -1,10 +1,12 @@
 [versions]
 dokka = "2.1.0"
-kotlin = "2.2.21"
-kotlinxCoroutines = "1.10.2"
-kotlinxSerializationJson = "1.9.0"
-ktlint = "13.1.0"
-kotlinTelegramBot = "6.0.7"
+kotlin = "2.4.0"
+kotlinxCoroutines = "1.11.0"
+kotlinxSerializationJson = "1.11.0"
+ktlint = "14.2.0"
+kotlinTelegramBot = "10.0.0"
+retrofit = "2.12.0" #kotlinTelegramBot requires
+mockk = "1.14.11"
 
 [libraries]
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -12,6 +14,9 @@ kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", 
 kotlinTelegramBot = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "kotlinTelegramBot" }
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinxSerializationProperties = { module = "org.jetbrains.kotlinx:kotlinx-serialization-properties", version.ref = "kotlinxSerializationJson" }
+retrofitCore = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+kotlinxCoroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 dokkaPlugin = { id = "org.jetbrains.dokka", version.ref = "dokka" }
