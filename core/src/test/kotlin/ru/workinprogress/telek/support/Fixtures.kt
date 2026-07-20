@@ -1,10 +1,12 @@
 package ru.workinprogress.telek.support
 
+import ru.workinprogress.telek.AsyncEffectHandler
 import ru.workinprogress.telek.Effect
 import ru.workinprogress.telek.EffectExecutor
 import ru.workinprogress.telek.EffectHandler
 import ru.workinprogress.telek.EffectResult
 import ru.workinprogress.telek.EffectSuccess
+import ru.workinprogress.telek.Event
 import ru.workinprogress.telek.ExecutionContext
 import ru.workinprogress.telek.FinalState
 import ru.workinprogress.telek.Input
@@ -38,6 +40,11 @@ data class TestEffect(
     val tag: String,
 ) : Effect
 
+data class TestEvent(
+    override val chatId: Long,
+    val tag: String,
+) : Event
+
 open class SimpleDispatcher<T : State>(
     override val startCommand: String,
     override val stateClass: KClass<T>,
@@ -65,14 +72,41 @@ class RecordingEffectHandler(
     }
 }
 
+class RecordingAsyncEffectHandler(
+    private val result: (TestEffect) -> Event? = { null },
+) : AsyncEffectHandler<TestEffect> {
+    val handled = mutableListOf<TestEffect>()
+
+    override suspend fun handle(
+        context: ExecutionContext,
+        effect: TestEffect,
+    ): Event? {
+        handled += effect
+        return result(effect)
+    }
+}
+
 class FakeEffectExecutor(
+    private val asyncWorkFor: (Effect) -> (suspend () -> Event?)? = { null },
     private val resultsFor: (Effect) -> EffectResult = { EffectSuccess },
 ) : EffectExecutor {
     val executed = mutableListOf<List<Effect>>()
 
-    override suspend fun execute(effects: List<Effect>): List<EffectResult> {
+    override suspend fun execute(
+        effects: List<Effect>,
+        dispatchAsync: (suspend () -> Event?) -> Unit,
+    ): List<EffectResult> {
         executed += effects
-        return effects.map(resultsFor)
+        val results = mutableListOf<EffectResult>()
+        for (effect in effects) {
+            val asyncWork = asyncWorkFor(effect)
+            if (asyncWork != null) {
+                dispatchAsync(asyncWork)
+                continue
+            }
+            results += resultsFor(effect)
+        }
+        return results
     }
 }
 

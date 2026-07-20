@@ -2,6 +2,7 @@
 
 package ru.workinprogress.telek
 
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -18,6 +19,7 @@ import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -70,6 +72,55 @@ class ChatWorkersTest {
             runCurrent()
 
             assertTrue(secondRan)
+        }
+
+    @Test
+    fun `launchAsync work does not block subsequent submitted tasks for the same chat`() =
+        runTest {
+            val workers = ChatWorkers(scope = this, idleTimeout = 15.minutes)
+            var asyncCompleted = false
+            var nextTaskRan = false
+
+            workers.submit(chatId = 1) {
+                workers.launchAsync(chatId = 1) {
+                    delay(10.minutes)
+                    asyncCompleted = true
+                }
+            }
+            runCurrent()
+
+            workers.submit(chatId = 1) { nextTaskRan = true }
+            runCurrent()
+
+            assertTrue(nextTaskRan)
+            assertFalse(asyncCompleted) // still pending — we never advanced 10 minutes
+        }
+
+    @Test
+    fun `async work is cancelled when its chat's worker retires`() =
+        runTest {
+            val workers = ChatWorkers(scope = this, idleTimeout = 100.milliseconds)
+            var completed = false
+            var cancelled = false
+
+            workers.submit(chatId = 1) {
+                workers.launchAsync(chatId = 1) {
+                    try {
+                        delay(10.minutes)
+                        completed = true
+                    } catch (e: CancellationException) {
+                        cancelled = true
+                        throw e
+                    }
+                }
+            }
+            runCurrent()
+
+            advanceTimeBy(200.milliseconds) // idle past the timeout — worker retires, cancelling it
+            runCurrent()
+
+            assertTrue(cancelled)
+            assertFalse(completed)
         }
 
     @Test

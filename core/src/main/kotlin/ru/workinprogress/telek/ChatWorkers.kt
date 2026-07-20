@@ -1,6 +1,10 @@
+@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+
 package ru.workinprogress.telek
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.onTimeout
@@ -14,7 +18,9 @@ import kotlin.time.Duration
 /**
  * Runs the work submitted for a given chatId strictly sequentially, one task at a time, in
  * submission order — regardless of how many callers concurrently call [submit] for that chatId.
- * Work submitted for different chatIds runs fully in parallel.
+ * Work submitted for different chatIds runs fully in parallel. Also lets a chat's async effects
+ * (see [launchAsync]) run independently of that ordering, while still being tied to the chat's
+ * lifecycle so they're cancelled when the chat goes idle.
  *
  * This is what lets [Telek] guarantee in-order processing per chat without any locking in
  * [UserStateStore] implementations: at most one [update][UserStateStore.update] call for a given
@@ -53,9 +59,30 @@ internal class ChatWorkers(
         }
     }
 
+    /**
+     * Launches [task] independently of [submit]'s ordering — for async effects, which must not
+     * block the transition that produced them. Fire-and-forget: doesn't wait for [task], and
+     * [task] is cancelled if this chat's worker retires (see [Worker.retire]).
+     *
+     * Must be called from within a task already running on that chat's worker (i.e. from inside a
+     * [submit]ted task — which is exactly where [Telek] calls it from, while executing a chat's
+     * effects), so the worker is guaranteed to still be live and not mid-retirement.
+     */
+    fun launchAsync(
+        chatId: Long,
+        task: suspend () -> Unit,
+    ) {
+        workers.computeIfAbsent(chatId) { Worker(chatId) }.launchAsync(task)
+    }
+
     private inner class Worker(
         private val chatId: Long,
     ) {
+        // A dedicated scope per worker (not just `scope.launch` directly) is what lets async
+        // effects launched via [launchAsync] be cancelled as a group when this worker retires,
+        // without touching unrelated chats. SupervisorJob so one failing async effect doesn't
+        // cancel the receive loop or any other in-flight async effect for this same chat.
+        private val workerScope = CoroutineScope(scope.coroutineContext + SupervisorJob())
         private val inbox = Channel<suspend () -> Unit>(Channel.UNLIMITED)
 
         // Guards the transition from "accepting work" to "retired": every enqueue and the
@@ -78,8 +105,12 @@ internal class ChatWorkers(
                 }
             }
 
+        fun launchAsync(task: suspend () -> Unit) {
+            workerScope.launch { task() }
+        }
+
         init {
-            scope.launch {
+            workerScope.launch {
                 while (true) {
                     // Deliberately not `withTimeoutOrNull(idleTimeout) { inbox.receive() }`: that
                     // pattern can drop an element that becomes available at the same instant the
@@ -108,7 +139,8 @@ internal class ChatWorkers(
          * more sends can land, is now the complete and final backlog) in submission order, and
          * only *after* that's fully done removes this worker from the map. Removing from the map
          * only at the end, rather than up front, is what stops a replacement worker from being
-         * created and running concurrently with this one's tail end — see [submit].
+         * created and running concurrently with this one's tail end — see [submit]. Finally
+         * cancels [workerScope], stopping any still-in-flight async effects for this chat.
          * Returns whether this worker actually retired.
          */
         private suspend fun retire(): Boolean {
@@ -128,6 +160,7 @@ internal class ChatWorkers(
                 leftover()
             }
             workers.remove(chatId, this)
+            workerScope.cancel()
             return true
         }
     }

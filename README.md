@@ -194,6 +194,77 @@ This mechanism allows you to:
 * 🧠 Keep your state logic pure while handling Telegram I/O declaratively
 
 
+### ⏳ Async effects & Events
+
+A regular effect runs as part of the transition that created it — fine for sending a message, wrong
+for a network call: you don't want to block the chat's next input on it. An **async effect** runs
+independently and reports back later as an **`Event`**, which re-enters the FSM through its own
+`transition(state, event)` overload — no manual `CoroutineScope`, no posting results back by hand.
+
+```kotlin
+// The effect just carries what the handler needs
+data class FetchCatFactEffect(val chatId: Long) : Effect
+
+// ...and what comes back, once it's done
+data class CatFactLoaded(override val chatId: Long, val fact: String) : Event
+data class CatFactLoadFailed(override val chatId: Long, val errorMessage: String) : Event
+
+// AsyncEffectHandler, not EffectHandler — returns an Event instead of an EffectResult
+class FetchCatFactEffectHandler(
+    private val networkUseCase: FetchCatFactUseCase,
+) : AsyncEffectHandler<FetchCatFactEffect> {
+    override suspend fun handle(context: ExecutionContext, effect: FetchCatFactEffect): Event =
+        networkUseCase()
+            .fold(
+                { fact -> CatFactLoaded(effect.chatId, fact.text) },
+                { error -> CatFactLoadFailed(effect.chatId, error.message ?: "Unknown error") },
+            )
+}
+```
+
+Register it with `registerAsync` instead of `register`, then add the effect from a transition like
+any other:
+
+```kotlin
+val effectRegistry = defaultEffectRegistry().apply {
+    registerAsync(FetchCatFactEffect::class, FetchCatFactEffectHandler(useCase))
+}
+
+// inside a transition
+transition {
+    newState = MyState.Loading
+    sendMessage(input.chatId, "Loading...")
+    add(FetchCatFactEffect(chatId = input.chatId))   // fire-and-forget from here on
+}
+```
+
+And handle the result with the `Event` overload of `transition` — there's no `entry` equivalent for
+events, since an event never starts a flow, only continues one:
+
+```kotlin
+override fun transition(state: MyState, event: Event): TransitionResult<MyState> =
+    when {
+        state is MyState.Loading && event is CatFactLoaded ->
+            transition { newState = MyState.Done(event.fact) }
+
+        state is MyState.Loading && event is CatFactLoadFailed ->
+            transition { newState = MyState.Error(event.errorMessage) }
+
+        else -> noTransition(state)
+    }
+```
+
+Notes:
+
+* The async effect's coroutine is tied to that chat's lifecycle — if the chat goes idle, it's
+  cancelled along with everything else for that chat.
+* A dispatcher whose async handler doesn't need `Bot` access can implement `AsyncEffectHandler`
+  directly, as above. One that does needs `Bot` should implement `TelegramAsyncEffectHandler`
+  instead — same relationship as `EffectHandler` / `TelegramEffectHandler`.
+* See `:example`'s `ExampleDispatcher` for the full pattern in context (fetching a cat fact while
+  showing a "Loading..." message).
+
+
 ### 📦 Optional modules
 
 Add optional modules if you need persistence or compact callback routing:

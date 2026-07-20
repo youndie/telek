@@ -1,13 +1,9 @@
 package ru.workinprogress.telek.example
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ru.workinprogress.telek.Callback
-import ru.workinprogress.telek.EffectResult
+import ru.workinprogress.telek.Event
 import ru.workinprogress.telek.Input
 import ru.workinprogress.telek.Message
-import ru.workinprogress.telek.State
 import ru.workinprogress.telek.StateDispatcher
 import ru.workinprogress.telek.TransitionResult
 import ru.workinprogress.telek.noTransition
@@ -16,15 +12,11 @@ import ru.workinprogress.telek.router.routes
 import ru.workinprogress.telek.router.tryDecode
 import ru.workinprogress.telek.telegram.editMarkup
 import ru.workinprogress.telek.telegram.editMessage
-import ru.workinprogress.telek.telegram.effect.handler.SendMessageEffectResult
 import ru.workinprogress.telek.telegram.inlineKeyboard
 import ru.workinprogress.telek.telegram.sendMessage
 import ru.workinprogress.telek.transition
 
-class ExampleDispatcher(
-    private val networkUseCase: ExampleNetworkUseCase,
-    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default),
-) : StateDispatcher<ExampleState>() {
+class ExampleDispatcher : StateDispatcher<ExampleState>() {
     override val startCommand = "example"
     override val stateClass = ExampleState::class
 
@@ -88,48 +80,6 @@ class ExampleDispatcher(
                 val numberValue =
                     input.tryDecode<ExampleRouteSelect>(routeRegistry)?.number ?: return noTransition(state)
 
-                coroutineScope.launch {
-                    networkUseCase().fold({ catFact ->
-                        transitionGate.post(input.chatId) { currentState ->
-                            val loadingMessageId = (currentState as? ExampleState.LoadingCatFact)?.messageId
-
-                            transition {
-                                newState =
-                                    ExampleState.Confirming(
-                                        number = numberValue,
-                                        string = state.string,
-                                        catFact = catFact.fact,
-                                    )
-
-                                loadingMessageId?.let { messageId ->
-                                    editMessage(input.chatId, messageId, "Cat fact loaded")
-                                }
-
-                                sendMessage(
-                                    input.chatId,
-                                    catFact.fact,
-                                    markup =
-                                        inlineKeyboard {
-                                            row {
-                                                callback("Confirm", ExampleRouteConfirm())
-                                                callback("Cancel", ExampleRouteCancel())
-                                            }
-                                        },
-                                )
-                            }
-                        }
-                    }, { error ->
-                        transitionGate.post(input.chatId) { currentState ->
-                            transition {
-                                newState =
-                                    ExampleState.Error(
-                                        errorMessage = error.message ?: "Unknown error",
-                                    )
-                            }
-                        }
-                    })
-                }
-
                 transition {
                     newState =
                         ExampleState.LoadingCatFact(
@@ -152,6 +102,11 @@ class ExampleDispatcher(
                             }
                         },
                     )
+
+                    // Async effect: fetches over the network without blocking this transition.
+                    // Its result re-enters as an Event, handled by the transition(state, event)
+                    // overload below — no manual coroutine, no transitionGate.post.
+                    add(FetchCatFactEffect(chatId = input.chatId, number = numberValue, string = state.string))
                 }
             }
 
@@ -180,20 +135,38 @@ class ExampleDispatcher(
             else -> noTransition(state)
         }
 
-    override fun onEffectResult(
-        state: State,
-        effectResult: EffectResult,
-    ) {
-        if (state is ExampleState.LoadingCatFact && effectResult is SendMessageEffectResult) {
-            transitionGate.post(effectResult.chatId) { currentState ->
-                if (currentState is ExampleState.LoadingCatFact) {
-                    transition {
-                        newState = currentState.copy(messageId = effectResult.messageId)
-                    }
-                } else {
-                    noTransition(state)
+    override fun transition(
+        state: ExampleState,
+        event: Event,
+    ): TransitionResult<ExampleState> =
+        when {
+            state is ExampleState.LoadingCatFact && event is CatFactLoaded ->
+                transition {
+                    newState =
+                        ExampleState.Confirming(
+                            number = event.number,
+                            string = event.string,
+                            catFact = event.fact,
+                        )
+
+                    sendMessage(
+                        event.chatId,
+                        event.fact,
+                        markup =
+                            inlineKeyboard {
+                                row {
+                                    callback("Confirm", ExampleRouteConfirm())
+                                    callback("Cancel", ExampleRouteCancel())
+                                }
+                            },
+                    )
                 }
-            }
+
+            state is ExampleState.LoadingCatFact && event is CatFactLoadFailed ->
+                transition {
+                    newState = ExampleState.Error(errorMessage = event.errorMessage)
+                }
+
+            else -> noTransition(state)
         }
-    }
 }

@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.runTest
 import ru.workinprogress.telek.support.FakeEffectExecutor
 import ru.workinprogress.telek.support.RecordingInterceptor
 import ru.workinprogress.telek.support.TestEffect
+import ru.workinprogress.telek.support.TestEvent
 import ru.workinprogress.telek.support.TestState
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -56,6 +57,36 @@ private class WizardDispatcher : StateDispatcher<TestState>() {
         chatId: Long,
         reducer: (TestState) -> TransitionResult<TestState>,
     ) = transitionGate.post(chatId, reducer)
+}
+
+private class AsyncDispatcher : StateDispatcher<TestState>() {
+    override val startCommand = "async"
+    override val stateClass = TestState::class
+
+    override fun entry(input: Input): TransitionResult<TestState>? =
+        if (input is Message && input.text == "/async") {
+            transition {
+                newState = TestState.Waiting(0)
+                add(TestEffect("fetch"))
+            }
+        } else {
+            null
+        }
+
+    override fun transition(
+        state: TestState,
+        input: Input,
+    ): TransitionResult<TestState> = noTransition(state)
+
+    override fun transition(
+        state: TestState,
+        event: Event,
+    ): TransitionResult<TestState> =
+        if (state is TestState.Waiting && event is TestEvent && event.tag == "loaded") {
+            transition { newState = TestState.Confirming(value = 99) }
+        } else {
+            noTransition(state)
+        }
 }
 
 class TelekTest {
@@ -278,6 +309,85 @@ class TelekTest {
             assertEquals(input, error.input)
             assertSame(boom, error.error)
             // The transition itself is unaffected — a failed effect doesn't undo the state change.
+            assertEquals(1, interceptor.afterStateChanged.size)
+        }
+
+    @Test
+    fun `an async effect's event re-enters the FSM through the transition(state, event) overload`() =
+        runTest {
+            val store = DefaultUserStateStore()
+            val executor =
+                FakeEffectExecutor(
+                    asyncWorkFor = { effect ->
+                        if (effect is TestEffect && effect.tag == "fetch") {
+                            { TestEvent(chatId = 1, tag = "loaded") }
+                        } else {
+                            null
+                        }
+                    },
+                )
+            val telek =
+                Telek(
+                    scope = this,
+                    userStateStore = store,
+                    dispatchers = listOf(AsyncDispatcher()),
+                    effectExecutor = executor,
+                )
+
+            telek.onInput(1, Message(1, "/async"))
+            advanceUntilIdle()
+
+            assertEquals(TestState.Confirming(99), store.get(1))
+        }
+
+    @Test
+    fun `an event that doesn't match the dispatcher's expectations leaves the state unchanged`() =
+        runTest {
+            val store = DefaultUserStateStore()
+            val executor =
+                FakeEffectExecutor(
+                    asyncWorkFor = { effect ->
+                        if (effect is TestEffect && effect.tag == "fetch") {
+                            { TestEvent(chatId = 1, tag = "unexpected") }
+                        } else {
+                            null
+                        }
+                    },
+                )
+            val telek =
+                Telek(
+                    scope = this,
+                    userStateStore = store,
+                    dispatchers = listOf(AsyncDispatcher()),
+                    effectExecutor = executor,
+                )
+
+            telek.onInput(1, Message(1, "/async"))
+            advanceUntilIdle()
+
+            assertEquals(TestState.Waiting(0), store.get(1))
+        }
+
+    @Test
+    fun `an async handler returning null produces no follow-up transition`() =
+        runTest {
+            val interceptor = RecordingInterceptor()
+            val store = DefaultUserStateStore()
+            val executor = FakeEffectExecutor(asyncWorkFor = { { null } })
+            val telek =
+                Telek(
+                    scope = this,
+                    userStateStore = store,
+                    dispatchers = listOf(AsyncDispatcher()),
+                    effectExecutor = executor,
+                    interceptors = listOf(interceptor),
+                )
+
+            telek.onInput(1, Message(1, "/async"))
+            advanceUntilIdle()
+
+            assertEquals(TestState.Waiting(0), store.get(1))
+            // Only the entry transition — no second, event-triggered one.
             assertEquals(1, interceptor.afterStateChanged.size)
         }
 }

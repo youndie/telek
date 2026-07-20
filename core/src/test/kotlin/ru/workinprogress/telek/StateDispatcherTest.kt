@@ -1,6 +1,7 @@
 package ru.workinprogress.telek
 
 import ru.workinprogress.telek.support.OtherState
+import ru.workinprogress.telek.support.TestEvent
 import ru.workinprogress.telek.support.TestState
 import kotlin.reflect.KClass
 import kotlin.test.Test
@@ -95,5 +96,24 @@ class StateDispatcherTest {
         dispatcher.onEffectResults(TestState.Waiting(0), emptyList())
 
         assertTrue(dispatcher.onEffectResultCalls.isEmpty())
+    }
+
+    @Test
+    fun `handleEvent defaults to no transition when the dispatcher doesn't override it`() {
+        val dispatcher = RecordingDispatcher()
+        val state = TestState.Waiting(3)
+
+        val result = dispatcher.handleEvent(state, TestEvent(chatId = 1, tag = "whatever"))
+
+        assertEquals(state, result?.newState)
+    }
+
+    @Test
+    fun `handleEvent returns null for a state of another type`() {
+        val dispatcher = RecordingDispatcher()
+
+        val result = dispatcher.handleEvent(OtherState(0), TestEvent(chatId = 1, tag = "whatever"))
+
+        assertNull(result)
     }
 }

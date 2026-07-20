@@ -4,7 +4,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 interface EffectExecutor {
-    suspend fun execute(effects: List<Effect>): List<EffectResult>
+    /**
+     * Runs [effects] and returns one [EffectResult] per *synchronous* effect, in order. An effect
+     * registered as async (see [EffectRegistry.registerAsync]) produces no [EffectResult] here —
+     * instead, [dispatchAsync] is called with a suspend block that runs that handler and returns
+     * its [Event]; the caller (telek's `Telek`) is responsible for actually launching that block
+     * somewhere that outlives this [execute] call and for routing a non-null [Event] back into the
+     * FSM. [dispatchAsync] is expected to be fire-and-forget from this method's perspective.
+     */
+    suspend fun execute(
+        effects: List<Effect>,
+        dispatchAsync: (suspend () -> Event?) -> Unit,
+    ): List<EffectResult>
 }
 
 /** What to do when an effect in a batch fails. */
@@ -22,9 +33,10 @@ enum class EffectFailurePolicy {
  * supply an [ExecutionContext] that may only become available after telek itself is constructed
  * (e.g. once a bot instance exists), without [Telek] needing to own or track that lifecycle.
  *
- * Handlers run on [Dispatchers.IO], since telek ships handlers that do blocking I/O
- * (kotlin-telegram-bot's client) — this keeps them off whatever dispatcher [Telek]'s
- * per-chat workers run on.
+ * Synchronous handlers run on [Dispatchers.IO], since telek ships handlers that do blocking I/O
+ * (kotlin-telegram-bot's client) — this keeps them off whatever dispatcher [Telek]'s per-chat
+ * workers run on. Async handlers (see [AsyncEffectHandler]) are handed to the caller-supplied
+ * `dispatchAsync` as-is; where they actually run is up to the caller.
  */
 class EffectExecutorImpl(
     private val effectRegistry: EffectRegistry,
@@ -32,18 +44,37 @@ class EffectExecutorImpl(
     private val failurePolicy: EffectFailurePolicy = EffectFailurePolicy.CONTINUE,
     private val logger: TelekLogger = TelekLogger.NoOp,
 ) : EffectExecutor {
-    override suspend fun execute(effects: List<Effect>): List<EffectResult> {
+    override suspend fun execute(
+        effects: List<Effect>,
+        dispatchAsync: (suspend () -> Event?) -> Unit,
+    ): List<EffectResult> {
         if (effects.isEmpty()) return emptyList()
         val resolvedContext = context()
 
         val results = mutableListOf<EffectResult>()
         for (effect in effects) {
+            @Suppress("UNCHECKED_CAST")
+            val asyncHandler = effectRegistry.getAsync(effect::class) as? AsyncEffectHandler<Effect>
+            if (asyncHandler != null) {
+                dispatchAsync { runAsync(resolvedContext, effect, asyncHandler) }
+                continue
+            }
+
             val result = executeOne(resolvedContext, effect)
             results += result
             if (failurePolicy == EffectFailurePolicy.FAIL_FAST && result is EffectFailed) break
         }
         return results
     }
+
+    private suspend fun runAsync(
+        context: ExecutionContext,
+        effect: Effect,
+        handler: AsyncEffectHandler<Effect>,
+    ): Event? =
+        runCatching { handler.handle(context, effect) }
+            .onFailure { logger.error("Async effect ${effect::class.simpleName} failed: ${it.message}", it) }
+            .getOrNull()
 
     private suspend fun executeOne(
         context: ExecutionContext,

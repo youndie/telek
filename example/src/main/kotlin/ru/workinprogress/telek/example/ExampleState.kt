@@ -18,7 +18,6 @@ sealed class ExampleState : State {
     data class LoadingCatFact(
         val number: Int,
         val string: String,
-        val messageId: Long? = null,
     ) : ExampleState()
 
     @Serializable

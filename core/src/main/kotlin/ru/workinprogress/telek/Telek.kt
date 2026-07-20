@@ -63,7 +63,13 @@ class Telek(
                     )
                 }
 
-            val effectResults = effectExecutor.execute(result.effects)
+            val effectResults =
+                effectExecutor.execute(result.effects) { asyncWork ->
+                    chatWorkers.launchAsync(chatId) {
+                        val event = asyncWork()
+                        if (event != null) onEvent(chatId, event)
+                    }
+                }
             effectResults.filterIsInstance<EffectFailed>().forEach { failed ->
                 interceptors.forEach { it.onError(chatId, input, failed.error) }
             }
@@ -84,6 +90,23 @@ class Telek(
         processTransition(chatId, input) { state ->
             val dispatcher = findDispatcherStrategy.findDispatcher(state, input)
             val transitionResult = dispatcher?.handle(state, input) ?: TransitionResult(state)
+            TransitionComputation(transitionResult, dispatcher)
+        }
+    }
+
+    /**
+     * Routes an [Event] produced by an [AsyncEffectHandler] back into the FSM, purely by the
+     * chat's current state (an event is never the first message of a flow, so there's no
+     * command/callback matching here — see [FindDispatcherStrategy]). Runs through the same
+     * per-chat worker as [onInput]/[applyReducer], so ordering with regular inputs is preserved.
+     */
+    private fun onEvent(
+        chatId: Long,
+        event: Event,
+    ) {
+        processTransition(chatId, null) { state ->
+            val dispatcher = findDispatcherStrategy.findDispatcher(state)
+            val transitionResult = dispatcher?.handleEvent(state, event) ?: TransitionResult(state)
             TransitionComputation(transitionResult, dispatcher)
         }
     }
