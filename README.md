@@ -113,17 +113,25 @@ This example shows how *telek* lets you:
 below is a minimal setup example using a parent coroutine scope, and interceptors.
 
 ```kotlin
+val contextSource = TelegramContextSource()
+
+val telek = Telek(
+    dispatchers = listOf(ExampleDispatcher()),
+    effectExecutor = telegramEffectExecutor(contextSource),
+)
+
 bot {
     token = "telegram token"
 
-    val telek = Telek(
-        dispatchers = listOf(ExampleDispatcher()),
-        effectExecutor = telegramEffectExecutor(),
-    )
-
-    dispatch { connect(telek) }
+    dispatch { connect(telek, contextSource) }
 }
 ```
+
+`TelegramContextSource` is what lets the effect executor reach the `Bot` instance: `bot { }` only
+hands one out inside a `dispatch { }` handler, so the executor and `connect()` share one source that
+resolves lazily on the first update. Both `EffectExecutor.execute` and every `EffectHandler.handle`
+are `suspend` — handlers run on `Dispatchers.IO`, off whatever dispatcher your chats' transitions run
+on, so a slow Telegram API call for one chat never blocks another chat's turn.
 
 
 ### ⚡ Defining a Custom Effect
@@ -142,7 +150,7 @@ data class CustomEffect(
 
 // Implement its handler
 class CustomEffectHandler : TelegramEffectHandler<CustomEffect> {
-    override fun handle(
+    override suspend fun handle(
         bot: Bot,
         effect: CustomEffect,
     ): EffectResult =
@@ -168,7 +176,7 @@ val effectRegistry =
         register(CustomEffect::class, CustomEffectHandler())
     }
 
-val effectExecutor = EffectExecutorImpl(effectRegistry)
+val effectExecutor = telegramEffectExecutor(contextSource, effectRegistry)
 ```
 
 And use it inside a transition:
@@ -218,7 +226,7 @@ val userStateStore = PersistableUserStateStoreImpl<YourState>(
 val telek = Telek(
     userStateStore = userStateStore,
     dispatchers = listOf(ExampleDispatcher()),
-    effectExecutor = telegramEffectExecutor(),
+    effectExecutor = telegramEffectExecutor(contextSource),
 )
 ```
 

@@ -7,9 +7,12 @@ import ru.workinprogress.telek.Callback
 import ru.workinprogress.telek.Message
 import ru.workinprogress.telek.Telek
 
-fun com.github.kotlintelegrambot.dispatcher.Dispatcher.connect(telek: Telek) {
+fun com.github.kotlintelegrambot.dispatcher.Dispatcher.connect(
+    telek: Telek,
+    contextSource: TelegramContextSource,
+) {
     fun ensureContext(bot: Bot) {
-        telek.initIfNeeded(TelegramContext(bot))
+        contextSource.provide(bot)
     }
 
     message {

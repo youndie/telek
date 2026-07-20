@@ -18,16 +18,10 @@ class Telek(
     private val findDispatcherStrategy: FindDispatcherStrategy = DefaultFindDispatcherStrategy(dispatchers),
     chatWorkerIdleTimeout: Duration = 15.minutes,
 ) {
-    private lateinit var context: ExecutionContext
     private val chatWorkers = ChatWorkers(scope, chatWorkerIdleTimeout)
 
     init {
         dispatchers.forEach { registerDispatcher(it) }
-    }
-
-    fun initIfNeeded(context: ExecutionContext) {
-        if (::context.isInitialized) return
-        this.context = context
     }
 
     /**
@@ -69,7 +63,10 @@ class Telek(
                     )
                 }
 
-            val effectResults = effectExecutor.execute(context, result.effects)
+            val effectResults = effectExecutor.execute(result.effects)
+            effectResults.filterIsInstance<EffectFailed>().forEach { failed ->
+                interceptors.forEach { it.onError(chatId, input, failed.error) }
+            }
             result.dispatcher?.onEffectResults(result.newState, effectResults)
             interceptors.forEach {
                 it.onAfterStateChanged(chatId, result.oldState, result.newState)

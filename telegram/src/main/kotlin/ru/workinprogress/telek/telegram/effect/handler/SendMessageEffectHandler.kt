@@ -7,7 +7,7 @@ import ru.workinprogress.telek.EffectResult
 import ru.workinprogress.telek.telegram.effect.SendMessageEffect
 
 class SendMessageEffectHandler : TelegramEffectHandler<SendMessageEffect> {
-    override fun handle(
+    override suspend fun handle(
         bot: Bot,
         effect: SendMessageEffect,
     ): EffectResult =

@@ -8,7 +8,7 @@ import ru.workinprogress.telek.telegram.TelegramContext
 import ru.workinprogress.telek.telegram.effect.TelegramEffect
 
 interface TelegramEffectHandler<T : TelegramEffect> : EffectHandler<T> {
-    override fun handle(
+    override suspend fun handle(
         context: ExecutionContext,
         effect: T,
     ): EffectResult {
@@ -19,7 +19,7 @@ interface TelegramEffectHandler<T : TelegramEffect> : EffectHandler<T> {
         return handle(context.bot, effect)
     }
 
-    fun handle(
+    suspend fun handle(
         bot: Bot,
         effect: T,
     ): EffectResult

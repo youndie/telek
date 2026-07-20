@@ -1,5 +1,6 @@
 package ru.workinprogress.telek.telegram.effect
 
+import ru.workinprogress.telek.telegram.TelegramContextSource
 import ru.workinprogress.telek.telegram.effect.handler.EditMarkupEffectHandler
 import ru.workinprogress.telek.telegram.effect.handler.EditMessageEffectHandler
 import ru.workinprogress.telek.telegram.effect.handler.SendMessageEffectHandler
@@ -18,7 +19,7 @@ class DefaultEffectRegistryTest {
 
     @Test
     fun `telegramEffectExecutor builds a working EffectExecutorImpl`() {
-        val executor = telegramEffectExecutor()
+        val executor = telegramEffectExecutor(TelegramContextSource())
 
         assertIs<ru.workinprogress.telek.EffectExecutorImpl>(executor)
     }

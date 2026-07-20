@@ -7,7 +7,6 @@ import kotlinx.coroutines.test.runTest
 import ru.workinprogress.telek.support.FakeEffectExecutor
 import ru.workinprogress.telek.support.RecordingInterceptor
 import ru.workinprogress.telek.support.TestEffect
-import ru.workinprogress.telek.support.TestExecutionContext
 import ru.workinprogress.telek.support.TestState
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -65,12 +64,10 @@ class TelekTest {
         runTest {
             val executor = FakeEffectExecutor()
             val telek = Telek(scope = this, dispatchers = listOf(WizardDispatcher()), effectExecutor = executor)
-            telek.initIfNeeded(TestExecutionContext)
-
             telek.onInput(chatId = 1, input = Message(1, "/test"))
             advanceUntilIdle()
 
-            assertEquals(listOf(TestEffect("started")), executor.executed.single().second)
+            assertEquals(listOf(TestEffect("started")), executor.executed.single())
         }
 
     @Test
@@ -78,8 +75,6 @@ class TelekTest {
         runTest {
             val executor = FakeEffectExecutor()
             val telek = Telek(scope = this, dispatchers = listOf(WizardDispatcher()), effectExecutor = executor)
-            telek.initIfNeeded(TestExecutionContext)
-
             telek.onInput(1, Message(1, "/test"))
             advanceUntilIdle()
             telek.onInput(1, Message(1, "hello"))
@@ -87,9 +82,9 @@ class TelekTest {
             telek.onInput(1, Callback(1, messageId = 1, data = "confirm"))
             advanceUntilIdle()
 
-            val allEffects = executor.executed.map { it.second }
+            val allEffects = executor.executed
             assertEquals(
-                listOf(
+                listOf<List<Effect>>(
                     listOf(TestEffect("started")),
                     listOf(TestEffect("confirm-prompt")),
                     listOf(TestEffect("done")),
@@ -110,8 +105,6 @@ class TelekTest {
                     dispatchers = listOf(WizardDispatcher()),
                     effectExecutor = executor,
                 )
-            telek.initIfNeeded(TestExecutionContext)
-
             telek.onInput(1, Message(1, "/test"))
             advanceUntilIdle()
             telek.onInput(1, Message(1, "hello"))
@@ -120,23 +113,6 @@ class TelekTest {
             advanceUntilIdle()
 
             assertNull(store.get(1))
-        }
-
-    @Test
-    fun `initIfNeeded sets the context only once`() =
-        runTest {
-            val executor = FakeEffectExecutor()
-            val telek = Telek(scope = this, dispatchers = listOf(WizardDispatcher()), effectExecutor = executor)
-            val first = TestExecutionContext
-            val second = object : ExecutionContext {}
-
-            telek.initIfNeeded(first)
-            telek.initIfNeeded(second)
-
-            telek.onInput(1, Message(1, "/test"))
-            advanceUntilIdle()
-
-            assertSame(first, executor.executed.single().first)
         }
 
     @Test
@@ -151,8 +127,6 @@ class TelekTest {
                     effectExecutor = executor,
                     interceptors = listOf(interceptor),
                 )
-            telek.initIfNeeded(TestExecutionContext)
-
             val input = Message(1, "/test")
             telek.onInput(1, input)
             advanceUntilIdle()
@@ -180,8 +154,6 @@ class TelekTest {
                     effectExecutor = executor,
                     interceptors = listOf(interceptor),
                 )
-            telek.initIfNeeded(TestExecutionContext)
-
             telek.onInput(1, Message(1, "/test"))
             advanceUntilIdle()
 
@@ -209,8 +181,6 @@ class TelekTest {
                     effectExecutor = executor,
                     interceptors = listOf(interceptor),
                 )
-            telek.initIfNeeded(TestExecutionContext)
-
             // current state is EmptyState, but the gate expects TestState -> mismatch
             dispatcher.postDirect(1) { state -> noTransition(state) }
             advanceUntilIdle()
@@ -232,8 +202,6 @@ class TelekTest {
                     dispatchers = listOf(dispatcher),
                     effectExecutor = executor,
                 )
-            telek.initIfNeeded(TestExecutionContext)
-
             telek.onInput(1, Message(1, "/test"))
             advanceUntilIdle()
 
@@ -278,13 +246,38 @@ class TelekTest {
                 }
             val executor = FakeEffectExecutor { EffectSuccess }
             val telek = Telek(scope = this, dispatchers = listOf(dispatcher), effectExecutor = executor)
-            telek.initIfNeeded(TestExecutionContext)
-
             telek.onInput(1, Message(1, "/test"))
             advanceUntilIdle()
 
             assertEquals(1, results.size)
             assertEquals(TestState.Waiting(0), results.single().first)
             assertTrue(results.single().second.all { it === EffectSuccess })
+        }
+
+    @Test
+    fun `a failed effect is reported to onError even though the transition itself succeeded`() =
+        runTest {
+            val interceptor = RecordingInterceptor()
+            val boom = RuntimeException("send failed")
+            val executor = FakeEffectExecutor { EffectFailed(boom) }
+            val telek =
+                Telek(
+                    scope = this,
+                    dispatchers = listOf(WizardDispatcher()),
+                    effectExecutor = executor,
+                    interceptors = listOf(interceptor),
+                )
+
+            val input = Message(1, "/test")
+            telek.onInput(1, input)
+            advanceUntilIdle()
+
+            assertEquals(1, interceptor.errors.size)
+            val error = interceptor.errors.single()
+            assertEquals(1, error.chatId)
+            assertEquals(input, error.input)
+            assertSame(boom, error.error)
+            // The transition itself is unaffected — a failed effect doesn't undo the state change.
+            assertEquals(1, interceptor.afterStateChanged.size)
         }
 }

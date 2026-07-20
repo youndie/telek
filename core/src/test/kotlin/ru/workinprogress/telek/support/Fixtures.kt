@@ -56,7 +56,7 @@ class RecordingEffectHandler(
 ) : EffectHandler<TestEffect> {
     val handled = mutableListOf<TestEffect>()
 
-    override fun handle(
+    override suspend fun handle(
         context: ExecutionContext,
         effect: TestEffect,
     ): EffectResult {
@@ -68,13 +68,10 @@ class RecordingEffectHandler(
 class FakeEffectExecutor(
     private val resultsFor: (Effect) -> EffectResult = { EffectSuccess },
 ) : EffectExecutor {
-    val executed = mutableListOf<Pair<ExecutionContext, List<Effect>>>()
+    val executed = mutableListOf<List<Effect>>()
 
-    override fun execute(
-        context: ExecutionContext,
-        effects: List<Effect>,
-    ): List<EffectResult> {
-        executed += context to effects
+    override suspend fun execute(effects: List<Effect>): List<EffectResult> {
+        executed += effects
         return effects.map(resultsFor)
     }
 }

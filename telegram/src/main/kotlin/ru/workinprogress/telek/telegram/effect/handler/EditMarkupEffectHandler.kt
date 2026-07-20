@@ -7,7 +7,7 @@ import ru.workinprogress.telek.EffectResult
 import ru.workinprogress.telek.telegram.effect.EditMarkupEffect
 
 class EditMarkupEffectHandler : TelegramEffectHandler<EditMarkupEffect> {
-    override fun handle(
+    override suspend fun handle(
         bot: Bot,
         effect: EditMarkupEffect,
     ): EffectResult =

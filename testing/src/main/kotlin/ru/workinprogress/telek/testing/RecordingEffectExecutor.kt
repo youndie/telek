@@ -4,7 +4,6 @@ import ru.workinprogress.telek.Effect
 import ru.workinprogress.telek.EffectExecutor
 import ru.workinprogress.telek.EffectResult
 import ru.workinprogress.telek.EffectSuccess
-import ru.workinprogress.telek.ExecutionContext
 
 /**
  * An [EffectExecutor] that records every batch of effects it was asked to run instead of
@@ -16,16 +15,13 @@ import ru.workinprogress.telek.ExecutionContext
 class RecordingEffectExecutor(
     private val resultsFor: (Effect) -> EffectResult = { EffectSuccess },
 ) : EffectExecutor {
-    private val _executed = mutableListOf<Pair<ExecutionContext, List<Effect>>>()
-    val executed: List<Pair<ExecutionContext, List<Effect>>> get() = _executed
+    private val _executed = mutableListOf<List<Effect>>()
+    val executed: List<List<Effect>> get() = _executed
 
-    val effects: List<Effect> get() = _executed.flatMap { it.second }
+    val effects: List<Effect> get() = _executed.flatten()
 
-    override fun execute(
-        context: ExecutionContext,
-        effects: List<Effect>,
-    ): List<EffectResult> {
-        _executed += context to effects
+    override suspend fun execute(effects: List<Effect>): List<EffectResult> {
+        _executed += effects
         return effects.map(resultsFor)
     }
 }

@@ -2,6 +2,7 @@ package ru.workinprogress.telek.telegram.effect.handler
 
 import com.github.kotlintelegrambot.Bot
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import ru.workinprogress.telek.EffectResult
 import ru.workinprogress.telek.EffectSuccess
 import ru.workinprogress.telek.ExecutionContext
@@ -18,7 +19,7 @@ private data class FakeTelegramEffect(
 private class FakeHandler : TelegramEffectHandler<FakeTelegramEffect> {
     var handledWith: Bot? = null
 
-    override fun handle(
+    override suspend fun handle(
         bot: Bot,
         effect: FakeTelegramEffect,
     ): EffectResult {
@@ -31,23 +32,25 @@ private object NotTelegramContext : ExecutionContext
 
 class TelegramEffectHandlerContractTest {
     @Test
-    fun `handle throws when the context is not a TelegramContext`() {
-        val handler = FakeHandler()
+    fun `handle throws when the context is not a TelegramContext`() =
+        runBlocking {
+            val handler = FakeHandler()
 
-        assertFailsWith<IllegalArgumentException> {
-            handler.handle(NotTelegramContext, FakeTelegramEffect("x"))
+            assertFailsWith<IllegalArgumentException> {
+                handler.handle(NotTelegramContext, FakeTelegramEffect("x"))
+            }
         }
-    }
 
     @Test
-    fun `handle delegates to the bot-based overload when the context is a TelegramContext`() {
-        val handler = FakeHandler()
-        val bot = mockk<Bot>()
-        val context = TelegramContext(bot)
+    fun `handle delegates to the bot-based overload when the context is a TelegramContext`() =
+        runBlocking {
+            val handler = FakeHandler()
+            val bot = mockk<Bot>()
+            val context = TelegramContext(bot)
 
-        val result = handler.handle(context, FakeTelegramEffect("x"))
+            val result = handler.handle(context, FakeTelegramEffect("x"))
 
-        assertSame(bot, handler.handledWith)
-        assertSame(EffectSuccess, result)
-    }
+            assertSame(bot, handler.handledWith)
+            assertSame(EffectSuccess, result)
+        }
 }

@@ -6,6 +6,7 @@ import com.github.kotlintelegrambot.entities.ParseMode
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.runBlocking
 import ru.workinprogress.telek.EffectFailed
 import ru.workinprogress.telek.telegram.effect.EditMessageEffect
 import kotlin.test.Test
@@ -17,51 +18,53 @@ class EditMessageEffectHandlerTest {
     private val handler = EditMessageEffectHandler()
 
     @Test
-    fun `success returns an EditMessageEffectResult`() {
-        val bot = mockk<Bot>()
-        every {
-            bot.editMessageText(
-                chatId = ChatId.fromId(1),
-                messageId = 2,
-                text = "edited",
-                parseMode = ParseMode.MARKDOWN,
-                replyMarkup = null,
-            )
-        } returns (null to null)
+    fun `success returns an EditMessageEffectResult`() =
+        runBlocking {
+            val bot = mockk<Bot>()
+            every {
+                bot.editMessageText(
+                    chatId = ChatId.fromId(1),
+                    messageId = 2,
+                    text = "edited",
+                    parseMode = ParseMode.MARKDOWN,
+                    replyMarkup = null,
+                )
+            } returns (null to null)
 
-        val result = handler.handle(bot, EditMessageEffect(chatId = 1, messageId = 2, text = "edited"))
+            val result = handler.handle(bot, EditMessageEffect(chatId = 1, messageId = 2, text = "edited"))
 
-        val success = assertIs<EditMessageEffectResult>(result)
-        assertEquals(1, success.chatId)
-        assertEquals(2, success.messageId)
-        verify {
-            bot.editMessageText(
-                chatId = ChatId.fromId(1),
-                messageId = 2,
-                text = "edited",
-                parseMode = ParseMode.MARKDOWN,
-                replyMarkup = null,
-            )
+            val success = assertIs<EditMessageEffectResult>(result)
+            assertEquals(1, success.chatId)
+            assertEquals(2, success.messageId)
+            verify {
+                bot.editMessageText(
+                    chatId = ChatId.fromId(1),
+                    messageId = 2,
+                    text = "edited",
+                    parseMode = ParseMode.MARKDOWN,
+                    replyMarkup = null,
+                )
+            }
         }
-    }
 
     @Test
-    fun `failure is reported as EffectFailed, not an EffectResult subtype`() {
-        val bot = mockk<Bot>()
-        val exception = RuntimeException("boom")
-        every {
-            bot.editMessageText(
-                chatId = ChatId.fromId(1),
-                messageId = 2,
-                text = "edited",
-                parseMode = ParseMode.MARKDOWN,
-                replyMarkup = null,
-            )
-        } returns (null to exception)
+    fun `failure is reported as EffectFailed, not an EffectResult subtype`() =
+        runBlocking {
+            val bot = mockk<Bot>()
+            val exception = RuntimeException("boom")
+            every {
+                bot.editMessageText(
+                    chatId = ChatId.fromId(1),
+                    messageId = 2,
+                    text = "edited",
+                    parseMode = ParseMode.MARKDOWN,
+                    replyMarkup = null,
+                )
+            } returns (null to exception)
 
-        val result = handler.handle(bot, EditMessageEffect(chatId = 1, messageId = 2, text = "edited"))
+            val result = handler.handle(bot, EditMessageEffect(chatId = 1, messageId = 2, text = "edited"))
 
-        val failed = assertIs<EffectFailed>(result)
-        assertSame(exception, failed.error)
-    }
+            val failed = assertIs<EffectFailed>(result)
+            assertSame(exception, failed.error)
+        }
 }
