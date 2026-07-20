@@ -9,14 +9,6 @@ import kotlinx.serialization.properties.decodeFromStringMap
 import kotlinx.serialization.properties.encodeToStringMap
 import ru.workinprogress.telek.Callback
 import ru.workinprogress.telek.router.RouteUtils.requireContext
-import ru.workinprogress.telek.telegram.RowBuilder
-
-fun RowBuilder.callback(
-    name: String,
-    route: Route,
-) {
-    callback(name, route.encode())
-}
 
 inline fun <reified T : Route> Callback.isRouteOf(registry: RouteRegistry): Boolean = registry.typeIs<T>(data)
 

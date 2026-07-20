@@ -1,8 +1,10 @@
+// Not published — exists solely so README.md's code samples are checked by the compiler as part
+// of `./gradlew build`. If you change a public API these samples use, this module will fail to
+// compile; update both the sample here and the corresponding snippet in README.md together.
 plugins {
     kotlin("jvm")
-    alias(libs.plugins.ktlintPlugin)
     alias(libs.plugins.serializationPlugin)
-    application
+    alias(libs.plugins.ktlintPlugin)
 }
 
 kotlin {
@@ -19,9 +21,4 @@ dependencies {
     implementation(libs.kotlinxCoroutines)
     implementation(libs.kotlinxSerializationJson)
     implementation(libs.kotlinTelegramBot)
-
-    implementation(ktorLibs.client.core)
-    implementation(ktorLibs.client.okhttp)
-    implementation(ktorLibs.client.contentNegotiation)
-    implementation(ktorLibs.serialization.kotlinx.json)
 }

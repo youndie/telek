@@ -2,20 +2,10 @@ package ru.workinprogress.telek.persistence
 
 import ru.workinprogress.telek.FinalState
 import ru.workinprogress.telek.State
+import ru.workinprogress.telek.StateStorage
 import ru.workinprogress.telek.UpdateResult
 import ru.workinprogress.telek.UserStateStore
 import java.util.concurrent.ConcurrentHashMap
-
-interface StateStorage<S : State> {
-    suspend fun save(
-        chatId: Long,
-        state: S,
-    )
-
-    suspend fun load(chatId: Long): S?
-
-    suspend fun delete(chatId: Long)
-}
 
 /**
  * See [UserStateStore]'s contract note: [Telek][ru.workinprogress.telek.Telek] never calls
@@ -24,7 +14,7 @@ interface StateStorage<S : State> {
  * *different* chatIds without any additional synchronization.
  */
 class PersistableUserStateStoreImpl<T : State>(
-    val stateStorage: FileStateStorage<T>,
+    val stateStorage: StateStorage<T>,
 ) : UserStateStore {
     private val states = ConcurrentHashMap<Long, State>()
 

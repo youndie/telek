@@ -6,12 +6,12 @@ plugins {
 }
 
 dependencies {
-    implementation(kotlin("reflect"))
-
+    api(projects.router)
     implementation(projects.core)
-    implementation(libs.kotlinxSerializationProperties)
-    implementation(libs.kotlinxCoroutines)
+    implementation(projects.telegram)
+    implementation(libs.kotlinTelegramBot)
 
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit5"))
+    testImplementation(libs.kotlinxSerializationJson)
 }

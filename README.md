@@ -274,8 +274,15 @@ dependencies {
     // ... core + telegram as shown above
     implementation("ru.workinprogress.telek:persistence:<VERSION>")
     implementation("ru.workinprogress.telek:router:<VERSION>")
+
+    // only if you're building inline keyboards with typed routes (RowBuilder.callback(name, route))
+    implementation("ru.workinprogress.telek:router-telegram:<VERSION>")
 }
 ```
+
+`:router` itself doesn't depend on `:telegram` — the route encode/decode logic (`Route`, `RouteRegistry`,
+`@RouteContext`) is transport-agnostic. `:router-telegram` adds the one bit of glue that needs a
+transport: the `RowBuilder.callback(name, route)` extension used below.
 
 ### 💾 Persistence module
 
@@ -335,14 +342,17 @@ val registry = routes {
 }
 
 // Build inline keyboard with typed routes
-sendMessage(chatId = input.chatId, message = { row { text("Choose:") } })
-keyboard {
-    row {
-        // `callback(name, route)` comes from router module
-        callback(name = "Confirm", route = ExampleRouteConfirm())
-        callback(name = "Cancel", route = ExampleRouteCancel())
-    }
-}
+sendMessage(
+    chatId = input.chatId,
+    message = { row { text("Choose:") } },
+    keyboard = {
+        row {
+            // `callback(name, route)` comes from the router-telegram module
+            callback(name = "Confirm", route = ExampleRouteConfirm())
+            callback(name = "Cancel", route = ExampleRouteCancel())
+        }
+    },
+)
 
 // Handle callbacks in a dispatcher
 when (input) {

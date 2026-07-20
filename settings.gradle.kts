@@ -22,7 +22,9 @@ include(":core")
 include(":telegram")
 include(":persistence")
 include(":router")
+include(":router-telegram")
 include(":testing")
 include(":example")
+include(":docs-samples")
 
 rootProject.name = "telek"
