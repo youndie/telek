@@ -264,6 +264,20 @@ Notes:
 * See `:example`'s `ExampleDispatcher` for the full pattern in context (fetching a cat fact while
   showing a "Loading..." message).
 
+**Debounce (opt-in).** By default two rapid inputs that each start the same async effect run
+concurrently — whichever resolves last wins. If you want latest-wins semantics instead (typical for
+"search as you type"), implement the `Debounced` marker on the effect:
+
+```kotlin
+data class SearchProductsEffect(val chatId: Long, val query: String) : Effect, Debounced {
+    override val debounceKey: Any get() = "search" // per-chat: same key cancels the previous in-flight search
+}
+```
+
+When a `Debounced` async effect is dispatched, the previous still-running handler for the same
+`debounceKey` **in the same chat** is cancelled before the new one starts. Different keys don't
+interfere, and effects without the marker are never auto-cancelled.
+
 
 ### 📦 Optional modules
 

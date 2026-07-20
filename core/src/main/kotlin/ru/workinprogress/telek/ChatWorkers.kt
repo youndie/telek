@@ -3,6 +3,7 @@
 package ru.workinprogress.telek
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
@@ -30,32 +31,45 @@ import kotlin.time.Duration
  * recreated on the next [submit] for that chatId, so memory use is bounded by *currently active*
  * chats rather than by every chatId ever seen.
  *
- * The inbox is unbounded: [submit] never suspends waiting for room. There is currently no
- * backpressure: a chat that produces work faster than its worker can process it will grow that
- * chat's inbox without bound. That's an intentional, documented gap (see telek's BACKLOG.md
- * item 12), not an oversight — a bounded inbox needs a dropping/rate-limiting policy on top of it
- * to stay correct, not just a capacity number.
+ * [submit] never suspends waiting for room: each chat's inbox holds at most [inboxCapacity]
+ * pending tasks. Once full, further [submit] calls for that chat **drop** the new task and log a
+ * warning via [logger] rather than growing without bound or blocking the caller — a chat that's
+ * producing input faster than it can be processed (e.g. a user hammering an inline button) loses
+ * the newest input instead of exhausting memory or stalling whoever calls [submit].
  */
 internal class ChatWorkers(
     private val scope: CoroutineScope,
     private val idleTimeout: Duration,
+    private val inboxCapacity: Int,
+    private val logger: TelekLogger = TelekLogger.NoOp,
 ) {
     private val workers = ConcurrentHashMap<Long, Worker>()
 
-    /** Enqueues [task] for [chatId] and returns once it has been accepted — not once it has run. */
+    /**
+     * Enqueues [task] for [chatId] and returns once it has either been accepted or dropped — not
+     * once it has run. See the class doc for what happens when that chat's inbox is full.
+     */
     suspend fun submit(
         chatId: Long,
         task: suspend () -> Unit,
     ) {
         while (true) {
             val worker = workers.computeIfAbsent(chatId) { Worker(chatId) }
-            if (worker.trySend(task)) return
-            // This worker has already decided to retire but may still be draining its own
-            // backlog; it removes itself from the map only once that's fully done (see retire()).
-            // Retrying here — instead of removing it ourselves — is what keeps a replacement
-            // worker from ever running concurrently with the old one's still-in-flight tail,
-            // which would break per-chat ordering.
-            yield()
+            when (worker.trySend(task)) {
+                SendOutcome.ACCEPTED -> return
+                SendOutcome.RETIRED -> {
+                    // This worker has already decided to retire but may still be draining its own
+                    // backlog; it removes itself from the map only once that's fully done (see
+                    // retire()). Retrying here — instead of removing it ourselves — is what keeps
+                    // a replacement worker from ever running concurrently with the old one's
+                    // still-in-flight tail, which would break per-chat ordering.
+                    yield()
+                }
+                SendOutcome.DROPPED -> {
+                    logger.warn("Dropping input for chatId=$chatId — inbox is full (capacity=$inboxCapacity)")
+                    return
+                }
+            }
         }
     }
 
@@ -64,16 +78,23 @@ internal class ChatWorkers(
      * block the transition that produced them. Fire-and-forget: doesn't wait for [task], and
      * [task] is cancelled if this chat's worker retires (see [Worker.retire]).
      *
+     * If [key] is non-null (see [Debounced]), any previously launched, still-running [task] for
+     * this same chat and [key] is cancelled first — at most one debounced job per (chatId, key)
+     * runs at a time. `null` (the default) means "never auto-cancelled".
+     *
      * Must be called from within a task already running on that chat's worker (i.e. from inside a
      * [submit]ted task — which is exactly where [Telek] calls it from, while executing a chat's
      * effects), so the worker is guaranteed to still be live and not mid-retirement.
      */
     fun launchAsync(
         chatId: Long,
+        key: Any? = null,
         task: suspend () -> Unit,
     ) {
-        workers.computeIfAbsent(chatId) { Worker(chatId) }.launchAsync(task)
+        workers.computeIfAbsent(chatId) { Worker(chatId) }.launchAsync(key, task)
     }
+
+    private enum class SendOutcome { ACCEPTED, RETIRED, DROPPED }
 
     private inner class Worker(
         private val chatId: Long,
@@ -83,7 +104,7 @@ internal class ChatWorkers(
         // without touching unrelated chats. SupervisorJob so one failing async effect doesn't
         // cancel the receive loop or any other in-flight async effect for this same chat.
         private val workerScope = CoroutineScope(scope.coroutineContext + SupervisorJob())
-        private val inbox = Channel<suspend () -> Unit>(Channel.UNLIMITED)
+        private val inbox = Channel<suspend () -> Unit>(inboxCapacity)
 
         // Guards the transition from "accepting work" to "retired": every enqueue and the
         // retirement decision run inside this lock, so a submitter can never enqueue into a
@@ -95,18 +116,41 @@ internal class ChatWorkers(
         private val lifecycle = Mutex()
         private var retired = false
 
-        /** Returns false if this worker has already retired and won't process anything more. */
-        suspend fun trySend(task: suspend () -> Unit): Boolean =
+        // Only ever touched from within launchAsync(), which per its own contract is only ever
+        // called from this worker's own currently-executing task — i.e. never concurrently for
+        // the same Worker — so a plain map (no locking) is safe here.
+        private val debouncedJobs = mutableMapOf<Any, Job>()
+
+        /**
+         * Uses the channel's non-suspending `trySend` rather than `send` — a full inbox should
+         * drop the task and report back immediately, not suspend the caller waiting for room
+         * (that would just turn "the chat is behind" into "the caller is blocked", not fix it).
+         * This is also what makes it safe to call `trySend` while holding [lifecycle]: it never
+         * suspends, so the lock is only ever held for plain, synchronous bookkeeping.
+         */
+        suspend fun trySend(task: suspend () -> Unit): SendOutcome =
             lifecycle.withLock {
                 if (retired) {
-                    false
+                    SendOutcome.RETIRED
+                } else if (inbox.trySend(task).isSuccess) {
+                    SendOutcome.ACCEPTED
                 } else {
-                    inbox.trySend(task).isSuccess
+                    SendOutcome.DROPPED
                 }
             }
 
-        fun launchAsync(task: suspend () -> Unit) {
-            workerScope.launch { task() }
+        fun launchAsync(
+            key: Any?,
+            task: suspend () -> Unit,
+        ) {
+            if (key != null) {
+                debouncedJobs[key]?.cancel()
+            }
+            val job = workerScope.launch { task() }
+            if (key != null) {
+                debouncedJobs[key] = job
+                job.invokeOnCompletion { debouncedJobs.remove(key, job) }
+            }
         }
 
         init {

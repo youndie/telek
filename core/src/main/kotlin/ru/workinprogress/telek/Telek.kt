@@ -17,8 +17,10 @@ class Telek(
     private val effectExecutor: EffectExecutor,
     private val findDispatcherStrategy: FindDispatcherStrategy = DefaultFindDispatcherStrategy(dispatchers),
     chatWorkerIdleTimeout: Duration = 15.minutes,
+    chatInboxCapacity: Int = 64,
+    logger: TelekLogger = TelekLogger.NoOp,
 ) {
-    private val chatWorkers = ChatWorkers(scope, chatWorkerIdleTimeout)
+    private val chatWorkers = ChatWorkers(scope, chatWorkerIdleTimeout, chatInboxCapacity, logger)
 
     init {
         dispatchers.forEach { registerDispatcher(it) }
@@ -64,8 +66,8 @@ class Telek(
                 }
 
             val effectResults =
-                effectExecutor.execute(result.effects) { asyncWork ->
-                    chatWorkers.launchAsync(chatId) {
+                effectExecutor.execute(result.effects) { key, asyncWork ->
+                    chatWorkers.launchAsync(chatId, key) {
                         val event = asyncWork()
                         if (event != null) onEvent(chatId, event)
                     }

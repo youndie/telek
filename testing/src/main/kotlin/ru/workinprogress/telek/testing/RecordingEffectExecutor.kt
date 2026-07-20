@@ -1,5 +1,6 @@
 package ru.workinprogress.telek.testing
 
+import ru.workinprogress.telek.Debounced
 import ru.workinprogress.telek.Effect
 import ru.workinprogress.telek.EffectExecutor
 import ru.workinprogress.telek.EffectResult
@@ -16,7 +17,8 @@ import ru.workinprogress.telek.Event
  * By default every effect is treated as synchronous. To simulate an async effect (see
  * `AsyncEffectHandler`), have [asyncWorkFor] return the suspend block that would have produced its
  * [Event] instead of `null` for that effect — it's handed to `dispatchAsync` exactly as a real
- * `EffectExecutorImpl` would, so `Telek` routes the resulting event back into the FSM for real.
+ * `EffectExecutorImpl` would (along with the effect's [Debounced.debounceKey], if it has one), so
+ * `Telek` routes the resulting event — and any debounce cancellation — back into the FSM for real.
  */
 class RecordingEffectExecutor(
     private val resultsFor: (Effect) -> EffectResult = { EffectSuccess },
@@ -29,14 +31,14 @@ class RecordingEffectExecutor(
 
     override suspend fun execute(
         effects: List<Effect>,
-        dispatchAsync: (suspend () -> Event?) -> Unit,
+        dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
     ): List<EffectResult> {
         _executed += effects
         val results = mutableListOf<EffectResult>()
         for (effect in effects) {
             val asyncWork = asyncWorkFor(effect)
             if (asyncWork != null) {
-                dispatchAsync(asyncWork)
+                dispatchAsync((effect as? Debounced)?.debounceKey, asyncWork)
                 continue
             }
             results += resultsFor(effect)

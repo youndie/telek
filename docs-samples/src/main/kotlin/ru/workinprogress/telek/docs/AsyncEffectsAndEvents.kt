@@ -2,6 +2,7 @@
 package ru.workinprogress.telek.docs
 
 import ru.workinprogress.telek.AsyncEffectHandler
+import ru.workinprogress.telek.Debounced
 import ru.workinprogress.telek.Effect
 import ru.workinprogress.telek.Event
 import ru.workinprogress.telek.ExecutionContext
@@ -77,6 +78,14 @@ fun asyncEffectUsageSample(input: Input): TransitionResult<MyState> =
         sendMessage(input.chatId, "Loading...")
         add(FetchCatFactEffect(chatId = input.chatId)) // fire-and-forget from here on
     }
+
+data class SearchProductsEffect(
+    val chatId: Long,
+    val query: String,
+) : Effect,
+    Debounced {
+    override val debounceKey: Any get() = "search" // per-chat: same key cancels the previous in-flight search
+}
 
 class MyDispatcher : StateDispatcher<MyState>() {
     override val startCommand = "my"

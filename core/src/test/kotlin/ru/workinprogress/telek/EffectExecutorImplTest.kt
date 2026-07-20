@@ -3,6 +3,7 @@ package ru.workinprogress.telek
 import kotlinx.coroutines.test.runTest
 import ru.workinprogress.telek.support.RecordingAsyncEffectHandler
 import ru.workinprogress.telek.support.RecordingEffectHandler
+import ru.workinprogress.telek.support.TestDebouncedEffect
 import ru.workinprogress.telek.support.TestEffect
 import ru.workinprogress.telek.support.TestEvent
 import ru.workinprogress.telek.support.TestExecutionContext
@@ -22,7 +23,7 @@ class EffectExecutorImplTest {
             registry.register(TestEffect::class, handler)
             val executor = EffectExecutorImpl(registry, context = { TestExecutionContext })
 
-            val results = executor.execute(listOf(TestEffect("a"))) {}
+            val results = executor.execute(listOf(TestEffect("a"))) { _, _ -> }
 
             assertEquals(listOf(EffectSuccess), results)
             assertEquals(listOf(TestEffect("a")), handler.handled)
@@ -33,7 +34,7 @@ class EffectExecutorImplTest {
         runTest {
             val executor = EffectExecutorImpl(EffectRegistry(), context = { TestExecutionContext })
 
-            val results = executor.execute(listOf(TestEffect("missing"))) {}
+            val results = executor.execute(listOf(TestEffect("missing"))) { _, _ -> }
 
             val failed = assertIs<EffectFailed>(results.single())
             assertIs<IllegalStateException>(failed.error)
@@ -55,7 +56,7 @@ class EffectExecutorImplTest {
             )
             val executor = EffectExecutorImpl(registry, context = { TestExecutionContext })
 
-            val results = executor.execute(listOf(TestEffect("a"))) {}
+            val results = executor.execute(listOf(TestEffect("a"))) { _, _ -> }
 
             val failed = assertIs<EffectFailed>(results.single())
             assertSame(boom, failed.error)
@@ -81,7 +82,7 @@ class EffectExecutorImplTest {
             val results =
                 executor.execute(
                     listOf(TestEffect("ok"), TestEffect("throws"), NoHandlerEffect),
-                ) {}
+                ) { _, _ -> }
 
             assertEquals(3, results.size)
             assertEquals(EffectSuccess, results[0])
@@ -110,7 +111,7 @@ class EffectExecutorImplTest {
             val results =
                 executor.execute(
                     listOf(TestEffect("ok"), TestEffect("throws"), TestEffect("never runs")),
-                ) {}
+                ) { _, _ -> }
 
             assertEquals(2, results.size)
             assertEquals(EffectSuccess, results[0])
@@ -122,7 +123,7 @@ class EffectExecutorImplTest {
         runTest {
             val executor = EffectExecutorImpl(EffectRegistry(), context = { TestExecutionContext })
 
-            val results = executor.execute(emptyList()) {}
+            val results = executor.execute(emptyList()) { _, _ -> }
 
             assertTrue(results.isEmpty())
         }
@@ -136,7 +137,7 @@ class EffectExecutorImplTest {
             val executor = EffectExecutorImpl(registry, context = { TestExecutionContext })
             val dispatched = mutableListOf<suspend () -> Event?>()
 
-            val results = executor.execute(listOf(TestEffect("a"))) { work -> dispatched += work }
+            val results = executor.execute(listOf(TestEffect("a"))) { _, work -> dispatched += work }
 
             assertTrue(results.isEmpty())
             assertTrue(handler.handled.isEmpty()) // not run inline — only once `dispatched` is invoked
@@ -152,7 +153,7 @@ class EffectExecutorImplTest {
             val executor = EffectExecutorImpl(registry, context = { TestExecutionContext })
             var work: (suspend () -> Event?)? = null
 
-            executor.execute(listOf(TestEffect("a"))) { w -> work = w }
+            executor.execute(listOf(TestEffect("a"))) { _, w -> work = w }
 
             assertSame(expectedEvent, work?.invoke())
         }
@@ -177,7 +178,7 @@ class EffectExecutorImplTest {
             val executor = EffectExecutorImpl(registry, context = { TestExecutionContext }, logger = logger)
             var work: (suspend () -> Event?)? = null
 
-            executor.execute(listOf(TestEffect("a"))) { w -> work = w }
+            executor.execute(listOf(TestEffect("a"))) { _, w -> work = w }
 
             assertNull(work?.invoke())
             assertSame(boom, loggedError)
@@ -200,9 +201,45 @@ class EffectExecutorImplTest {
             )
             val executor = EffectExecutorImpl(registry, context = { TestExecutionContext })
 
-            val results = executor.execute(listOf(TestEffect("a"), NoHandlerEffect)) {}
+            val results = executor.execute(listOf(TestEffect("a"), NoHandlerEffect)) { _, _ -> }
 
             assertEquals(listOf(EffectSuccess), results)
+        }
+
+    @Test
+    fun `an effect implementing Debounced passes its debounceKey to dispatchAsync`() =
+        runTest {
+            val registry = EffectRegistry()
+            registry.registerAsync(
+                TestDebouncedEffect::class,
+                object : AsyncEffectHandler<TestDebouncedEffect> {
+                    override suspend fun handle(
+                        context: ExecutionContext,
+                        effect: TestDebouncedEffect,
+                    ): Event? = null
+                },
+            )
+            val executor = EffectExecutorImpl(registry, context = { TestExecutionContext })
+            var capturedKey: Any? = "not set"
+
+            executor.execute(listOf(TestDebouncedEffect("a", debounceKey = "search"))) { key, _ ->
+                capturedKey = key
+            }
+
+            assertEquals("search", capturedKey)
+        }
+
+    @Test
+    fun `an async effect that does not implement Debounced passes a null key`() =
+        runTest {
+            val registry = EffectRegistry()
+            registry.registerAsync(TestEffect::class, RecordingAsyncEffectHandler())
+            val executor = EffectExecutorImpl(registry, context = { TestExecutionContext })
+            var capturedKey: Any? = "not set"
+
+            executor.execute(listOf(TestEffect("a"))) { key, _ -> capturedKey = key }
+
+            assertNull(capturedKey)
         }
 
     private object NoHandlerEffect : Effect

@@ -1,6 +1,7 @@
 package ru.workinprogress.telek.support
 
 import ru.workinprogress.telek.AsyncEffectHandler
+import ru.workinprogress.telek.Debounced
 import ru.workinprogress.telek.Effect
 import ru.workinprogress.telek.EffectExecutor
 import ru.workinprogress.telek.EffectHandler
@@ -39,6 +40,12 @@ data class OtherState(
 data class TestEffect(
     val tag: String,
 ) : Effect
+
+data class TestDebouncedEffect(
+    val tag: String,
+    override val debounceKey: Any,
+) : Effect,
+    Debounced
 
 data class TestEvent(
     override val chatId: Long,
@@ -94,14 +101,14 @@ class FakeEffectExecutor(
 
     override suspend fun execute(
         effects: List<Effect>,
-        dispatchAsync: (suspend () -> Event?) -> Unit,
+        dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
     ): List<EffectResult> {
         executed += effects
         val results = mutableListOf<EffectResult>()
         for (effect in effects) {
             val asyncWork = asyncWorkFor(effect)
             if (asyncWork != null) {
-                dispatchAsync(asyncWork)
+                dispatchAsync((effect as? Debounced)?.debounceKey, asyncWork)
                 continue
             }
             results += resultsFor(effect)

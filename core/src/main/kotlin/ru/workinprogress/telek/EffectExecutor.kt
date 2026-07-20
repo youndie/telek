@@ -7,14 +7,16 @@ interface EffectExecutor {
     /**
      * Runs [effects] and returns one [EffectResult] per *synchronous* effect, in order. An effect
      * registered as async (see [EffectRegistry.registerAsync]) produces no [EffectResult] here —
-     * instead, [dispatchAsync] is called with a suspend block that runs that handler and returns
-     * its [Event]; the caller (telek's `Telek`) is responsible for actually launching that block
-     * somewhere that outlives this [execute] call and for routing a non-null [Event] back into the
-     * FSM. [dispatchAsync] is expected to be fire-and-forget from this method's perspective.
+     * instead, [dispatchAsync] is called with the effect's [Debounced.debounceKey] (or `null` if
+     * it isn't [Debounced]) and a suspend block that runs that handler and returns its [Event];
+     * the caller (telek's `Telek`) is responsible for actually launching that block somewhere
+     * that outlives this [execute] call, for cancelling a previous same-key launch first, and for
+     * routing a non-null [Event] back into the FSM. [dispatchAsync] is expected to be
+     * fire-and-forget from this method's perspective.
      */
     suspend fun execute(
         effects: List<Effect>,
-        dispatchAsync: (suspend () -> Event?) -> Unit,
+        dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
     ): List<EffectResult>
 }
 
@@ -46,7 +48,7 @@ class EffectExecutorImpl(
 ) : EffectExecutor {
     override suspend fun execute(
         effects: List<Effect>,
-        dispatchAsync: (suspend () -> Event?) -> Unit,
+        dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
     ): List<EffectResult> {
         if (effects.isEmpty()) return emptyList()
         val resolvedContext = context()
@@ -56,7 +58,8 @@ class EffectExecutorImpl(
             @Suppress("UNCHECKED_CAST")
             val asyncHandler = effectRegistry.getAsync(effect::class) as? AsyncEffectHandler<Effect>
             if (asyncHandler != null) {
-                dispatchAsync { runAsync(resolvedContext, effect, asyncHandler) }
+                val key = (effect as? Debounced)?.debounceKey
+                dispatchAsync(key) { runAsync(resolvedContext, effect, asyncHandler) }
                 continue
             }
 
