@@ -5,7 +5,7 @@ import com.github.kotlintelegrambot.entities.ChatId
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import ru.workinprogress.telek.EffectSuccess
+import ru.workinprogress.telek.EffectFailed
 import ru.workinprogress.telek.telegram.effect.EditMarkupEffect
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,7 +16,7 @@ class EditMarkupEffectHandlerTest {
     private val handler = EditMarkupEffectHandler()
 
     @Test
-    fun `success returns EffectSuccess`() {
+    fun `success returns EditMarkupEffectResult`() {
         val bot = mockk<Bot>()
         every {
             bot.editMessageReplyMarkup(
@@ -28,7 +28,9 @@ class EditMarkupEffectHandlerTest {
 
         val result = handler.handle(bot, EditMarkupEffect(chatId = 1, messageId = 2, markup = null))
 
-        assertSame(EffectSuccess, result)
+        val markupResult = assertIs<EditMarkupEffectResult>(result)
+        assertEquals(1, markupResult.chatId)
+        assertEquals(2, markupResult.messageId)
         verify {
             bot.editMessageReplyMarkup(
                 chatId = ChatId.fromId(1),
@@ -39,20 +41,20 @@ class EditMarkupEffectHandlerTest {
     }
 
     @Test
-    fun `failure returns an EditMarkupEffectResult, not EffectFailed`() {
+    fun `failure returns EffectFailed with the underlying exception`() {
         val bot = mockk<Bot>()
+        val exception = RuntimeException("boom")
         every {
             bot.editMessageReplyMarkup(
                 chatId = ChatId.fromId(1),
                 messageId = 2,
                 replyMarkup = null,
             )
-        } returns (null to RuntimeException("boom"))
+        } returns (null to exception)
 
         val result = handler.handle(bot, EditMarkupEffect(chatId = 1, messageId = 2, markup = null))
 
-        val markupResult = assertIs<EditMarkupEffectResult>(result)
-        assertEquals(1, markupResult.chatId)
-        assertEquals(2, markupResult.messageId)
+        val failed = assertIs<EffectFailed>(result)
+        assertSame(exception, failed.error)
     }
 }

@@ -90,11 +90,9 @@ class Telek(
     }
 
     private fun <T : State> registerDispatcher(dispatcher: StateDispatcher<T>) {
-        effectExecutor.let { executor ->
-            dispatcher.attach(
-                transitionGate = TelekTransitionGate(this, dispatcher.stateClass),
-            )
-        }
+        dispatcher.attach(
+            transitionGate = TelekTransitionGate(this, dispatcher.stateClass),
+        )
     }
 
     private class TransitionComputation(
@@ -114,6 +112,10 @@ class DefaultFindDispatcherStrategy(
             val cmd = input.text.removePrefix("/")
             return dispatchers.firstOrNull { it.startCommand == cmd }
                 ?: dispatchers.firstOrNull { it.startCommand == "*" }
+        }
+
+        if (input is Callback) {
+            dispatchers.firstOrNull { it.canHandleCallback(input.data) }?.let { return it }
         }
 
         return state?.let { s -> dispatchers.firstOrNull { it.stateClass.isInstance(s) } }

@@ -69,4 +69,43 @@ class DefaultFindDispatcherStrategyTest {
 
         assertNull(found)
     }
+
+    @Test
+    fun `callback is routed by canHandleCallback when there is no matching state`() {
+        val strategy = DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher))
+
+        val found =
+            strategy.findDispatcher(
+                state = null,
+                input = Callback(chatId = 1, messageId = 1, data = "example"),
+            )
+
+        assertSame(exampleDispatcher, found)
+    }
+
+    @Test
+    fun `callback routed by canHandleCallback takes priority over state-based lookup`() {
+        val strategy = DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher))
+
+        val found =
+            strategy.findDispatcher(
+                state = OtherState(0),
+                input = Callback(chatId = 1, messageId = 1, data = "example"),
+            )
+
+        assertSame(exampleDispatcher, found)
+    }
+
+    @Test
+    fun `callback matching no dispatcher and no state returns null`() {
+        val strategy = DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher))
+
+        val found =
+            strategy.findDispatcher(
+                state = null,
+                input = Callback(chatId = 1, messageId = 1, data = "unrelated"),
+            )
+
+        assertNull(found)
+    }
 }

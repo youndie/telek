@@ -42,7 +42,7 @@ Below is a simple dispatcher handling a confirmation dialog:
 
 ```kotlin
 // Dispatcher that manages the conversation flow (FSM) for the 'example' command
-class ExampleDispatcher() : StateDispatcher<ExampleState>(effectExecutor) {
+class ExampleDispatcher : StateDispatcher<ExampleState>() {
     // The command that starts this dispatcher flow
     override val startCommand = "example"
     // The associated state class for this flow
@@ -55,7 +55,7 @@ class ExampleDispatcher() : StateDispatcher<ExampleState>(effectExecutor) {
     ): TransitionResult<ExampleState> =
         when (state) {
             // If waiting for a string, and receive a message input from user
-            is ExampleState.WaitingString if (input is Input.Message) -> {
+            is ExampleState.WaitingString if (input is Message) -> {
                 transition {
                     // Move to Confirming state, keep number, save input string
                     newState = ExampleState.Confirming(
@@ -80,7 +80,7 @@ class ExampleDispatcher() : StateDispatcher<ExampleState>(effectExecutor) {
                 }
             }
             // If in Confirming state and receive a callback from the inline keyboard
-            is ExampleState.Confirming if (input is Input.Callback) -> {
+            is ExampleState.Confirming if (input is Callback) -> {
                 transition {
                     // Move to Done state
                     newState = ExampleState.Done
@@ -142,12 +142,13 @@ data class CustomEffect(
 
 // Implement its handler
 class CustomEffectHandler : TelegramEffectHandler<CustomEffect> {
-    override suspend fun handle(
+    override fun handle(
         bot: Bot,
         effect: CustomEffect,
-    ) {
-        bot.deleteMessage(ChatId.fromId(effect.chatId), effect.messageId)
-    }
+    ): EffectResult =
+        bot
+            .deleteMessage(ChatId.fromId(effect.chatId), effect.messageId)
+            .fold({ EffectSuccess }, { error -> EffectFailed(IllegalStateException(error.toString())) })
 }
 
 // DSL extension for transitions
@@ -266,7 +267,7 @@ keyboard {
 
 // Handle callbacks in a dispatcher
 when (input) {
-    is Input.Callback -> {
+    is Callback -> {
         when {
             input.isRouteOf<ExampleRouteConfirm>(registry) -> { /* handle confirm */ }
             input.isRouteOf<ExampleRouteCancel>(registry) -> { /* handle cancel */ }
@@ -283,4 +284,4 @@ when (input) {
 How it works:
 - Each `Route` must be annotated with `@RouteContext(scope, action)` and, if it has fields, annotated with `@Serializable`.
 - The encoder produces strings like `scope:action:key1_val1_key2_val2` using `kotlinx.serialization` properties format.
-- `routes { register<T>() }` adds decoders per route type, enabling `isRouteOf<T>()` and `tryDecode<T>()` on `Input.Callback`.
+- `routes { register<T>() }` adds decoders per route type, enabling `isRouteOf<T>()` and `tryDecode<T>()` on `Callback`.

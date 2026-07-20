@@ -1,6 +1,5 @@
 package ru.workinprogress.telek.telegram.effect.handler
 
-import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.types.TelegramBotResult
 import ru.workinprogress.telek.EffectResult
 

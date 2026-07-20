@@ -2,8 +2,8 @@ package ru.workinprogress.telek.telegram.effect.handler
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
+import ru.workinprogress.telek.EffectFailed
 import ru.workinprogress.telek.EffectResult
-import ru.workinprogress.telek.EffectSuccess
 import ru.workinprogress.telek.telegram.effect.EditMarkupEffect
 
 class EditMarkupEffectHandler : TelegramEffectHandler<EditMarkupEffect> {
@@ -18,9 +18,9 @@ class EditMarkupEffectHandler : TelegramEffectHandler<EditMarkupEffect> {
                 replyMarkup = effect.markup,
             ).let { (_, exception) ->
                 if (exception == null) {
-                    EffectSuccess
-                } else {
                     EditMarkupEffectResult(effect.chatId, effect.messageId)
+                } else {
+                    EffectFailed(exception)
                 }
             }
 }

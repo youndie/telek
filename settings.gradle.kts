@@ -22,6 +22,7 @@ include(":core")
 include(":telegram")
 include(":persistence")
 include(":router")
+include(":testing")
 include(":example")
 
 rootProject.name = "telek"
