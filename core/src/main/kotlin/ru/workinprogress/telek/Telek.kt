@@ -5,6 +5,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.reflect.KClass
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 class Telek(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
@@ -14,8 +16,10 @@ class Telek(
     private val interceptors: List<TelekInterceptor> = emptyList(),
     private val effectExecutor: EffectExecutor,
     private val findDispatcherStrategy: FindDispatcherStrategy = DefaultFindDispatcherStrategy(dispatchers),
+    chatWorkerIdleTimeout: Duration = 15.minutes,
 ) {
     private lateinit var context: ExecutionContext
+    private val chatWorkers = ChatWorkers(scope, chatWorkerIdleTimeout)
 
     init {
         dispatchers.forEach { registerDispatcher(it) }
@@ -26,38 +30,53 @@ class Telek(
         this.context = context
     }
 
+    /**
+     * Hands the transition off to that chat's worker instead of running it here, so that all
+     * transitions for one chatId — whether triggered by [onInput] or [applyReducer] — execute
+     * strictly in submission order, one at a time. See [ChatWorkers].
+     */
     private fun processTransition(
         chatId: Long,
         input: Input?,
         reducerProvider: (State) -> TransitionComputation,
     ) {
         scope.launch {
-            if (input != null) interceptors.forEach { it.onBeforeInput(chatId, input) }
-
-            runCatching {
-                val result =
-                    userStateStore.update(chatId) { current ->
-                        val state = current ?: initialStateProvider.initialState(chatId)
-                        val computation = reducerProvider(state)
-                        val transResult = computation.transitionResult
-
-                        UpdateResult(
-                            oldState = current,
-                            newState = transResult.newState,
-                            effects = transResult.effects,
-                            dispatcher = computation.dispatcher,
-                        )
-                    }
-
-                val effectResults = effectExecutor.execute(context, result.effects)
-                result.dispatcher?.onEffectResults(result.newState, effectResults)
-                interceptors.forEach {
-                    it.onAfterStateChanged(chatId, result.oldState, result.newState)
-                }
-            }.onFailure { e ->
-                if (e is CancellationException) throw e
-                interceptors.forEach { it.onError(chatId, input, e) }
+            chatWorkers.submit(chatId) {
+                runTransition(chatId, input, reducerProvider)
             }
+        }
+    }
+
+    private suspend fun runTransition(
+        chatId: Long,
+        input: Input?,
+        reducerProvider: (State) -> TransitionComputation,
+    ) {
+        if (input != null) interceptors.forEach { it.onBeforeInput(chatId, input) }
+
+        runCatching {
+            val result =
+                userStateStore.update(chatId) { current ->
+                    val state = current ?: initialStateProvider.initialState(chatId)
+                    val computation = reducerProvider(state)
+                    val transResult = computation.transitionResult
+
+                    UpdateResult(
+                        oldState = current,
+                        newState = transResult.newState,
+                        effects = transResult.effects,
+                        dispatcher = computation.dispatcher,
+                    )
+                }
+
+            val effectResults = effectExecutor.execute(context, result.effects)
+            result.dispatcher?.onEffectResults(result.newState, effectResults)
+            interceptors.forEach {
+                it.onAfterStateChanged(chatId, result.oldState, result.newState)
+            }
+        }.onFailure { e ->
+            if (e is CancellationException) throw e
+            interceptors.forEach { it.onError(chatId, input, e) }
         }
     }
 

@@ -1,7 +1,5 @@
 package ru.workinprogress.telek.persistence
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer
@@ -12,8 +10,12 @@ import ru.workinprogress.telek.UserStateStore
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertIs
 import kotlin.test.assertNull
+
+// PersistableUserStateStoreImpl intentionally does no per-chat locking of its own — see
+// UserStateStore's KDoc. Telek's ChatWorkers guarantees at most one `update` call per chatId is
+// ever in flight; that guarantee is exercised in ChatWorkersTest and TelekTest, not against this
+// store in isolation.
 
 private class CountingFileStateStorage<T : State>(
     dir: File,
@@ -115,27 +117,5 @@ class PersistableUserStateStoreImplTest {
             val restartedStore = PersistableUserStateStoreImpl(stateStorageOf<PersistenceTestState>(dir))
 
             assertEquals(PersistenceTestState.Waiting(9), restartedStore.get(1))
-        }
-
-    @Test
-    fun `concurrent updates for the same chatId are serialized`() =
-        runTest {
-            val fileStorage = stateStorageOf<PersistenceTestState>(dir)
-            val store = PersistableUserStateStoreImpl(fileStorage)
-            store.update(1) { current -> updateResult(current, PersistenceTestState.Waiting(0)) }
-
-            val jobs =
-                (1..50).map {
-                    async {
-                        store.update(1) { current ->
-                            val state = assertIs<PersistenceTestState.Waiting>(current)
-                            updateResult(current, state.copy(value = state.value + 1))
-                        }
-                    }
-                }
-            jobs.awaitAll()
-
-            assertEquals(PersistenceTestState.Waiting(50), store.get(1))
-            assertEquals(PersistenceTestState.Waiting(50), fileStorage.load(1))
         }
 }

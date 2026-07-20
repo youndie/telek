@@ -1,13 +1,16 @@
 package ru.workinprogress.telek
 
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.test.runTest
 import ru.workinprogress.telek.support.OtherState
 import ru.workinprogress.telek.support.TestState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+
+// DefaultUserStateStore intentionally does no per-chat locking of its own: Telek's ChatWorkers
+// guarantees at most one `update` call per chatId is ever in flight (see UserStateStore's KDoc).
+// Concurrency correctness for the same chatId is exercised through that actor, in ChatWorkersTest
+// and TelekTest — not here against the store in isolation.
 
 class DefaultUserStateStoreTest {
     private fun updateResult(
@@ -64,25 +67,5 @@ class DefaultUserStateStoreTest {
 
             assertEquals(TestState.Waiting(1), store.get(chatId = 1))
             assertEquals(OtherState(2), store.get(chatId = 2))
-        }
-
-    @Test
-    fun `concurrent updates for the same chatId are serialized`() =
-        runTest {
-            val store = DefaultUserStateStore()
-            store.update(chatId = 1) { current -> updateResult(current, TestState.Waiting(0)) }
-
-            val jobs =
-                (1..50).map {
-                    async {
-                        store.update(chatId = 1) { current ->
-                            val state = current as TestState.Waiting
-                            updateResult(current, state.copy(value = state.value + 1))
-                        }
-                    }
-                }
-            jobs.awaitAll()
-
-            assertEquals(TestState.Waiting(50), store.get(chatId = 1))
         }
 }
