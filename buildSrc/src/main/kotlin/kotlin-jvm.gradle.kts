@@ -22,7 +22,7 @@ publishing {
         create<MavenPublication>("maven") {
             from(components["kotlin"])
             artifact(tasks.named("sourcesJar"))
-            version = findProperty("VERSION")?.toString()
+            version = findProperty("VERSION")?.toString() ?: project.version.toString()
             artifactId = project.name
             groupId = "ru.workinprogress.telek"
         }

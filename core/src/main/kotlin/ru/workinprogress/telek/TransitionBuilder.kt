@@ -16,7 +16,13 @@ class TransitionBuilder<S : State> {
         effects += effect
     }
 
-    fun build(): TransitionResult<S> = TransitionResult(newState, effects)
+    fun build(): TransitionResult<S> {
+        check(::newState.isInitialized) {
+            "TransitionBuilder.newState was never set — did you forget `newState = ...` inside " +
+                "this `transition { }` block? (${effects.size} effect(s) were added before this failed)"
+        }
+        return TransitionResult(newState, effects)
+    }
 }
 
 data class TransitionResult<S : State>(

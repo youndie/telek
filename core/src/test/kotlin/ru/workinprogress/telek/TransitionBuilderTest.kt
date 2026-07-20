@@ -4,6 +4,7 @@ import ru.workinprogress.telek.support.TestEffect
 import ru.workinprogress.telek.support.TestState
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class TransitionBuilderTest {
@@ -42,5 +43,18 @@ class TransitionBuilderTest {
 
         assertEquals(state, result.newState)
         assertTrue(result.effects.isEmpty())
+    }
+
+    @Test
+    fun `forgetting to set newState fails with an actionable message, not a bare lateinit error`() {
+        val error =
+            assertFailsWith<IllegalStateException> {
+                transition<TestState> {
+                    add(TestEffect("orphaned"))
+                }
+            }
+
+        assertTrue(error.message.orEmpty().contains("newState"))
+        assertTrue(error.message.orEmpty().contains("1 effect"))
     }
 }

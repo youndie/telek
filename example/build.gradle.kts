@@ -9,6 +9,10 @@ kotlin {
     jvmToolchain(21)
 }
 
+application {
+    mainClass.set("ru.workinprogress.telek.example.ApplicationKt")
+}
+
 dependencies {
     implementation(projects.core)
     implementation(projects.telegram)
