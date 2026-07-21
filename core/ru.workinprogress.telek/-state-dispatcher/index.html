@@ -39,7 +39,7 @@
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
-        <div class="library-version" id="library-version">0.0.1
+        <div class="library-version" id="library-version">0.0.9
         </div>
         <div class="navigation-controls">
         <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
@@ -214,6 +214,21 @@
               </div>
             </div>
           </div>
+<a data-name="-386010684%2FFunctions%2F-431355489" anchor-label="handleEvent" id="-386010684%2FFunctions%2F-431355489" data-filterable-set=":core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="handle-event.html"><span>handle</span><wbr><span><span>Event</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-386010684%2FFunctions%2F-431355489"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="handle-event.html"><span class="token function">handleEvent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">current<span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token punctuation">, </span></span><span class="parameter ">event<span class="token operator">: </span><a href="../-event/index.html">Event</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-transition-result/index.html">TransitionResult</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
 <a data-name="1133814225%2FFunctions%2F-431355489" anchor-label="onEffectResult" id="1133814225%2FFunctions%2F-431355489" data-filterable-set=":core/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
             <div class="main-subrow keyValue ">
@@ -244,17 +259,17 @@
               </div>
             </div>
           </div>
-<a data-name="-1743921281%2FFunctions%2F-431355489" anchor-label="transition" id="-1743921281%2FFunctions%2F-431355489" data-filterable-set=":core/main"></a>
+<a data-name="1374135934%2FFunctions%2F-431355489" anchor-label="transition" id="1374135934%2FFunctions%2F-431355489" data-filterable-set=":core/main"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="../-state-machine/transition.html"><span><span>transition</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1743921281%2FFunctions%2F-431355489"></span>
+                  <div><a href="transition.html"><span><span>transition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1374135934%2FFunctions%2F-431355489"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-state-machine/transition.html"><span class="token function">transition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">state<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">input<span class="token operator">: </span><a href="../-input/index.html">Input</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-transition-result/index.html">TransitionResult</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">fun </span><a href="transition.html"><span class="token function">transition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">state<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">event<span class="token operator">: </span><a href="../-event/index.html">Event</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-transition-result/index.html">TransitionResult</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Handles an <a href="../-event/index.html">Event</a> — the result of an <a href="../-async-effect-handler/index.html">AsyncEffectHandler</a> re-entering the FSM. Defaults to a no-op transition; override for any state that starts async work. There is no <code class="lang-kotlin">entry</code> equivalent for events — unlike <a href="../-input/index.html">Input</a>, an <a href="../-event/index.html">Event</a> never starts a flow, only routes by the chat's current state (see <a href="../-find-dispatcher-strategy/index.html">FindDispatcherStrategy</a>).</p></div><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="../-state-machine/transition.html"><span class="token function">transition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">state<span class="token operator">: </span><a href="index.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">input<span class="token operator">: </span><a href="../-input/index.html">Input</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-transition-result/index.html">TransitionResult</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>

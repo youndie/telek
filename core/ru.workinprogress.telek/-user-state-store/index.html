@@ -39,7 +39,7 @@
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
-        <div class="library-version" id="library-version">0.0.1
+        <div class="library-version" id="library-version">0.0.9
         </div>
         <div class="navigation-controls">
         <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
@@ -94,7 +94,7 @@
   <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">ru.workinprogress.telek</a><span class="delimiter">/</span><span class="current">UserStateStore</span></div>
   <div class="cover ">
     <h1 class="cover"><span>User</span><wbr><span>State</span><wbr><span><span>Store</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">UserStateStore</a></div><h4 class="tableheader">Inheritors</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-default-user-state-store/index.html">DefaultUserStateStore</a></div></span></div><div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">UserStateStore</a></div><p class="paragraph">Stores per-chat FSM state.</p><p class="paragraph"><a href="update.html">update</a> is only ever called by <a href="../-telek/index.html">Telek</a>, through its internal per-chat actor (<a href="../../../core/ru.workinprogress.telek/-chat-workers/index.html">ChatWorkers</a>), which guarantees that at most one <a href="update.html">update</a> call for a given <code class="lang-kotlin">chatId</code> is in flight at any time, in the order the corresponding inputs were received. Implementations do not need to — and should not — serialize <a href="update.html">update</a> internally with their own per-chat locking: that duplicates a guarantee the caller already provides, and doing it locally is easy to get subtly wrong (e.g. reading state before acquiring a lock, or leaking a lock/mutex map that's never cleaned up).</p><h4 class="tableheader">Inheritors</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":core/main" data-filterable-set=":core/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-default-user-state-store/index.html">DefaultUserStateStore</a></div></span></div><div></div></div></div></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
