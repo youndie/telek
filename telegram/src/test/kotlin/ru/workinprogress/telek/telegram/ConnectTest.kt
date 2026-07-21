@@ -2,9 +2,7 @@ package ru.workinprogress.telek.telegram
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.dispatcher.Dispatcher
-import com.github.kotlintelegrambot.dispatcher.handlers.CallbackQueryHandler
 import com.github.kotlintelegrambot.dispatcher.handlers.Handler
-import com.github.kotlintelegrambot.dispatcher.handlers.MessageHandler
 import com.github.kotlintelegrambot.entities.CallbackQuery
 import com.github.kotlintelegrambot.entities.Chat
 import com.github.kotlintelegrambot.entities.Message
@@ -25,6 +23,11 @@ import ru.workinprogress.telek.Message as TelekMessage
  * [Dispatcher] has an internal constructor, so it can't be built directly here.
  * MockK creates an instance without calling any constructor (via Objenesis), which is enough
  * since [connect] only calls the public [Dispatcher.addHandler] on it.
+ *
+ * The concrete `MessageHandler`/`CallbackQueryHandler` types [connect] registers are themselves
+ * `internal` to kotlin-telegram-bot, so tests can't `filterIsInstance` for them — instead, each
+ * captured [Handler] is identified by [Handler.checkUpdate] against the [Update] it's meant to
+ * handle, which is exactly what [Dispatcher] itself uses to route an incoming update.
  */
 class ConnectTest {
     private fun chat(id: Long) = Chat(id = id, type = "private")
@@ -56,9 +59,10 @@ class ConnectTest {
             val bot = mockk<Bot>(relaxed = true)
             val telek = mockk<Telek>(relaxed = true)
             val contextSource = TelegramContextSource()
-            val messageHandler = capturedHandlers(telek, contextSource).filterIsInstance<MessageHandler>().single()
+            val update = Update(updateId = 1, message = message(chatId = 42, text = "hello"))
+            val messageHandler = capturedHandlers(telek, contextSource).single { it.checkUpdate(update) }
 
-            messageHandler.handleUpdate(bot, Update(updateId = 1, message = message(chatId = 42, text = "hello")))
+            messageHandler.handleUpdate(bot, update)
 
             assertSame(bot, contextSource.context().bot)
             verify { telek.onInput(chatId = 42, input = TelekMessage(chatId = 42, text = "hello")) }
@@ -69,10 +73,10 @@ class ConnectTest {
         runBlocking {
             val bot = mockk<Bot>(relaxed = true)
             val telek = mockk<Telek>(relaxed = true)
-            val messageHandler =
-                capturedHandlers(telek, TelegramContextSource()).filterIsInstance<MessageHandler>().single()
+            val update = Update(updateId = 1, message = message(chatId = 42, text = null))
+            val messageHandler = capturedHandlers(telek, TelegramContextSource()).single { it.checkUpdate(update) }
 
-            messageHandler.handleUpdate(bot, Update(updateId = 1, message = message(chatId = 42, text = null)))
+            messageHandler.handleUpdate(bot, update)
 
             verify { telek.onInput(chatId = 42, input = TelekMessage(chatId = 42, text = "")) }
         }
@@ -85,8 +89,6 @@ class ConnectTest {
                 bot.answerCallbackQuery(any(), any(), any(), any(), any())
             } returns TelegramBotResult.Success(true)
             val telek = mockk<Telek>(relaxed = true)
-            val callbackHandler =
-                capturedHandlers(telek, TelegramContextSource()).filterIsInstance<CallbackQueryHandler>().single()
 
             val callbackQuery =
                 CallbackQuery(
@@ -96,7 +98,9 @@ class ConnectTest {
                     data = "route:data",
                     chatInstance = "inst",
                 )
-            callbackHandler.handleUpdate(bot, Update(updateId = 2, callbackQuery = callbackQuery))
+            val update = Update(updateId = 2, callbackQuery = callbackQuery)
+            val callbackHandler = capturedHandlers(telek, TelegramContextSource()).single { it.checkUpdate(update) }
+            callbackHandler.handleUpdate(bot, update)
 
             verify { telek.onInput(chatId = 7, input = Callback(chatId = 7, messageId = 55, data = "route:data")) }
         }
@@ -109,12 +113,12 @@ class ConnectTest {
                 bot.answerCallbackQuery(any(), any(), any(), any(), any())
             } returns TelegramBotResult.Success(true)
             val telek = mockk<Telek>(relaxed = true)
-            val callbackHandler =
-                capturedHandlers(telek, TelegramContextSource()).filterIsInstance<CallbackQueryHandler>().single()
 
             val callbackQuery =
                 CallbackQuery(id = "cb1", from = user(), message = null, data = "route:data", chatInstance = "inst")
-            callbackHandler.handleUpdate(bot, Update(updateId = 3, callbackQuery = callbackQuery))
+            val update = Update(updateId = 3, callbackQuery = callbackQuery)
+            val callbackHandler = capturedHandlers(telek, TelegramContextSource()).single { it.checkUpdate(update) }
+            callbackHandler.handleUpdate(bot, update)
 
             verify(exactly = 0) { telek.onInput(any(), any()) }
         }
