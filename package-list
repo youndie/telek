@@ -3,6 +3,10 @@ $dokka.linkExtension:html
 
 module:core
 ru.workinprogress.telek
+module:ktg
+ru.workinprogress.telek.ktg
+ru.workinprogress.telek.ktg.effect
+ru.workinprogress.telek.ktg.effect.handler
 module:telegram
 ru.workinprogress.telek.telegram
 ru.workinprogress.telek.telegram.effect

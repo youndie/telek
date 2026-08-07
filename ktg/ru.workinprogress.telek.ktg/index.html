@@ -1,0 +1,359 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ru.workinprogress.telek.ktg</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    telek
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">0.1.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector common-like" data-active="" aria-pressed="true" data-filter=":ktg/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":ktg/commonMain" data-filter=":ktg/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    telek
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="ktg::ru.workinprogress.telek.ktg////PointingToDeclaration//1607988375">
+  <div class="breadcrumbs"><a href="../index.html">ktg</a><span class="delimiter">/</span><span class="current">ru.workinprogress.telek.ktg</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="2008360628%2FClasslikes%2F1607988375" anchor-label="InlineKeyboardBuilder" id="2008360628%2FClasslikes%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-inline-keyboard-builder/index.html"><span>Inline</span><wbr><span>Keyboard</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2008360628%2FClasslikes%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-inline-keyboard-builder/index.html">InlineKeyboardBuilder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1006648934%2FClasslikes%2F1607988375" anchor-label="InlineKeyboardMarkupDsl" id="-1006648934%2FClasslikes%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-inline-keyboard-markup-dsl/index.html"><span>Inline</span><wbr><span>Keyboard</span><wbr><span>Markup</span><wbr><span><span>Dsl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1006648934%2FClasslikes%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-dsl-marker/index.html"><span class="token annotation builtin">DslMarker</span></a></div></div><span class="token keyword">annotation class </span><a href="-inline-keyboard-markup-dsl/index.html">InlineKeyboardMarkupDsl</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-757212062%2FClasslikes%2F1607988375" anchor-label="KtgContext" id="-757212062%2FClasslikes%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-ktg-context/index.html"><span>Ktg</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-757212062%2FClasslikes%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-ktg-context/index.html">KtgContext</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>bot<span class="token operator">: </span><span data-unresolved-link="dev.inmo.tgbotapi.bot/TelegramBot///PointingToDeclaration/">TelegramBot</span></span></span><span class="token punctuation">)</span> : <a href="../../core/ru.workinprogress.telek/-execution-context/index.html">ExecutionContext</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-910555193%2FClasslikes%2F1607988375" anchor-label="KtgContextSource" id="-910555193%2FClasslikes%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-ktg-context-source/index.html"><span>Ktg</span><wbr><span>Context</span><wbr><span><span>Source</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-910555193%2FClasslikes%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-ktg-context-source/index.html">KtgContextSource</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">bot<span class="token operator">: </span><span data-unresolved-link="dev.inmo.tgbotapi.bot/TelegramBot///PointingToDeclaration/">TelegramBot</span><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Resolves the <a href="-ktg-context/index.html">KtgContext</a> lazily, once a <span data-unresolved-link="dev.inmo.tgbotapi.bot/TelegramBot///PointingToDeclaration/">TelegramBot</span> instance becomes available.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1064956494%2FClasslikes%2F1607988375" anchor-label="RowBuilder" id="-1064956494%2FClasslikes%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-row-builder/index.html"><span>Row</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1064956494%2FClasslikes%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-row-builder/index.html">RowBuilder</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1787456324%2FClasslikes%2F1607988375" anchor-label="TelegramMessageDsl" id="-1787456324%2FClasslikes%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-telegram-message-dsl/index.html"><span>Telegram</span><wbr><span>Message</span><wbr><span><span>Dsl</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1787456324%2FClasslikes%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-dsl-marker/index.html"><span class="token annotation builtin">DslMarker</span></a></div></div><span class="token keyword">annotation class </span><a href="-telegram-message-dsl/index.html">TelegramMessageDsl</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1616494178%2FClasslikes%2F1607988375" anchor-label="TelegramTextBuilder" id="1616494178%2FClasslikes%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-telegram-text-builder/index.html"><span>Telegram</span><wbr><span>Text</span><wbr><span><span>Builder</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1616494178%2FClasslikes%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="-telegram-text-builder/index.html">TelegramTextBuilder</a></div><div class="brief "><p class="paragraph">Deliberately a verbatim copy of <code class="lang-kotlin">:telegram</code>'s builder of the same name: it only produces a Telegram-flavoured markdown <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a> and has nothing to do with either client library, but sharing it would mean <code class="lang-kotlin">:ktg</code> depending on <code class="lang-kotlin">:telegram</code> (and so on kotlin-telegram-bot). Keep the two in sync when either changes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="295927574%2FProperties%2F1607988375" anchor-label="telekChatId" id="295927574%2FProperties%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="telek-chat-id.html"><span>telek</span><wbr><span>Chat</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="295927574%2FProperties%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><span data-unresolved-link="dev.inmo.tgbotapi.types.message.abstracts/Message///PointingToDeclaration/">Message</span><span class="token punctuation">.</span><a href="telek-chat-id.html">telekChatId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">ktgbotapi models ids as value classes (<code class="lang-kotlin">ChatId</code>/<code class="lang-kotlin">RawChatId</code>, <code class="lang-kotlin">MessageId</code>); telek keys everything by a plain <code class="lang-kotlin">Long</code>. These adapters are the whole of that translation — they're public so a bot wiring its own update handling (webhooks, a custom <code class="lang-kotlin">FlowsUpdatesFilter</code>) can reuse them instead of going through <a href="connect.html">connect</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="785785965%2FFunctions%2F1607988375" anchor-label="asTelekInput" id="785785965%2FFunctions%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="as-telek-input.html"><span>as</span><wbr><span>Telek</span><wbr><span><span>Input</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="785785965%2FFunctions%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="dev.inmo.tgbotapi.types.message.abstracts/ContentMessage///PointingToDeclaration/">ContentMessage</span><span class="token operator">&lt;</span><span data-unresolved-link="dev.inmo.tgbotapi.types.message.content/TextContent///PointingToDeclaration/">TextContent</span><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="as-telek-input.html"><span class="token function">asTelekInput</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../core/ru.workinprogress.telek/-message/index.html">Message</a></div><br><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="dev.inmo.tgbotapi.types.queries.callback/DataCallbackQuery///PointingToDeclaration/">DataCallbackQuery</span><span class="token punctuation">.</span><a href="as-telek-input.html"><span class="token function">asTelekInput</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../core/ru.workinprogress.telek/-callback/index.html">Callback</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph"><code class="lang-kotlin">null</code> for a callback query that has no message attached to it (an inline-mode one), which telek can't key by <code class="lang-kotlin">chatId</code> and therefore can't route.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="972511101%2FFunctions%2F1607988375" anchor-label="connect" id="972511101%2FFunctions%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="connect.html"><span><span>connect</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="972511101%2FFunctions%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="dev.inmo.tgbotapi.extensions.behaviour_builder/BehaviourContext///PointingToDeclaration/">BehaviourContext</span><span class="token punctuation">.</span><a href="connect.html"><span class="token function">connect</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">telek<span class="token operator">: </span><a href="../../core/ru.workinprogress.telek/-telek/index.html">Telek</a><span class="token punctuation">, </span></span><span class="parameter ">contextSource<span class="token operator">: </span><a href="-ktg-context-source/index.html">KtgContextSource</a><span class="token punctuation">, </span></span><span class="parameter ">answerCallbackQueries<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Adapts ktgbotapi updates into telek <a href="../../core/ru.workinprogress.telek/-input/index.html">ru.workinprogress.telek.Input</a>s, keyed by <code class="lang-kotlin">chatId</code>, and feeds the behaviour context's <span data-unresolved-link="dev.inmo.tgbotapi.bot/TelegramBot///PointingToDeclaration/">dev.inmo.tgbotapi.bot.TelegramBot</span> to <a href="connect.html">contextSource</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-901922518%2FFunctions%2F1607988375" anchor-label="editMarkup" id="-901922518%2FFunctions%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="edit-markup.html"><span>edit</span><wbr><span><span>Markup</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-901922518%2FFunctions%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="edit-markup.html">S</a><span class="token operator"> : </span><a href="../../core/ru.workinprogress.telek/-state/index.html">State</a><span class="token operator">&gt; </span><a href="../../core/ru.workinprogress.telek/-transition-builder/index.html">TransitionBuilder</a><span class="token operator">&lt;</span><a href="edit-markup.html">S</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="edit-markup.html"><span class="token function">editMarkup</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">messageId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">markup<span class="token operator">: </span><span data-unresolved-link="dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup///PointingToDeclaration/">InlineKeyboardMarkup</span><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="492834654%2FFunctions%2F1607988375" anchor-label="editMessage" id="492834654%2FFunctions%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="edit-message.html"><span>edit</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="492834654%2FFunctions%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="edit-message.html">S</a><span class="token operator"> : </span><a href="../../core/ru.workinprogress.telek/-state/index.html">State</a><span class="token operator">&gt; </span><a href="../../core/ru.workinprogress.telek/-transition-builder/index.html">TransitionBuilder</a><span class="token operator">&lt;</span><a href="edit-message.html">S</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="edit-message.html"><span class="token function">editMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">messageId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">message<span class="token operator">: </span><a href="-telegram-text-builder/index.html">TelegramTextBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">keyboard<span class="token operator">: </span><a href="-inline-keyboard-builder/index.html">InlineKeyboardBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="edit-message.html">S</a><span class="token operator"> : </span><a href="../../core/ru.workinprogress.telek/-state/index.html">State</a><span class="token operator">&gt; </span><a href="../../core/ru.workinprogress.telek/-transition-builder/index.html">TransitionBuilder</a><span class="token operator">&lt;</span><a href="edit-message.html">S</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="edit-message.html"><span class="token function">editMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">messageId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">markup<span class="token operator">: </span><span data-unresolved-link="dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup///PointingToDeclaration/">InlineKeyboardMarkup</span><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1440470701%2FFunctions%2F1607988375" anchor-label="inlineKeyboard" id="1440470701%2FFunctions%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="inline-keyboard.html"><span>inline</span><wbr><span><span>Keyboard</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1440470701%2FFunctions%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="inline-keyboard.html"><span class="token function">inlineKeyboard</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><a href="-inline-keyboard-builder/index.html">InlineKeyboardBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup///PointingToDeclaration/">InlineKeyboardMarkup</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="743066974%2FFunctions%2F1607988375" anchor-label="sendMessage" id="743066974%2FFunctions%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="send-message.html"><span>send</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="743066974%2FFunctions%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="send-message.html">S</a><span class="token operator"> : </span><a href="../../core/ru.workinprogress.telek/-state/index.html">State</a><span class="token operator">&gt; </span><a href="../../core/ru.workinprogress.telek/-transition-builder/index.html">TransitionBuilder</a><span class="token operator">&lt;</span><a href="send-message.html">S</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="send-message.html"><span class="token function">sendMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">message<span class="token operator">: </span><a href="-telegram-text-builder/index.html">TelegramTextBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">keyboard<span class="token operator">: </span><a href="-inline-keyboard-builder/index.html">InlineKeyboardBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="send-message.html">S</a><span class="token operator"> : </span><a href="../../core/ru.workinprogress.telek/-state/index.html">State</a><span class="token operator">&gt; </span><a href="../../core/ru.workinprogress.telek/-transition-builder/index.html">TransitionBuilder</a><span class="token operator">&lt;</span><a href="send-message.html">S</a><span class="token operator">&gt;</span><span class="token punctuation">.</span><a href="send-message.html"><span class="token function">sendMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">markup<span class="token operator">: </span><span data-unresolved-link="dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup///PointingToDeclaration/">InlineKeyboardMarkup</span><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1359862179%2FFunctions%2F1607988375" anchor-label="telegramMessage" id="1359862179%2FFunctions%2F1607988375" data-filterable-set=":ktg/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":ktg/commonMain" data-filterable-set=":ktg/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="telegram-message.html"><span>telegram</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1359862179%2FFunctions%2F1607988375"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":ktg/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="telegram-message.html"><span class="token function">telegramMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><a href="-telegram-text-builder/index.html">TelegramTextBuilder</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

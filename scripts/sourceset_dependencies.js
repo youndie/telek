@@ -1,1 +1,1 @@
-sourceset_dependencies = '{":core/main":[],":telegram/main":[]}'
+sourceset_dependencies = '{":core/commonMain":[],":core/jvmMain":[":core/commonMain"],":core/linuxArm64Main":[":core/linuxMain"],":core/linuxMain":[":core/nativeMain"],":core/linuxX64Main":[":core/linuxMain"],":core/nativeMain":[":core/commonMain"],":telegram/main":[],":ktg/commonMain":[],":ktg/jvmMain":[":ktg/commonMain"],":ktg/linuxArm64Main":[":ktg/linuxMain"],":ktg/linuxMain":[":ktg/nativeMain"],":ktg/linuxX64Main":[":ktg/linuxMain"],":ktg/nativeMain":[":ktg/commonMain"]}'
