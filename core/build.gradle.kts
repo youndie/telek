@@ -1,12 +1,20 @@
 plugins {
-    id("buildsrc.convention.kotlin-jvm")
+    id("buildsrc.convention.kotlin-multiplatform")
     alias(libs.plugins.dokkaPlugin)
     alias(libs.plugins.ktlintPlugin)
 }
 
-dependencies {
-    implementation(libs.kotlinxCoroutines)
-    testImplementation(kotlin("test"))
-    testImplementation(kotlin("test-junit5"))
-    testImplementation(libs.kotlinxCoroutinesTest)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.kotlinxCoroutines)
+            implementation(libs.atomicfu)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlinxCoroutinesTest)
+        }
+        jvmTest.dependencies {
+            implementation(kotlin("test-junit5"))
+        }
+    }
 }

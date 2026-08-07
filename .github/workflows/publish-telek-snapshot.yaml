@@ -10,6 +10,9 @@ permissions:
 
 jobs:
   publish-telek:
+    # ubuntu isn't incidental any more: it's the only runner that can *execute* the
+    # linuxX64 tests instead of merely cross-compiling them. (linuxArm64 is still
+    # compile-and-link only — an x86-64 host can't run those binaries.)
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout sources
@@ -25,18 +28,45 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
+      # setup-gradle caches ~/.gradle but not ~/.konan, and the Kotlin/Native toolchain
+      # is a fresh ~1 GB download on every run without this.
+      - name: Cache Kotlin/Native toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: konan-${{ runner.os }}-
+
       - name: Determine version
         id: ver
         run: |
-          VERSION=$(grep telek.version gradle.properties | cut -d'=' -f2).${{ github.run_number }}
+          VERSION=$(grep '^telek.version=' gradle.properties | cut -d'=' -f2).${{ github.run_number }}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Build
-        run: ./gradlew test ktlintCheck publishMavenPublicationToWipRepository dokkaGenerate --no-daemon
+      # `build` rather than `test ktlintCheck`: the multiplatform modules have no `test`
+      # task at all (they have `jvmTest` / `linuxX64Test` / `allTests`), so a bare `test`
+      # would silently cover only :telegram and :router-telegram. `build` runs every
+      # target's tests, ktlint, and the native compile+link.
+      #
+      # `publishAllPublicationsToWipRepository` rather than
+      # `publishMavenPublicationToWipRepository` for the same reason: the hand-rolled
+      # "maven" publication only exists on the two JVM-only modules; a KMP module
+      # publishes `kotlinMultiplatform` plus one publication per target instead, so the
+      # old task name would have quietly published 2 modules out of 8.
+      - name: Build, test and publish
+        run: ./gradlew build publishAllPublicationsToWipRepository dokkaGenerate --no-daemon
         env:
           ORG_GRADLE_PROJECT_REPOSILITE_USER: ${{ secrets.REPOSILITE_USER }}
           ORG_GRADLE_PROJECT_REPOSILITE_SECRET: ${{ secrets.REPOSILITE_SECRET }}
           ORG_GRADLE_PROJECT_VERSION: ${{ steps.ver.outputs.version }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/build/test-results/**/TEST-*.xml'
+          if-no-files-found: warn
 
       - name: Deploy dokka to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

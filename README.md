@@ -38,6 +38,12 @@ with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegra
 on [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI) — same API shape, pick whichever
 Telegram client you already use (see [Using ktgbotapi instead](#-using-ktgbotapi-instead)).
 
+**Multiplatform.** `core`, `ktg`, `router`, `router-ktg`, `persistence` and `testing` are Kotlin
+Multiplatform, published for **JVM, linuxX64 and linuxArm64** — so a bot can also ship as a native
+Linux binary. `telegram` and `router-telegram` are JVM-only, because kotlin-telegram-bot is. A plain
+JVM Gradle project resolves the right variant automatically from Gradle module metadata; nothing
+changes for JVM consumers.
+
 
 ### 💬 Usage with Telegram bot
 
@@ -365,12 +371,16 @@ Key components:
 - `stateStorageOf<T>()` — convenience factory for `FileStateStorage`
 - `PersistableUserStateStoreImpl<T : State>` — drop‑in replacement for the default in‑memory store
 
+File access goes through [okio](https://square.github.io/okio/) rather than `java.io`, so paths are
+`okio.Path` and the module works on native targets too. Both take an optional `fileSystem` — pass
+okio's `FakeFileSystem` to test a flow's persistence without touching the disk.
+
 Usage:
 
 ```kotlin
 // Suppose your flow uses states of type YourState : State
 val userStateStore = PersistableUserStateStoreImpl<YourState>(
-    stateStorageOf(dir = File("./state")) // files like ./state/<chatId>.json
+    stateStorageOf(dir = "./state".toPath()) // files like ./state/<chatId>.json
 )
 
 val telek = Telek(
@@ -443,6 +453,7 @@ when (input) {
 ```
 
 How it works:
-- Each `Route` must be annotated with `@RouteContext(scope, action)` and, if it has fields, annotated with `@Serializable`.
+- Each `Route` must be annotated with `@RouteContext(scope, action)` **and** with `@Serializable` — including routes with no fields at all.
+- `@RouteContext` is a `@SerialInfo` annotation, so the serialization compiler plugin bakes it into the route's generated `SerialDescriptor` and telek reads it from there. That's what lets `:router` work on every target: `KClass.annotations` needs JVM-only reflection, and `:router` no longer depends on `kotlin-reflect` at all.
 - The encoder produces strings like `scope:action:key1_val1_key2_val2` using `kotlinx.serialization` properties format.
 - `routes { register<T>() }` adds decoders per route type, enabling `isRouteOf<T>()` and `tryDecode<T>()` on `Callback`.

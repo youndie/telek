@@ -7,6 +7,8 @@ ktlint = "14.2.0"
 kotlinTelegramBot = "10.0.0"
 retrofit = "2.12.0" #kotlinTelegramBot requires
 tgbotapi = "35.1.0"
+atomicfu = "0.33.0"
+okio = "3.18.1"
 mockk = "1.14.11"
 
 [libraries]
@@ -17,6 +19,11 @@ kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serializati
 kotlinxSerializationProperties = { module = "org.jetbrains.kotlinx:kotlinx-serialization-properties", version.ref = "kotlinxSerializationJson" }
 retrofitCore = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 tgbotapi = { module = "dev.inmo:tgbotapi", version.ref = "tgbotapi" }
+# Used as a plain library (locks only, no `atomic()` fields), so the atomicfu compiler plugin is
+# deliberately not applied — see CLAUDE.md.
+atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+okioFakeFileSystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 kotlinxCoroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
