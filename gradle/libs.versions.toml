@@ -1,11 +1,12 @@
 [versions]
 dokka = "2.1.0"
-kotlin = "2.4.0"
+kotlin = "2.4.10"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerializationJson = "1.11.0"
 ktlint = "14.2.0"
 kotlinTelegramBot = "10.0.0"
 retrofit = "2.12.0" #kotlinTelegramBot requires
+tgbotapi = "35.1.0"
 mockk = "1.14.11"
 
 [libraries]
@@ -15,6 +16,7 @@ kotlinTelegramBot = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bo
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinxSerializationProperties = { module = "org.jetbrains.kotlinx:kotlinx-serialization-properties", version.ref = "kotlinxSerializationJson" }
 retrofitCore = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+tgbotapi = { module = "dev.inmo:tgbotapi", version.ref = "tgbotapi" }
 kotlinxCoroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 

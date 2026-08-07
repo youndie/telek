@@ -20,9 +20,11 @@ plugins {
 
 include(":core")
 include(":telegram")
+include(":ktg")
 include(":persistence")
 include(":router")
 include(":router-telegram")
+include(":router-ktg")
 include(":testing")
 include(":example")
 include(":docs-samples")

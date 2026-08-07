@@ -25,12 +25,18 @@ repositories {
 
 dependencies {
     implementation("ru.workinprogress.telek:core:<VERSION>")
-    implementation("ru.workinprogress.telek:telegram:<VERSION>")
+
+    // pick one transport:
+    implementation("ru.workinprogress.telek:telegram:<VERSION>") // kotlin-telegram-bot
+    // implementation("ru.workinprogress.telek:ktg:<VERSION>")   // ktgbotapi
 }
 ```
 The core module contains the FSM engine, transitions, and effect system.
 The telegram module provides integration
-with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot)
+with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot), and the
+`ktg` module the same integration
+on [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI) — same API shape, pick whichever
+Telegram client you already use (see [Using ktgbotapi instead](#-using-ktgbotapi-instead)).
 
 
 ### 💬 Usage with Telegram bot
@@ -132,6 +138,56 @@ hands one out inside a `dispatch { }` handler, so the executor and `connect()` s
 resolves lazily on the first update. Both `EffectExecutor.execute` and every `EffectHandler.handle`
 are `suspend` — handlers run on `Dispatchers.IO`, off whatever dispatcher your chats' transitions run
 on, so a slow Telegram API call for one chat never blocks another chat's turn.
+
+
+### 🤖 Using ktgbotapi instead
+
+The `ktg` module is the same integration built
+on [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI) instead of kotlin-telegram-bot.
+Everything above — dispatchers, transitions, `sendMessage` / `editMessage` / `editMarkup`, the text
+and inline-keyboard DSLs — reads identically; only the imports change
+(`ru.workinprogress.telek.telegram.*` → `ru.workinprogress.telek.ktg.*`) and the types they produce
+are ktgbotapi's (`InlineKeyboardMarkup`, `TelegramBot`).
+
+```kotlin
+val bot = telegramBot("telegram token")
+val contextSource = KtgContextSource(bot)
+
+val telek = Telek(
+    dispatchers = listOf(ExampleDispatcher()),
+    effectExecutor = ktgEffectExecutor(contextSource),
+)
+
+bot.buildBehaviourWithLongPolling {
+    connect(telek, contextSource)
+}.join()
+```
+
+`connect()` is an extension on ktgbotapi's `BehaviourContext`: it subscribes `onText` and
+`onDataCallbackQuery`, maps them to telek `Message` / `Callback` inputs keyed by `chatId`, and hands
+the `TelegramBot` to the shared `KtgContextSource`. It answers each handled callback query by default
+so Telegram stops the client's spinner — pass `answerCallbackQueries = false` if a dispatcher answers
+with its own text or alert. Callback queries with no message attached (inline-mode ones) can't be
+keyed by `chatId` and are ignored.
+
+Unlike kotlin-telegram-bot, ktgbotapi hands out its `TelegramBot` up front, so `KtgContextSource(bot)`
+usually resolves immediately; the deferred form (`KtgContextSource()` + `provide(bot)`) is still there
+for wiring built before the bot exists.
+
+Differences worth knowing:
+
+* Effect handler interfaces are `KtgEffectHandler` / `KtgAsyncEffectHandler`, taking ktgbotapi's
+  `TelegramBot` rather than kotlin-telegram-bot's `Bot`; the marker interface for effects is
+  `KtgEffect`.
+* ktgbotapi reports API failures by throwing rather than returning a result type, so the built-in
+  handlers don't return a failure result of their own — the exception reaches `EffectExecutorImpl`,
+  which logs it and turns it into an `EffectFailed` that reaches `TelekInterceptor.onError`.
+* `ContentMessage<TextContent>.asTelekInput()`, `DataCallbackQuery.asTelekInput()` and
+  `Message.telekChatId` are public, so a bot wiring its own updates (webhooks, a custom
+  `FlowsUpdatesFilter`) can reuse the mapping without going through `connect()`.
+
+The router equivalent is `router-ktg` — same `RowBuilder.callback(name, route)` extension, over
+`ru.workinprogress.telek.ktg.RowBuilder`.
 
 
 ### ⚡ Defining a Custom Effect
@@ -289,14 +345,16 @@ dependencies {
     implementation("ru.workinprogress.telek:persistence:<VERSION>")
     implementation("ru.workinprogress.telek:router:<VERSION>")
 
-    // only if you're building inline keyboards with typed routes (RowBuilder.callback(name, route))
+    // only if you're building inline keyboards with typed routes (RowBuilder.callback(name, route)) —
+    // pick the one matching your transport
     implementation("ru.workinprogress.telek:router-telegram:<VERSION>")
+    // implementation("ru.workinprogress.telek:router-ktg:<VERSION>")
 }
 ```
 
-`:router` itself doesn't depend on `:telegram` — the route encode/decode logic (`Route`, `RouteRegistry`,
-`@RouteContext`) is transport-agnostic. `:router-telegram` adds the one bit of glue that needs a
-transport: the `RowBuilder.callback(name, route)` extension used below.
+`:router` itself doesn't depend on any transport — the route encode/decode logic (`Route`,
+`RouteRegistry`, `@RouteContext`) is transport-agnostic. `:router-telegram` and `:router-ktg` add the
+one bit of glue that needs a transport: the `RowBuilder.callback(name, route)` extension used below.
 
 ### 💾 Persistence module
 
@@ -361,7 +419,7 @@ sendMessage(
     message = { row { text("Choose:") } },
     keyboard = {
         row {
-            // `callback(name, route)` comes from the router-telegram module
+            // `callback(name, route)` comes from the router-telegram (or router-ktg) module
             callback(name = "Confirm", route = ExampleRouteConfirm())
             callback(name = "Cancel", route = ExampleRouteCancel())
         }

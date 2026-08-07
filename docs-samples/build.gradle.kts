@@ -14,11 +14,14 @@ kotlin {
 dependencies {
     implementation(projects.core)
     implementation(projects.telegram)
+    implementation(projects.ktg)
     implementation(projects.persistence)
     implementation(projects.router)
     implementation(projects.routerTelegram)
+    implementation(projects.routerKtg)
 
     implementation(libs.kotlinxCoroutines)
     implementation(libs.kotlinxSerializationJson)
     implementation(libs.kotlinTelegramBot)
+    implementation(libs.tgbotapi)
 }

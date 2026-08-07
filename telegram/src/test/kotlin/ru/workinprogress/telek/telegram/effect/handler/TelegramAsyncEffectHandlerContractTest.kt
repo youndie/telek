@@ -37,7 +37,7 @@ private object NotTelegramContextForAsync : ExecutionContext
 
 class TelegramAsyncEffectHandlerContractTest {
     @Test
-    fun `handle throws when the context is not a TelegramContext`() =
+    fun `handle throws when the context is not a TelegramContext`(): Unit =
         runBlocking {
             val handler = FakeAsyncHandler()
 

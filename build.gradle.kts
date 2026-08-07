@@ -8,4 +8,5 @@ version = findProperty("telek.version").toString()
 dependencies {
     dokka(projects.core)
     dokka(projects.telegram)
+    dokka(projects.ktg)
 }
