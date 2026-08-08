@@ -1,9 +1,13 @@
 # telek
 
 [![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
-[![kotlin](https://img.shields.io/badge/Kotlin-2.4.0-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![telek core](https://reposilite.kotlin.website/api/badge/latest/snapshots/ru/workinprogress/telek/core?name=snapshots&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/ru/workinprogress/telek)
 [![API Docs](https://img.shields.io/badge/docs-Dokka-blue?logoColor=white)](https://youndie.github.io/telek/)
+
+[![JVM](https://img.shields.io/badge/platform-JVM-E76F00?logo=openjdk&logoColor=white)](#-installation)
+[![Linux x64](https://img.shields.io/badge/platform-linuxX64-2C4F7C?logo=linux&logoColor=white)](#-installation)
+[![Linux arm64](https://img.shields.io/badge/platform-linuxArm64-2C4F7C?logo=linux&logoColor=white)](#-installation)
 
 **type-safe kotlin toolkit** for building **Telegram bots**, **wizard-flows**, and other **interactive systems** powered
 by **FSM**
@@ -142,7 +146,7 @@ bot {
 `TelegramContextSource` is what lets the effect executor reach the `Bot` instance: `bot { }` only
 hands one out inside a `dispatch { }` handler, so the executor and `connect()` share one source that
 resolves lazily on the first update. Both `EffectExecutor.execute` and every `EffectHandler.handle`
-are `suspend` — handlers run on `Dispatchers.IO`, off whatever dispatcher your chats' transitions run
+are `suspend` — handlers run on a dedicated I/O dispatcher, off whatever dispatcher your chats' transitions run
 on, so a slow Telegram API call for one chat never blocks another chat's turn.
 
 
