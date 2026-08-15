@@ -8,6 +8,7 @@
 [![JVM](https://img.shields.io/badge/platform-JVM-E76F00?logo=openjdk&logoColor=white)](#-installation)
 [![Linux x64](https://img.shields.io/badge/platform-linuxX64-2C4F7C?logo=linux&logoColor=white)](#-installation)
 [![Linux arm64](https://img.shields.io/badge/platform-linuxArm64-2C4F7C?logo=linux&logoColor=white)](#-installation)
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 **type-safe kotlin toolkit** for building **Telegram bots**, **wizard-flows**, and other **interactive systems** powered
 by **FSM**
