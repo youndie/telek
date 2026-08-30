@@ -65,6 +65,7 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                     )
                 }
             }
+
             // If in Confirming state and receive a callback from the inline keyboard
             is ExampleState.Confirming if (input is Callback) -> {
                 transition {
@@ -80,7 +81,10 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                     }
                 }
             }
+
             // For all other cases, no state transition
-            else -> noTransition(state)
+            else -> {
+                noTransition(state)
+            }
         }
 }

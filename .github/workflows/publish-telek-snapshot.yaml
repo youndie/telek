@@ -18,41 +18,29 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v5
 
-      - name: Setup Java
-        uses: actions/setup-java@v5
+      # Java, Gradle and the Kotlin/Native cache in one step. setup-gradle caches ~/.gradle
+      # but not ~/.konan, and the toolchain is a fresh ~1 GB download on every run without
+      # it — the action keys that cache the same way this workflow did.
+      - uses: youndie/sborka/.github/actions/setup-kotlin@main
         with:
-          distribution: 'temurin'
-          java-version: 21
-          cache: 'gradle'
+          konan-cache: "true"
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
-
-      # setup-gradle caches ~/.gradle but not ~/.konan, and the Kotlin/Native toolchain
-      # is a fresh ~1 GB download on every run without this.
-      - name: Cache Kotlin/Native toolchain
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml', 'gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: konan-${{ runner.os }}-
-
+      # The head of the version from gradle.properties with the run number on the tail. The
+      # action reads plain `version`, which is where the head lives now — it was
+      # `telek.version`, one more name for the same thing, and the same lines of shell were
+      # copied into three repositories.
       - name: Determine version
         id: ver
-        run: |
-          VERSION=$(grep '^telek.version=' gradle.properties | cut -d'=' -f2).${{ github.run_number }}
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        uses: youndie/sborka/.github/actions/determine-version@main
 
       # `build` rather than `test ktlintCheck`: the multiplatform modules have no `test`
       # task at all (they have `jvmTest` / `linuxX64Test` / `allTests`), so a bare `test`
       # would silently cover only :telegram and :router-telegram. `build` runs every
       # target's tests, ktlint, and the native compile+link.
       #
-      # `publishAllPublicationsToWipRepository` rather than
-      # `publishMavenPublicationToWipRepository` for the same reason: the hand-rolled
-      # "maven" publication only exists on the two JVM-only modules; a KMP module
-      # publishes `kotlinMultiplatform` plus one publication per target instead, so the
-      # old task name would have quietly published 2 modules out of 8.
+      # `publishAllPublicationsToWipRepository` rather than a single named publication for the
+      # same reason: a KMP module publishes `kotlinMultiplatform` plus one publication per
+      # target, so a task named after one publication would quietly publish 2 modules out of 8.
       - name: Build, test and publish
         run: ./gradlew build publishAllPublicationsToWipRepository dokkaGenerate --no-daemon
         env:

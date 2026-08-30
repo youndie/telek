@@ -11,5 +11,8 @@ import kotlin.test.Test
  */
 class ChatWorkersStressTest {
     @Test
-    fun `submissions racing directly against idle retirement are never lost or reordered`() = runBlocking { chatWorkersStressScenario() }
+    fun `submissions racing directly against idle retirement are never lost or reordered`() =
+        runBlocking {
+            chatWorkersStressScenario()
+        }
 }

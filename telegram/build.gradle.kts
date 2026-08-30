@@ -1,7 +1,9 @@
 plugins {
-    id("buildsrc.convention.kotlin-jvm")
+    id("org.jetbrains.kotlin.jvm")
+    id("ru.workinprogress.sborka.jvm")
+    id("ru.workinprogress.sborka.publish")
     alias(libs.plugins.dokkaPlugin)
-    alias(libs.plugins.ktlintPlugin)
+    id("ru.workinprogress.sborka.lint")
 }
 
 dependencies {

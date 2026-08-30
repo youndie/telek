@@ -101,12 +101,16 @@ class MyDispatcher : StateDispatcher<MyState>() {
         event: Event,
     ): TransitionResult<MyState> =
         when {
-            state is MyState.Loading && event is CatFactLoaded ->
+            state is MyState.Loading && event is CatFactLoaded -> {
                 transition { newState = MyState.Done(event.fact) }
+            }
 
-            state is MyState.Loading && event is CatFactLoadFailed ->
+            state is MyState.Loading && event is CatFactLoadFailed -> {
                 transition { newState = MyState.Error(event.errorMessage) }
+            }
 
-            else -> noTransition(state)
+            else -> {
+                noTransition(state)
+            }
         }
 }

@@ -38,4 +38,5 @@ class RowBuilder {
     fun build(): List<InlineKeyboardButton> = buttons
 }
 
-fun inlineKeyboard(block: InlineKeyboardBuilder.() -> Unit): InlineKeyboardMarkup = InlineKeyboardBuilder().apply(block).build()
+fun inlineKeyboard(block: InlineKeyboardBuilder.() -> Unit): InlineKeyboardMarkup =
+    InlineKeyboardBuilder().apply(block).build()

@@ -78,7 +78,10 @@ internal class ChatWorkers(
         while (true) {
             val worker = workerFor(chatId)
             when (worker.trySend(task)) {
-                SendOutcome.ACCEPTED -> return
+                SendOutcome.ACCEPTED -> {
+                    return
+                }
+
                 SendOutcome.RETIRED -> {
                     // This worker has already decided to retire but may still be draining its own
                     // backlog; it removes itself from the map only once that's fully done (see
@@ -87,6 +90,7 @@ internal class ChatWorkers(
                     // still-in-flight tail, which would break per-chat ordering.
                     yield()
                 }
+
                 SendOutcome.DROPPED -> {
                     logger.warn("Dropping input for chatId=$chatId — inbox is full (capacity=$inboxCapacity)")
                     return

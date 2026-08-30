@@ -56,14 +56,18 @@ fun routerModuleHandleSample(input: Input) {
         is Callback -> {
             when {
                 input.isRouteOf<ExampleRouteConfirm>(registry) -> { /* handle confirm */ }
+
                 input.isRouteOf<ExampleRouteCancel>(registry) -> { /* handle cancel */ }
-                else ->
+
+                else -> {
                     input.tryDecode<ExampleRouteSelect>(registry)?.let { route ->
                         val n = route.number
                         n.let { /* handle selection of `n` */ }
                     }
+                }
             }
         }
+
         else -> { /* other inputs */ }
     }
 }

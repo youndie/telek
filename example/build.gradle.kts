@@ -1,12 +1,16 @@
 plugins {
-    kotlin("jvm")
-    alias(libs.plugins.ktlintPlugin)
-    alias(libs.plugins.serializationPlugin)
+    id("org.jetbrains.kotlin.jvm")
+    id("ru.workinprogress.sborka.jvm")
+    id("ru.workinprogress.sborka.lint")
+    id("org.jetbrains.kotlin.plugin.serialization")
     application
 }
 
 kotlin {
-    jvmToolchain(21)
+    // NOT A LIBRARY: nothing is published and nothing depends on it, so there is no consumer for a
+    // spelled-out public API to be spelled out FOR. The toolchain and warnings as errors come from
+    // the convention and are wanted here as much as anywhere.
+    explicitApi = null
 }
 
 application {

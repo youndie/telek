@@ -128,11 +128,15 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                         }
                     }
 
-                    else -> noTransition(state)
+                    else -> {
+                        noTransition(state)
+                    }
                 }
             }
 
-            else -> noTransition(state)
+            else -> {
+                noTransition(state)
+            }
         }
 
     override fun transition(
@@ -140,7 +144,7 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
         event: Event,
     ): TransitionResult<ExampleState> =
         when {
-            state is ExampleState.LoadingCatFact && event is CatFactLoaded ->
+            state is ExampleState.LoadingCatFact && event is CatFactLoaded -> {
                 transition {
                     newState =
                         ExampleState.Confirming(
@@ -161,12 +165,16 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                             },
                     )
                 }
+            }
 
-            state is ExampleState.LoadingCatFact && event is CatFactLoadFailed ->
+            state is ExampleState.LoadingCatFact && event is CatFactLoadFailed -> {
                 transition {
                     newState = ExampleState.Error(errorMessage = event.errorMessage)
                 }
+            }
 
-            else -> noTransition(state)
+            else -> {
+                noTransition(state)
+            }
         }
 }

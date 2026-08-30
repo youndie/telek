@@ -35,22 +35,27 @@ private class WizardDispatcher : StateDispatcher<TestState>() {
         input: Input,
     ): TransitionResult<TestState> =
         when {
-            state is TestState.Waiting && input is Message && input.text == "boom" ->
+            state is TestState.Waiting && input is Message && input.text == "boom" -> {
                 throw RuntimeException("boom")
+            }
 
-            state is TestState.Waiting && input is Message ->
+            state is TestState.Waiting && input is Message -> {
                 transition {
                     newState = TestState.Confirming(value = input.text.length)
                     add(TestEffect("confirm-prompt"))
                 }
+            }
 
-            state is TestState.Confirming && input is Callback && input.data == "confirm" ->
+            state is TestState.Confirming && input is Callback && input.data == "confirm" -> {
                 transition {
                     newState = TestState.Done(value = state.value)
                     add(TestEffect("done"))
                 }
+            }
 
-            else -> noTransition(state)
+            else -> {
+                noTransition(state)
+            }
         }
 
     fun postDirect(
