@@ -57,7 +57,9 @@ class KtgExampleDispatcher : StateDispatcher<ExampleState>() {
                 }
             }
 
-            else -> noTransition(state)
+            else -> {
+                noTransition(state)
+            }
         }
 }
 

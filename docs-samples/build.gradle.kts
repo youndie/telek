@@ -2,13 +2,17 @@
 // of `./gradlew build`. If you change a public API these samples use, this module will fail to
 // compile; update both the sample here and the corresponding snippet in README.md together.
 plugins {
-    kotlin("jvm")
-    alias(libs.plugins.serializationPlugin)
-    alias(libs.plugins.ktlintPlugin)
+    id("org.jetbrains.kotlin.jvm")
+    id("ru.workinprogress.sborka.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("ru.workinprogress.sborka.lint")
 }
 
 kotlin {
-    jvmToolchain(21)
+    // NOT A LIBRARY: nothing is published and nothing depends on it, so there is no consumer for a
+    // spelled-out public API to be spelled out FOR. The toolchain and warnings as errors come from
+    // the convention and are wanted here as much as anywhere.
+    explicitApi = null
 }
 
 dependencies {

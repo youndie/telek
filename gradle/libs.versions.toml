@@ -1,9 +1,10 @@
 [versions]
+# The shared build conventions. One number: every sborka plugin below takes its version from here.
+sborka = "0.1.0.13"
 dokka = "2.1.0"
 kotlin = "2.4.10"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerializationJson = "1.11.0"
-ktlint = "14.2.0"
 kotlinTelegramBot = "10.0.0"
 retrofit = "2.12.0" #kotlinTelegramBot requires
 tgbotapi = "35.1.0"
@@ -28,6 +29,13 @@ kotlinxCoroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-tes
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
+sborkaKmp = { id = "ru.workinprogress.sborka.kmp", version.ref = "sborka" }
+sborkaJvm = { id = "ru.workinprogress.sborka.jvm", version.ref = "sborka" }
+sborkaLint = { id = "ru.workinprogress.sborka.lint", version.ref = "sborka" }
+sborkaPublish = { id = "ru.workinprogress.sborka.publish", version.ref = "sborka" }
 dokkaPlugin = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-ktlintPlugin = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 serializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+# The Kotlin plugins are named here now. They used to arrive on the classpath through buildSrc, which
+# is gone: `sborka.kmp` and `sborka.jvm` configure Kotlin and deliberately do not choose its version.
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
