@@ -1,0 +1,39 @@
+name: Build
+
+# THIS REPOSITORY HAD NOTHING THAT RAN ON A PULL REQUEST. The only workflow publishes, and it fires
+# on a push to main and on dispatch — so every change was first built by CI *after* it was merged,
+# and a red build was a red main rather than a red review.
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # ubuntu is not incidental: it is the only runner that can EXECUTE the linuxX64 tests rather than
+    # merely cross-compile them. linuxArm64 stays compile-and-link either way — an x86-64 host cannot
+    # run those binaries.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: youndie/sborka/.github/actions/setup-kotlin@main
+        with:
+          konan-cache: "true"
+
+      # `build` rather than `test ktlintCheck`: the multiplatform modules have no `test` task at all
+      # — they have `jvmTest` / `linuxX64Test` / `allTests` — so a bare `test` would silently cover
+      # only :telegram and :router-telegram. `build` runs every target's tests, ktlint, and the
+      # native compile and link.
+      - run: ./gradlew build --no-daemon
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/build/test-results/**/TEST-*.xml'
+          if-no-files-found: warn
