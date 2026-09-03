@@ -49,14 +49,7 @@
       // settings.gradle.kts. Without this they arrive as two pull requests for one number, which
       // is what happens today in the repositories that migrated first.
       description: "sborka is one release, not one release per place it is named",
-      matchPackageNames: [
-        "/^ru\\.workinprogress\\.sborka/",
-        // The catalog's `sborka` version is read from the GitHub releases of the repository that
-        // publishes the plugins, so Renovate knows the same release under a second name. Without
-        // this line it arrives as a second pull request for the same number — which is exactly
-        // what the repositories that migrated first are living with today.
-        "youndie/sborka",
-      ],
+      matchPackageNames: ["/^ru\\.workinprogress\\.sborka/"],
       groupName: "sborka",
     },
     {
