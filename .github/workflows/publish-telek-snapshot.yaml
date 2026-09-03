@@ -16,7 +16,7 @@ jobs:
     runs-on: [ ubuntu-latest ]
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       # Java, Gradle and the Kotlin/Native cache in one step. setup-gradle caches ~/.gradle
       # but not ~/.konan, and the toolchain is a fresh ~1 GB download on every run without
