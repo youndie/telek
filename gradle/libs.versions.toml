@@ -1,7 +1,7 @@
 [versions]
 # The shared build conventions. One number: every sborka plugin below takes its version from here.
 sborka = "0.1.0.13"
-dokka = "2.1.0"
+dokka = "2.2.0"
 kotlin = "2.4.10"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerializationJson = "1.11.0"
