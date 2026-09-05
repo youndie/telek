@@ -1,5 +1,27 @@
 # Release notes
 
+## 0.2.0
+
+**The coordinate moved.** Every module is now published under `io.github.youndie.telek` instead of
+`ru.workinprogress.telek`. Module names are unchanged, and so is every package in the source — only
+the group in front of the artefact is different.
+
+```kotlin
+-implementation("ru.workinprogress.telek:core:0.1.2")
++implementation("io.github.youndie.telek:core:0.2.0")
+```
+
+`ru.workinprogress` is a domain this account does not own, which makes it a group that cannot be
+published to Maven Central. `io.github.youndie` follows from the GitHub account itself, so the
+namespace is verifiable there.
+
+Nothing already released is rewritten: `ru.workinprogress.telek:*` up to 0.1.2 stays on the
+snapshot server and keeps resolving. 0.2.0 is the first version that exists only under the new
+group, which is why the minor number moves rather than the patch — there is no upgrade path that
+does not also edit the coordinate.
+
+---
+
 ## 0.1.2
 
 Two things: a **second Telegram transport** (ktgbotapi alongside kotlin-telegram-bot) and a
