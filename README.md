@@ -2,7 +2,7 @@
 
 [![ktlint](https://img.shields.io/badge/ktlint%20code--style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![kotlin](https://img.shields.io/badge/Kotlin-2.4.10-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org)
-[![telek core](https://reposilite.kotlin.website/api/badge/latest/snapshots/ru/workinprogress/telek/core?name=snapshots&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/ru/workinprogress/telek)
+[![telek core](https://reposilite.kotlin.website/api/badge/latest/snapshots/io/github/youndie/telek/core?name=snapshots&color=40c14a&prefix=v)](https://reposilite.kotlin.website/#/snapshots/io/github/youndie/telek)
 [![API Docs](https://img.shields.io/badge/docs-Dokka-blue?logoColor=white)](https://youndie.github.io/telek/)
 
 [![JVM](https://img.shields.io/badge/platform-JVM-E76F00?logo=openjdk&logoColor=white)](#-installation)
@@ -29,11 +29,11 @@ repositories {
 }
 
 dependencies {
-    implementation("ru.workinprogress.telek:core:<VERSION>")
+    implementation("io.github.youndie.telek:core:<VERSION>")
 
     // pick one transport:
-    implementation("ru.workinprogress.telek:telegram:<VERSION>") // kotlin-telegram-bot
-    // implementation("ru.workinprogress.telek:ktg:<VERSION>")   // ktgbotapi
+    implementation("io.github.youndie.telek:telegram:<VERSION>") // kotlin-telegram-bot
+    // implementation("io.github.youndie.telek:ktg:<VERSION>")   // ktgbotapi
 }
 ```
 The core module contains the FSM engine, transitions, and effect system.
@@ -353,13 +353,13 @@ Add optional modules if you need persistence or compact callback routing:
 ```kotlin
 dependencies {
     // ... core + telegram as shown above
-    implementation("ru.workinprogress.telek:persistence:<VERSION>")
-    implementation("ru.workinprogress.telek:router:<VERSION>")
+    implementation("io.github.youndie.telek:persistence:<VERSION>")
+    implementation("io.github.youndie.telek:router:<VERSION>")
 
     // only if you're building inline keyboards with typed routes (RowBuilder.callback(name, route)) —
     // pick the one matching your transport
-    implementation("ru.workinprogress.telek:router-telegram:<VERSION>")
-    // implementation("ru.workinprogress.telek:router-ktg:<VERSION>")
+    implementation("io.github.youndie.telek:router-telegram:<VERSION>")
+    // implementation("io.github.youndie.telek:router-ktg:<VERSION>")
 }
 ```
 
