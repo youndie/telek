@@ -1,77 +1,24 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
 
-  extends: ["config:recommended"],
-
-  // Once a week, in UTC. Updates arrive as one Monday-morning batch rather than a trickle of a PR
-  // a day — every pull request here runs the full build, and that build is not cheap.
-  timezone: "Etc/UTC",
-  schedule: ["before 6am on monday"],
-
-  // Commits here are Conventional Commits, and a hook enforces it. `config:recommended` maps
-  // dependency bumps to `fix:` and everything else to `chore:`.
-  semanticCommits: "enabled",
-
-  labels: ["dependencies"],
-
-  // With the build harness merging itself these numbers stop being a throttle on human attention
-  // and become one on runner time, so they can be higher.
-  prConcurrentLimit: 5,
-  prHourlyLimit: 0,
-
-  // Renovate merges the pull request itself rather than arming GitHub's auto-merge: GitHub refuses
-  // to arm it on a branch with no required checks, and adding branch protection to `main` would
-  // change how this repository is worked in.
-  platformAutomerge: false,
-
-  // Vulnerabilities are the one thing that ignores the schedule.
-  vulnerabilityAlerts: {
-    schedule: ["at any time"],
-    labels: ["dependencies", "security"],
-  },
-
-  ignorePaths: ["**/build/**", "**/.gradle/**"],
-
-  packageRules: [
-    {
-      description: "Kotlin: the compiler and its plugins move as one version, and that is never a routine bump",
-      matchPackageNames: ["/^org\\.jetbrains\\.kotlin[:.]/"],
-      groupName: "kotlin",
-    },
-    {
-      description: "kotlinx ships as one release train — one PR",
-      matchPackageNames: ["/^org\\.jetbrains\\.kotlinx[:.]/"],
-      groupName: "kotlinx",
-    },
-    {
-      // The build conventions are one release published under two names: the catalog entry
-      // `sborka` (the plugin coordinates) and the settings plugin id resolved in
-      // settings.gradle.kts. Without this they arrive as two pull requests for one number, which
-      // is what happens today in the repositories that migrated first.
-      description: "sborka is one release, not one release per place it is named",
-      matchPackageNames: ["/^ru\\.workinprogress\\.sborka/"],
-      groupName: "sborka",
-    },
-    {
-      description: "The build harness arrives as one PR, not one per action",
-      matchManagers: ["github-actions"],
-      groupName: "ci actions",
-    },
-    {
-      description: "Majors of anything that ships get a human",
-      matchUpdateTypes: ["major"],
-      automerge: false,
-      labels: ["dependencies", "major"],
-    },
-    // Last, so it wins over the major rule above. A major of `actions/checkout` is not the same
-    // kind of event as a major of a library this publishes: the build harness is not shipped to
-    // anyone, and the check that would catch a bad bump is the build itself — which already ran
-    // on the pull request.
-    {
-      description: "The build harness merges itself, majors included: CI on pull_request is the review",
-      matchManagers: ["github-actions", "gradle-wrapper"],
-      automerge: true,
-      automergeType: "pr",
-    },
+  // Everything this file used to spell out now lives in sborka and is extended by name. It was not
+  // wrong — it was written ten times. The timezone, the Monday schedule, the limits, the
+  // kotlin/kotlinx/sborka/ci-actions groups and "majors get a human" were identical in ten
+  // repositories, which is nine copies that could drift and one that would be noticed.
+  //
+  // Nothing was telek-specific, so nothing stayed. If something here later needs a rule of its own,
+  // it goes below the extends and wins: package rules are concatenated, preset first, and the last
+  // match takes effect.
+  //
+  // The second preset is the automerge one, and it is extended second on purpose — its rule has to
+  // land after the base preset's "majors get a human" to override it for the harness. Its
+  // precondition holds here: build.yaml runs on `pull_request`, so a pull request really is
+  // reviewed by a build before it merges itself.
+  //
+  // What telek gains that it did not have: the refusal of `kotlinx-datetime:*-0.6.x-compat`, which
+  // is 0.8.0 built against the OLD 0.6.x API and which Renovate reads as an upgrade.
+  extends: [
+    "github>youndie/sborka",
+    "github>youndie/sborka:automerge-harness",
   ],
 }
