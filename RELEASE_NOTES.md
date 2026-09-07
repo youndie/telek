@@ -1,5 +1,30 @@
 # Release notes
 
+## 0.3.0
+
+**The packages moved, and stored state written by an earlier version will not read back.** Every
+package is now `io.github.youndie.telek.*` instead of `ru.workinprogress.telek.*`. A consumer
+changes its imports; the module names and the coordinates are what 0.2.0 made them.
+
+```kotlin
+-import ru.workinprogress.telek.router.Router
++import io.github.youndie.telek.router.Router
+```
+
+**`FileStateStorage` cannot read what it wrote before this version.** It serialises with
+`classDiscriminator = "state_type"` and no explicit `@SerialName` anywhere, so the discriminator in
+a saved file is the full name of the Kotlin class. A file written by 0.2.0 carries
+`"state_type": "ru.workinprogress.telek..."` for any state type declared inside telek, and nothing
+in 0.3.0 answers to that name.
+
+This is deliberate: keeping the old names alive would mean carrying `@SerialName("ru.workinprogress…")`
+on types that live somewhere else now, which reads as a lie about where they are and never expires
+on its own. State types declared by a bot are **not** affected — they carry the bot's own package,
+which this release does not touch. A bot that must keep its stored state across the upgrade should
+drain it before upgrading, or spell `@SerialName` on its own types, which is worth doing regardless.
+
+---
+
 ## 0.2.0
 
 **The coordinate moved.** Every module is now published under `io.github.youndie.telek` instead of
