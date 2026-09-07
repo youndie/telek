@@ -1,8 +1,8 @@
 package io.github.youndie.telek.example
 
-import kotlinx.serialization.Serializable
 import io.github.youndie.telek.router.Route
 import io.github.youndie.telek.router.RouteContext
+import kotlinx.serialization.Serializable
 
 @RouteContext(scope = "example", action = "select")
 @Serializable

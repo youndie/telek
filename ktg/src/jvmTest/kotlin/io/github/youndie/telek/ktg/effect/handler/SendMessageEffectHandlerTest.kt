@@ -8,13 +8,13 @@ import dev.inmo.tgbotapi.types.RawChatId
 import dev.inmo.tgbotapi.types.message.MarkdownParseMode
 import dev.inmo.tgbotapi.types.message.abstracts.PrivateContentMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
+import io.github.youndie.telek.ktg.effect.SendMessageEffect
+import io.github.youndie.telek.ktg.inlineKeyboard
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.runBlocking
-import io.github.youndie.telek.ktg.effect.SendMessageEffect
-import io.github.youndie.telek.ktg.inlineKeyboard
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

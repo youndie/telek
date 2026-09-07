@@ -1,12 +1,12 @@
 package io.github.youndie.telek
 
-import kotlinx.coroutines.test.runTest
 import io.github.youndie.telek.support.RecordingAsyncEffectHandler
 import io.github.youndie.telek.support.RecordingEffectHandler
 import io.github.youndie.telek.support.TestDebouncedEffect
 import io.github.youndie.telek.support.TestEffect
 import io.github.youndie.telek.support.TestEvent
 import io.github.youndie.telek.support.TestExecutionContext
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

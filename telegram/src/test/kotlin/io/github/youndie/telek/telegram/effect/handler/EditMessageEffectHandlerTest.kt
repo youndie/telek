@@ -3,12 +3,12 @@ package io.github.youndie.telek.telegram.effect.handler
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.ParseMode
+import io.github.youndie.telek.EffectFailed
+import io.github.youndie.telek.telegram.effect.EditMessageEffect
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
-import io.github.youndie.telek.EffectFailed
-import io.github.youndie.telek.telegram.effect.EditMessageEffect
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs

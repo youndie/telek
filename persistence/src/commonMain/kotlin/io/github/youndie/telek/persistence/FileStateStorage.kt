@@ -1,5 +1,9 @@
 package io.github.youndie.telek.persistence
 
+import io.github.youndie.telek.State
+import io.github.youndie.telek.StateStorage
+import io.github.youndie.telek.TelekLogger
+import io.github.youndie.telek.telekIoDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
@@ -7,10 +11,6 @@ import kotlinx.serialization.serializer
 import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
-import io.github.youndie.telek.State
-import io.github.youndie.telek.StateStorage
-import io.github.youndie.telek.TelekLogger
-import io.github.youndie.telek.telekIoDispatcher
 
 inline fun <reified T : State> stateStorageOf(
     dir: Path = "./state".toPath(),

@@ -1,12 +1,12 @@
 package io.github.youndie.telek.ktg.effect.handler
 
 import dev.inmo.tgbotapi.bot.TelegramBot
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
 import io.github.youndie.telek.Event
 import io.github.youndie.telek.ExecutionContext
 import io.github.youndie.telek.ktg.KtgContext
 import io.github.youndie.telek.ktg.effect.KtgEffect
+import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

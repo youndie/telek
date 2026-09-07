@@ -1,8 +1,8 @@
 package io.github.youndie.telek.router
 
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.CallbackDataInlineKeyboardButton
-import kotlinx.serialization.Serializable
 import io.github.youndie.telek.ktg.InlineKeyboardBuilder
+import kotlinx.serialization.Serializable
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -9,12 +9,12 @@ import com.github.kotlintelegrambot.entities.Message
 import com.github.kotlintelegrambot.entities.Update
 import com.github.kotlintelegrambot.entities.User
 import com.github.kotlintelegrambot.types.TelegramBotResult
+import io.github.youndie.telek.Callback
+import io.github.youndie.telek.Telek
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
-import io.github.youndie.telek.Callback
-import io.github.youndie.telek.Telek
 import kotlin.test.Test
 import kotlin.test.assertSame
 import io.github.youndie.telek.Message as TelekMessage

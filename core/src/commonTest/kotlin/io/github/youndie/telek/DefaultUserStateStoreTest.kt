@@ -1,8 +1,8 @@
 package io.github.youndie.telek
 
-import kotlinx.coroutines.test.runTest
 import io.github.youndie.telek.support.OtherState
 import io.github.youndie.telek.support.TestState
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

@@ -1,10 +1,10 @@
 package io.github.youndie.telek.router
 
-import kotlinx.serialization.Serializable
 import io.github.youndie.telek.Input
 import io.github.youndie.telek.State
 import io.github.youndie.telek.TransitionResult
 import io.github.youndie.telek.noTransition
+import kotlinx.serialization.Serializable
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

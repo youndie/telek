@@ -9,10 +9,10 @@ import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.queries.callback.InlineMessageIdDataCallbackQuery
 import dev.inmo.tgbotapi.types.queries.callback.MessageDataCallbackQuery
 import dev.inmo.tgbotapi.utils.RiskFeature
-import io.mockk.every
-import io.mockk.mockk
 import io.github.youndie.telek.Callback
 import io.github.youndie.telek.Message
+import io.mockk.every
+import io.mockk.mockk
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

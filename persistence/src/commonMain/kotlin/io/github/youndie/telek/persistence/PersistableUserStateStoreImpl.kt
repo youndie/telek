@@ -1,12 +1,12 @@
 package io.github.youndie.telek.persistence
 
-import kotlinx.atomicfu.locks.SynchronizedObject
-import kotlinx.atomicfu.locks.synchronized
 import io.github.youndie.telek.FinalState
 import io.github.youndie.telek.State
 import io.github.youndie.telek.StateStorage
 import io.github.youndie.telek.UpdateResult
 import io.github.youndie.telek.UserStateStore
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 
 /**
  * See [UserStateStore]'s contract note: [Telek][io.github.youndie.telek.Telek] never calls

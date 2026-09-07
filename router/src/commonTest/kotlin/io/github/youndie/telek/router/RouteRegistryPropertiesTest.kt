@@ -1,7 +1,7 @@
 package io.github.youndie.telek.router
 
-import kotlinx.serialization.Serializable
 import io.github.youndie.telek.router.RouteRegistry
+import kotlinx.serialization.Serializable
 import kotlin.random.Random
 import kotlin.test.BeforeTest
 import kotlin.test.Test

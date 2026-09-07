@@ -1,5 +1,8 @@
 package io.github.youndie.telek.persistence
 
+import io.github.youndie.telek.State
+import io.github.youndie.telek.UpdateResult
+import io.github.youndie.telek.UserStateStore
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.serializer
@@ -7,9 +10,6 @@ import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
 import okio.fakefilesystem.FakeFileSystem
-import io.github.youndie.telek.State
-import io.github.youndie.telek.UpdateResult
-import io.github.youndie.telek.UserStateStore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

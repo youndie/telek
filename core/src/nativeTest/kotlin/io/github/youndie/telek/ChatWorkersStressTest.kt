@@ -1,7 +1,7 @@
 package io.github.youndie.telek
 
-import kotlinx.coroutines.runBlocking
 import io.github.youndie.telek.support.chatWorkersStressScenario
+import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 
 /**

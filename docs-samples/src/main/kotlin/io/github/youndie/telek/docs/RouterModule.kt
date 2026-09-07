@@ -1,7 +1,6 @@
 // Compiled copy of README.md's "Router module" section — keep both in sync.
 package io.github.youndie.telek.docs
 
-import kotlinx.serialization.Serializable
 import io.github.youndie.telek.Callback
 import io.github.youndie.telek.Input
 import io.github.youndie.telek.router.Route
@@ -12,6 +11,7 @@ import io.github.youndie.telek.router.routes
 import io.github.youndie.telek.router.tryDecode
 import io.github.youndie.telek.telegram.sendMessage
 import io.github.youndie.telek.transition
+import kotlinx.serialization.Serializable
 
 @RouteContext(scope = "example", action = "select")
 @Serializable

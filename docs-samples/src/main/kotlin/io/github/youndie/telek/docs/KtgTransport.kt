@@ -3,7 +3,6 @@ package io.github.youndie.telek.docs
 
 import dev.inmo.tgbotapi.bot.ktor.telegramBot
 import dev.inmo.tgbotapi.extensions.behaviour_builder.buildBehaviourWithLongPolling
-import kotlinx.coroutines.runBlocking
 import io.github.youndie.telek.Callback
 import io.github.youndie.telek.Input
 import io.github.youndie.telek.Message
@@ -17,6 +16,7 @@ import io.github.youndie.telek.ktg.effect.ktgEffectExecutor
 import io.github.youndie.telek.ktg.sendMessage
 import io.github.youndie.telek.noTransition
 import io.github.youndie.telek.transition
+import kotlinx.coroutines.runBlocking
 
 // Identical to ExampleDispatcher, except the effect DSL comes from `io.github.youndie.telek.ktg`
 class KtgExampleDispatcher : StateDispatcher<ExampleState>() {

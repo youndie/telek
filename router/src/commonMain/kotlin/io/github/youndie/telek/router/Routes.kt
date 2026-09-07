@@ -2,14 +2,14 @@
 
 package io.github.youndie.telek.router
 
+import io.github.youndie.telek.Callback
+import io.github.youndie.telek.router.RouteUtils.requireContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialInfo
 import kotlinx.serialization.properties.Properties
 import kotlinx.serialization.properties.decodeFromStringMap
 import kotlinx.serialization.properties.encodeToStringMap
-import io.github.youndie.telek.Callback
-import io.github.youndie.telek.router.RouteUtils.requireContext
 
 inline fun <reified T : Route> Callback.isRouteOf(registry: RouteRegistry): Boolean = registry.typeIs<T>(data)
 

@@ -1,12 +1,12 @@
 package io.github.youndie.telek.telegram.effect.handler
 
 import com.github.kotlintelegrambot.Bot
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
 import io.github.youndie.telek.Event
 import io.github.youndie.telek.ExecutionContext
 import io.github.youndie.telek.telegram.TelegramContext
 import io.github.youndie.telek.telegram.effect.TelegramEffect
+import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

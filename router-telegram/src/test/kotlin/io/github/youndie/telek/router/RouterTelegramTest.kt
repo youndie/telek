@@ -1,8 +1,8 @@
 package io.github.youndie.telek.router
 
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
-import kotlinx.serialization.Serializable
 import io.github.youndie.telek.telegram.InlineKeyboardBuilder
+import kotlinx.serialization.Serializable
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

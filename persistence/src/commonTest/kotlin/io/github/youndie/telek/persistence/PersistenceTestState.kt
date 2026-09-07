@@ -1,8 +1,8 @@
 package io.github.youndie.telek.persistence
 
-import kotlinx.serialization.Serializable
 import io.github.youndie.telek.FinalState
 import io.github.youndie.telek.State
+import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface PersistenceTestState : State {

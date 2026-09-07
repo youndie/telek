@@ -1,7 +1,7 @@
 package io.github.youndie.telek.router
 
-import kotlinx.serialization.Serializable
 import io.github.youndie.telek.Callback
+import kotlinx.serialization.Serializable
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

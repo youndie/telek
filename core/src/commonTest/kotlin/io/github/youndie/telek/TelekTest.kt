@@ -2,13 +2,13 @@
 
 package io.github.youndie.telek
 
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
 import io.github.youndie.telek.support.FakeEffectExecutor
 import io.github.youndie.telek.support.RecordingInterceptor
 import io.github.youndie.telek.support.TestEffect
 import io.github.youndie.telek.support.TestEvent
 import io.github.youndie.telek.support.TestState
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
