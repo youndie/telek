@@ -3,9 +3,9 @@
 // compile; update both the sample here and the corresponding snippet in README.md together.
 plugins {
     id("org.jetbrains.kotlin.jvm")
-    id("ru.workinprogress.sborka.jvm")
+    id("io.github.youndie.sborka.jvm")
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("ru.workinprogress.sborka.lint")
+    id("io.github.youndie.sborka.lint")
 }
 
 kotlin {
