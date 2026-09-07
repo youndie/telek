@@ -2,12 +2,12 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 
 module:core
-ru.workinprogress.telek
+io.github.youndie.telek
 module:ktg
-ru.workinprogress.telek.ktg
-ru.workinprogress.telek.ktg.effect
-ru.workinprogress.telek.ktg.effect.handler
+io.github.youndie.telek.ktg
+io.github.youndie.telek.ktg.effect
+io.github.youndie.telek.ktg.effect.handler
 module:telegram
-ru.workinprogress.telek.telegram
-ru.workinprogress.telek.telegram.effect
-ru.workinprogress.telek.telegram.effect.handler
+io.github.youndie.telek.telegram
+io.github.youndie.telek.telegram.effect
+io.github.youndie.telek.telegram.effect.handler
