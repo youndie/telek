@@ -157,7 +157,7 @@ The `ktg` module is the same integration built
 on [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI) instead of kotlin-telegram-bot.
 Everything above — dispatchers, transitions, `sendMessage` / `editMessage` / `editMarkup`, the text
 and inline-keyboard DSLs — reads identically; only the imports change
-(`ru.workinprogress.telek.telegram.*` → `ru.workinprogress.telek.ktg.*`) and the types they produce
+(`io.github.youndie.telek.telegram.*` → `io.github.youndie.telek.ktg.*`) and the types they produce
 are ktgbotapi's (`InlineKeyboardMarkup`, `TelegramBot`).
 
 ```kotlin
@@ -198,7 +198,7 @@ Differences worth knowing:
   `FlowsUpdatesFilter`) can reuse the mapping without going through `connect()`.
 
 The router equivalent is `router-ktg` — same `RowBuilder.callback(name, route)` extension, over
-`ru.workinprogress.telek.ktg.RowBuilder`.
+`io.github.youndie.telek.ktg.RowBuilder`.
 
 
 ### ⚡ Defining a Custom Effect

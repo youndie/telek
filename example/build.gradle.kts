@@ -14,7 +14,7 @@ kotlin {
 }
 
 application {
-    mainClass.set("ru.workinprogress.telek.example.ApplicationKt")
+    mainClass.set("io.github.youndie.telek.example.ApplicationKt")
 }
 
 dependencies {
