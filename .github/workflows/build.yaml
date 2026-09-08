@@ -3,7 +3,12 @@ name: Build
 # THIS REPOSITORY HAD NOTHING THAT RAN ON A PULL REQUEST. The only workflow publishes, and it fires
 # on a push to main and on dispatch — so every change was first built by CI *after* it was merged,
 # and a red build was a red main rather than a red review.
+# `push` on main as well, and not only `pull_request`. A green pull request was checked on its own
+# base; what lands on main is a different tree, and nothing here ever built the merge commit. Two
+# branches can each be green against the base they were cut from and disagree once both are in.
 on:
+  push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
