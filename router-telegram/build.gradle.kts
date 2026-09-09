@@ -7,6 +7,11 @@ plugins {
     id("io.github.youndie.sborka.lint")
 }
 
+kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation {}
+}
+
 dependencies {
     api(projects.router)
     implementation(projects.core)

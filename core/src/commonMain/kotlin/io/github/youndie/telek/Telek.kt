@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
-class Telek(
+public class Telek(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val userStateStore: UserStateStore = DefaultUserStateStore(),
     private val dispatchers: List<StateDispatcher<out State>>,
@@ -85,7 +85,7 @@ class Telek(
         }
     }
 
-    fun onInput(
+    public fun onInput(
         chatId: Long,
         input: Input,
     ) {
@@ -142,7 +142,7 @@ class Telek(
     )
 }
 
-class DefaultFindDispatcherStrategy(
+public class DefaultFindDispatcherStrategy(
     private val dispatchers: List<StateDispatcher<out State>>,
 ) : FindDispatcherStrategy {
     override fun findDispatcher(
@@ -163,15 +163,15 @@ class DefaultFindDispatcherStrategy(
     }
 }
 
-data class UpdateResult(
+public data class UpdateResult(
     val oldState: State?,
     val newState: State,
     val effects: List<Effect>,
     val dispatcher: StateDispatcher<out State>?,
 )
 
-interface FindDispatcherStrategy {
-    fun findDispatcher(
+public interface FindDispatcherStrategy {
+    public fun findDispatcher(
         state: State?,
         input: Input? = null,
     ): StateDispatcher<out State>?

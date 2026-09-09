@@ -16,7 +16,7 @@ import io.github.youndie.telek.Telek
  * spinner (kotlin-telegram-bot does this on its own; ktgbotapi doesn't). Turn it off if a
  * dispatcher answers with its own text/alert.
  */
-fun BehaviourContext.connect(
+public fun BehaviourContext.connect(
     telek: Telek,
     contextSource: KtgContextSource,
     answerCallbackQueries: Boolean = true,

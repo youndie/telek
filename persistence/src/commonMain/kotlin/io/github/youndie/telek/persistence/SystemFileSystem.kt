@@ -9,4 +9,4 @@ import okio.FileSystem
  * `FileSystem.SYSTEM` as an `expect` extension in its own `systemFileSystem` source set rather
  * than in `commonMain`, so common code can't reference it directly.
  */
-expect val systemFileSystem: FileSystem
+public expect val systemFileSystem: FileSystem

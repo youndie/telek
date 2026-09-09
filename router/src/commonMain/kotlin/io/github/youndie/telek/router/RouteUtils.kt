@@ -12,11 +12,11 @@ import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 
 @OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
-object RouteUtils {
+public object RouteUtils {
     private val serializerCacheLock = SynchronizedObject()
     private val serializerCache = mutableMapOf<KClass<*>, KSerializer<Any>>()
 
-    fun encodeRouteDynamic(route: Route): String {
+    public fun encodeRouteDynamic(route: Route): String {
         val serializer =
             synchronized(serializerCacheLock) {
                 serializerCache.getOrPut(route::class) {
@@ -34,19 +34,19 @@ object RouteUtils {
         return "$scope:$action:$paramsString"
     }
 
-    inline fun <reified T : Route> encodeRoute(instance: T): String {
+    public inline fun <reified T : Route> encodeRoute(instance: T): String {
         val (scope, action) = requireContext<T>()
         val params = Properties.Default.encodeToStringMap(instance)
         val paramString = params.entries.joinToString("_") { "${it.key}_${it.value}" }
         return "$scope:$action:$paramString"
     }
 
-    inline fun <reified T : Route> decodeRoute(raw: String): T {
+    public inline fun <reified T : Route> decodeRoute(raw: String): T {
         val params = parseCommonRoute(raw).params
         return decodeParams(params)
     }
 
-    inline fun <reified T : Route> requireContext(): Pair<String, String> {
+    public inline fun <reified T : Route> requireContext(): Pair<String, String> {
         val (scope, action) =
             getRouteContext(serializer<T>().descriptor)
                 ?: error("Missing @RouteContext for ${T::class.simpleName}")
@@ -63,7 +63,7 @@ object RouteUtils {
      * The one requirement this adds is that every [Route] must be `@Serializable` — including ones
      * with no properties at all.
      */
-    fun getRouteContext(descriptor: SerialDescriptor): Pair<String, String>? =
+    public fun getRouteContext(descriptor: SerialDescriptor): Pair<String, String>? =
         descriptor.annotations
             .filterIsInstance<RouteContext>()
             .firstOrNull()

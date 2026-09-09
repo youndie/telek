@@ -7,7 +7,7 @@ import io.github.youndie.telek.ktg.RowBuilder
  * needs to know about a transport at all, kept out of `:router` itself so its encode/decode logic
  * stays transport-agnostic.
  */
-fun RowBuilder.callback(
+public fun RowBuilder.callback(
     name: String,
     route: Route,
 ) {

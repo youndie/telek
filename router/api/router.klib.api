@@ -1,0 +1,80 @@
+// Klib ABI Dump
+// Targets: [linuxArm64, linuxX64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie.telek:router>
+open annotation class io.github.youndie.telek.router/RouteContext : kotlin/Annotation { // io.github.youndie.telek.router/RouteContext|null[0]
+    constructor <init>(kotlin/String, kotlin/String) // io.github.youndie.telek.router/RouteContext.<init>|<init>(kotlin.String;kotlin.String){}[0]
+
+    final val action // io.github.youndie.telek.router/RouteContext.action|{}action[0]
+        final fun <get-action>(): kotlin/String // io.github.youndie.telek.router/RouteContext.action.<get-action>|<get-action>(){}[0]
+    final val scope // io.github.youndie.telek.router/RouteContext.scope|{}scope[0]
+        final fun <get-scope>(): kotlin/String // io.github.youndie.telek.router/RouteContext.scope.<get-scope>|<get-scope>(){}[0]
+}
+
+abstract fun interface <#A: io.github.youndie.telek.router/Route> io.github.youndie.telek.router/RouteDecoder { // io.github.youndie.telek.router/RouteDecoder|null[0]
+    abstract fun decode(kotlin/String): #A // io.github.youndie.telek.router/RouteDecoder.decode|decode(kotlin.String){}[0]
+}
+
+abstract interface io.github.youndie.telek.router/Route { // io.github.youndie.telek.router/Route|null[0]
+    open fun encode(): kotlin/String // io.github.youndie.telek.router/Route.encode|encode(){}[0]
+}
+
+abstract class <#A: io.github.youndie.telek/State> io.github.youndie.telek.router/StateDispatcherWithRoutes : io.github.youndie.telek/StateDispatcher<#A> { // io.github.youndie.telek.router/StateDispatcherWithRoutes|null[0]
+    constructor <init>() // io.github.youndie.telek.router/StateDispatcherWithRoutes.<init>|<init>(){}[0]
+
+    abstract val routeRegistry // io.github.youndie.telek.router/StateDispatcherWithRoutes.routeRegistry|{}routeRegistry[0]
+        abstract fun <get-routeRegistry>(): io.github.youndie.telek.router/RouteRegistry // io.github.youndie.telek.router/StateDispatcherWithRoutes.routeRegistry.<get-routeRegistry>|<get-routeRegistry>(){}[0]
+
+    open fun canHandleCallback(kotlin/String): kotlin/Boolean // io.github.youndie.telek.router/StateDispatcherWithRoutes.canHandleCallback|canHandleCallback(kotlin.String){}[0]
+}
+
+final class io.github.youndie.telek.router/CommonRoute { // io.github.youndie.telek.router/CommonRoute|null[0]
+    constructor <init>(kotlin/String, kotlin/String, kotlin/String? = ...) // io.github.youndie.telek.router/CommonRoute.<init>|<init>(kotlin.String;kotlin.String;kotlin.String?){}[0]
+
+    final val action // io.github.youndie.telek.router/CommonRoute.action|{}action[0]
+        final fun <get-action>(): kotlin/String // io.github.youndie.telek.router/CommonRoute.action.<get-action>|<get-action>(){}[0]
+    final val params // io.github.youndie.telek.router/CommonRoute.params|{}params[0]
+        final fun <get-params>(): kotlin/String? // io.github.youndie.telek.router/CommonRoute.params.<get-params>|<get-params>(){}[0]
+    final val scope // io.github.youndie.telek.router/CommonRoute.scope|{}scope[0]
+        final fun <get-scope>(): kotlin/String // io.github.youndie.telek.router/CommonRoute.scope.<get-scope>|<get-scope>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.telek.router/CommonRoute.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.telek.router/CommonRoute.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.telek.router/CommonRoute.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String = ..., kotlin/String? = ...): io.github.youndie.telek.router/CommonRoute // io.github.youndie.telek.router/CommonRoute.copy|copy(kotlin.String;kotlin.String;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek.router/CommonRoute.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek.router/CommonRoute.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek.router/CommonRoute.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek.router/RouteRegistry { // io.github.youndie.telek.router/RouteRegistry|null[0]
+    constructor <init>() // io.github.youndie.telek.router/RouteRegistry.<init>|<init>(){}[0]
+
+    final val decoders // io.github.youndie.telek.router/RouteRegistry.decoders|{}decoders[0]
+        final fun <get-decoders>(): kotlin.collections/MutableMap<kotlin/Pair<kotlin/String, kotlin/String>, io.github.youndie.telek.router/RouteDecoder<out io.github.youndie.telek.router/Route>> // io.github.youndie.telek.router/RouteRegistry.decoders.<get-decoders>|<get-decoders>(){}[0]
+
+    final fun <#A1: io.github.youndie.telek.router/Route> decode(kotlin/String): #A1 // io.github.youndie.telek.router/RouteRegistry.decode|decode(kotlin.String){0§<io.github.youndie.telek.router.Route>}[0]
+    final fun canDecode(kotlin/String): kotlin/Boolean // io.github.youndie.telek.router/RouteRegistry.canDecode|canDecode(kotlin.String){}[0]
+    final inline fun <#A1: reified io.github.youndie.telek.router/Route> register() // io.github.youndie.telek.router/RouteRegistry.register|register(){0§<io.github.youndie.telek.router.Route>}[0]
+    final inline fun <#A1: reified io.github.youndie.telek.router/Route> register(noinline kotlin/Function1<kotlin/String, #A1>) // io.github.youndie.telek.router/RouteRegistry.register|register(kotlin.Function1<kotlin.String,0:0>){0§<io.github.youndie.telek.router.Route>}[0]
+    final inline fun <#A1: reified io.github.youndie.telek.router/Route> typeIs(kotlin/String): kotlin/Boolean // io.github.youndie.telek.router/RouteRegistry.typeIs|typeIs(kotlin.String){0§<io.github.youndie.telek.router.Route>}[0]
+}
+
+final object io.github.youndie.telek.router/RouteUtils { // io.github.youndie.telek.router/RouteUtils|null[0]
+    final fun encodeRouteDynamic(io.github.youndie.telek.router/Route): kotlin/String // io.github.youndie.telek.router/RouteUtils.encodeRouteDynamic|encodeRouteDynamic(io.github.youndie.telek.router.Route){}[0]
+    final fun getRouteContext(kotlinx.serialization.descriptors/SerialDescriptor): kotlin/Pair<kotlin/String, kotlin/String>? // io.github.youndie.telek.router/RouteUtils.getRouteContext|getRouteContext(kotlinx.serialization.descriptors.SerialDescriptor){}[0]
+    final inline fun <#A1: reified io.github.youndie.telek.router/Route> decodeRoute(kotlin/String): #A1 // io.github.youndie.telek.router/RouteUtils.decodeRoute|decodeRoute(kotlin.String){0§<io.github.youndie.telek.router.Route>}[0]
+    final inline fun <#A1: reified io.github.youndie.telek.router/Route> encodeRoute(#A1): kotlin/String // io.github.youndie.telek.router/RouteUtils.encodeRoute|encodeRoute(0:0){0§<io.github.youndie.telek.router.Route>}[0]
+    final inline fun <#A1: reified io.github.youndie.telek.router/Route> requireContext(): kotlin/Pair<kotlin/String, kotlin/String> // io.github.youndie.telek.router/RouteUtils.requireContext|requireContext(){0§<io.github.youndie.telek.router.Route>}[0]
+}
+
+final fun io.github.youndie.telek.router/parseCommonRoute(kotlin/String): io.github.youndie.telek.router/CommonRoute // io.github.youndie.telek.router/parseCommonRoute|parseCommonRoute(kotlin.String){}[0]
+final fun io.github.youndie.telek.router/routes(kotlin/Function1<io.github.youndie.telek.router/RouteRegistry, kotlin/Unit>): io.github.youndie.telek.router/RouteRegistry // io.github.youndie.telek.router/routes|routes(kotlin.Function1<io.github.youndie.telek.router.RouteRegistry,kotlin.Unit>){}[0]
+final inline fun <#A: reified io.github.youndie.telek.router/Route> (io.github.youndie.telek/Callback).io.github.youndie.telek.router/isRouteOf(io.github.youndie.telek.router/RouteRegistry): kotlin/Boolean // io.github.youndie.telek.router/isRouteOf|isRouteOf@io.github.youndie.telek.Callback(io.github.youndie.telek.router.RouteRegistry){0§<io.github.youndie.telek.router.Route>}[0]
+final inline fun <#A: reified io.github.youndie.telek.router/Route> (io.github.youndie.telek/Callback).io.github.youndie.telek.router/tryDecode(io.github.youndie.telek.router/RouteRegistry): #A? // io.github.youndie.telek.router/tryDecode|tryDecode@io.github.youndie.telek.Callback(io.github.youndie.telek.router.RouteRegistry){0§<io.github.youndie.telek.router.Route>}[0]
+final inline fun <#A: reified kotlin/Any> io.github.youndie.telek.router/decodeParams(kotlin/String?): #A // io.github.youndie.telek.router/decodeParams|decodeParams(kotlin.String?){0§<kotlin.Any>}[0]
+final inline fun <#A: reified kotlin/Any> io.github.youndie.telek.router/encodeParams(#A): kotlin/String // io.github.youndie.telek.router/encodeParams|encodeParams(0:0){0§<kotlin.Any>}[0]

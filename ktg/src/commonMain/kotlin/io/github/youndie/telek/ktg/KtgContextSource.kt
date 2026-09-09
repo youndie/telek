@@ -13,7 +13,7 @@ import kotlinx.coroutines.CompletableDeferred
  * and [connect] so the executor awaits the same bot the behaviour context observes, without
  * [io.github.youndie.telek.Telek] needing to own or track it.
  */
-class KtgContextSource(
+public class KtgContextSource(
     bot: TelegramBot? = null,
 ) {
     private val botDeferred = CompletableDeferred<TelegramBot>()
@@ -23,9 +23,9 @@ class KtgContextSource(
     }
 
     /** Idempotent — the first bot wins, later calls are ignored. Called by [connect]. */
-    fun provide(bot: TelegramBot) {
+    public fun provide(bot: TelegramBot) {
         botDeferred.complete(bot)
     }
 
-    suspend fun context(): KtgContext = KtgContext(botDeferred.await())
+    public suspend fun context(): KtgContext = KtgContext(botDeferred.await())
 }

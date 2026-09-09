@@ -12,7 +12,7 @@ import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
 
-inline fun <reified T : State> stateStorageOf(
+public inline fun <reified T : State> stateStorageOf(
     dir: Path = "./state".toPath(),
     logger: TelekLogger = TelekLogger.NoOp,
     fileSystem: FileSystem = systemFileSystem,
@@ -26,7 +26,7 @@ inline fun <reified T : State> stateStorageOf(
  * File access goes through okio rather than `java.io`/`java.nio` so this works on every telek
  * target. [fileSystem] defaults to the real one; pass okio's `FakeFileSystem` in tests.
  */
-open class FileStateStorage<T : State>(
+public open class FileStateStorage<T : State>(
     private val dir: Path,
     private val serializer: KSerializer<T>,
     private val logger: TelekLogger = TelekLogger.NoOp,
@@ -69,8 +69,8 @@ open class FileStateStorage<T : State>(
         }
     }
 
-    companion object {
-        val json =
+    public companion object {
+        public val json: Json =
             Json {
                 prettyPrint = true
                 ignoreUnknownKeys = true

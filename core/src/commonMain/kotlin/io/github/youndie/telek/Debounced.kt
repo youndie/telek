@@ -11,6 +11,6 @@ package io.github.youndie.telek
  * default and means "run every dispatch of this effect independently" — cancellation is never
  * automatic or implicit for effects that don't opt in.
  */
-interface Debounced {
-    val debounceKey: Any
+public interface Debounced {
+    public val debounceKey: Any
 }

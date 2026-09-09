@@ -1,23 +1,32 @@
 package io.github.youndie.telek.telegram
 
-fun telegramMessage(block: TelegramTextBuilder.() -> Unit): String = TelegramTextBuilder().apply(block).toString()
+public fun telegramMessage(block: TelegramTextBuilder.() -> Unit): String =
+    TelegramTextBuilder().apply(block).toString()
 
 @DslMarker
-annotation class TelegramMessageDsl
+public annotation class TelegramMessageDsl
 
 @TelegramMessageDsl
-class TelegramTextBuilder {
+public class TelegramTextBuilder {
     private val parts = StringBuilder()
 
-    fun text(value: String) = parts.append(value)
+    public fun text(value: String) {
+        parts.append(value)
+    }
 
-    fun bold(value: String) = parts.append("*$value*")
+    public fun bold(value: String) {
+        parts.append("*$value*")
+    }
 
-    fun br() = parts.append("\n")
+    public fun br() {
+        parts.append("\n")
+    }
 
-    fun br2() = parts.append("\n\n")
+    public fun br2() {
+        parts.append("\n\n")
+    }
 
-    fun row(block: TelegramTextBuilder.() -> Unit) {
+    public fun row(block: TelegramTextBuilder.() -> Unit) {
         if (parts.isNotEmpty() && parts.lastOrNull()?.toString()?.endsWith("\n") != true) {
             parts.append("\n")
         }
@@ -25,15 +34,16 @@ class TelegramTextBuilder {
         parts.append("\n")
     }
 
-    fun <T> list(
+    public fun <T> list(
         items: List<T>,
         block: TelegramTextBuilder.(T) -> Unit,
-    ) = items.forEachIndexed { idx, item ->
-        block(item)
-        if (idx != items.lastIndex) br2()
-    }
+    ): Unit =
+        items.forEachIndexed { idx, item ->
+            block(item)
+            if (idx != items.lastIndex) br2()
+        }
 
-    fun build() = parts.toString().trimIndent()
+    public fun build(): String = parts.toString().trimIndent()
 
     override fun toString(): String = build()
 }

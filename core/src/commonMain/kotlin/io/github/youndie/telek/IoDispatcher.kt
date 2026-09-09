@@ -11,4 +11,4 @@ import kotlinx.coroutines.CoroutineDispatcher
  * one, so both actuals are just `Dispatchers.IO`; a hypothetical JS target would actual this to
  * `Dispatchers.Default` and nothing else would have to change.
  */
-expect val telekIoDispatcher: CoroutineDispatcher
+public expect val telekIoDispatcher: CoroutineDispatcher

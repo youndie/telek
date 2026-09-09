@@ -1,0 +1,205 @@
+public final class io/github/youndie/telek/telegram/ConnectKt {
+	public static final fun connect (Lcom/github/kotlintelegrambot/dispatcher/Dispatcher;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/telegram/TelegramContextSource;)V
+}
+
+public final class io/github/youndie/telek/telegram/InlineKeyboardBuilder {
+	public fun <init> ()V
+	public final fun build ()Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;
+	public final fun row (Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class io/github/youndie/telek/telegram/InlineKeyboardBuilderKt {
+	public static final fun inlineKeyboard (Lkotlin/jvm/functions/Function1;)Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;
+}
+
+public abstract interface annotation class io/github/youndie/telek/telegram/InlineKeyboardMarkupDsl : java/lang/annotation/Annotation {
+}
+
+public final class io/github/youndie/telek/telegram/RowBuilder {
+	public fun <init> ()V
+	public final fun build ()Ljava/util/List;
+	public final fun callback (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun url (Ljava/lang/String;Ljava/lang/String;)V
+}
+
+public final class io/github/youndie/telek/telegram/TelegramContext : io/github/youndie/telek/ExecutionContext {
+	public fun <init> (Lcom/github/kotlintelegrambot/Bot;)V
+	public final fun getBot ()Lcom/github/kotlintelegrambot/Bot;
+}
+
+public final class io/github/youndie/telek/telegram/TelegramContextSource {
+	public fun <init> ()V
+	public final fun context (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface annotation class io/github/youndie/telek/telegram/TelegramMessageDsl : java/lang/annotation/Annotation {
+}
+
+public final class io/github/youndie/telek/telegram/TelegramMessageDslKt {
+	public static final fun telegramMessage (Lkotlin/jvm/functions/Function1;)Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/telegram/TelegramTextBuilder {
+	public fun <init> ()V
+	public final fun bold (Ljava/lang/String;)V
+	public final fun br ()V
+	public final fun br2 ()V
+	public final fun build ()Ljava/lang/String;
+	public final fun list (Ljava/util/List;Lkotlin/jvm/functions/Function2;)V
+	public final fun row (Lkotlin/jvm/functions/Function1;)V
+	public final fun text (Ljava/lang/String;)V
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/telegram/TelegramTransitionsKt {
+	public static final fun editMarkup (Lio/github/youndie/telek/TransitionBuilder;JJLcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)V
+	public static synthetic fun editMarkup$default (Lio/github/youndie/telek/TransitionBuilder;JJLcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILjava/lang/Object;)V
+	public static final fun editMessage (Lio/github/youndie/telek/TransitionBuilder;JJLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)V
+	public static final fun editMessage (Lio/github/youndie/telek/TransitionBuilder;JJLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun editMessage$default (Lio/github/youndie/telek/TransitionBuilder;JJLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILjava/lang/Object;)V
+	public static synthetic fun editMessage$default (Lio/github/youndie/telek/TransitionBuilder;JJLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun sendMessage (Lio/github/youndie/telek/TransitionBuilder;JLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)V
+	public static final fun sendMessage (Lio/github/youndie/telek/TransitionBuilder;JLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun sendMessage$default (Lio/github/youndie/telek/TransitionBuilder;JLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILjava/lang/Object;)V
+	public static synthetic fun sendMessage$default (Lio/github/youndie/telek/TransitionBuilder;JLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/telek/telegram/effect/DefaultEffectRegistryKt {
+	public static final fun defaultEffectRegistry ()Lio/github/youndie/telek/EffectRegistry;
+}
+
+public final class io/github/youndie/telek/telegram/effect/EditMarkupEffect : io/github/youndie/telek/telegram/effect/TelegramEffect {
+	public fun <init> (JJLcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)V
+	public synthetic fun <init> (JJLcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;
+	public final fun copy (JJLcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)Lio/github/youndie/telek/telegram/effect/EditMarkupEffect;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/telegram/effect/EditMarkupEffect;JJLcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/telegram/effect/EditMarkupEffect;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChatId ()J
+	public final fun getMarkup ()Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;
+	public final fun getMessageId ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/telegram/effect/EditMessageEffect : io/github/youndie/telek/telegram/effect/TelegramEffect {
+	public fun <init> (JJLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)V
+	public synthetic fun <init> (JJLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;
+	public final fun copy (JJLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)Lio/github/youndie/telek/telegram/effect/EditMessageEffect;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/telegram/effect/EditMessageEffect;JJLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/telegram/effect/EditMessageEffect;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChatId ()J
+	public final fun getMarkup ()Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;
+	public final fun getMessageId ()J
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/telegram/effect/SendMessageEffect : io/github/youndie/telek/telegram/effect/TelegramEffect {
+	public fun <init> (JLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)V
+	public synthetic fun <init> (JLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;
+	public final fun copy (JLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;)Lio/github/youndie/telek/telegram/effect/SendMessageEffect;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/telegram/effect/SendMessageEffect;JLjava/lang/String;Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/telegram/effect/SendMessageEffect;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChatId ()J
+	public final fun getMarkup ()Lcom/github/kotlintelegrambot/entities/InlineKeyboardMarkup;
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/telek/telegram/effect/TelegramEffect : io/github/youndie/telek/Effect {
+}
+
+public final class io/github/youndie/telek/telegram/effect/TelegramEffectExecutorKt {
+	public static final fun telegramEffectExecutor (Lio/github/youndie/telek/telegram/TelegramContextSource;Lio/github/youndie/telek/EffectRegistry;Lio/github/youndie/telek/EffectFailurePolicy;Lio/github/youndie/telek/TelekLogger;)Lio/github/youndie/telek/EffectExecutor;
+	public static synthetic fun telegramEffectExecutor$default (Lio/github/youndie/telek/telegram/TelegramContextSource;Lio/github/youndie/telek/EffectRegistry;Lio/github/youndie/telek/EffectFailurePolicy;Lio/github/youndie/telek/TelekLogger;ILjava/lang/Object;)Lio/github/youndie/telek/EffectExecutor;
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/EditMarkupEffectHandler : io/github/youndie/telek/telegram/effect/handler/TelegramEffectHandler {
+	public fun <init> ()V
+	public fun handle (Lcom/github/kotlintelegrambot/Bot;Lio/github/youndie/telek/telegram/effect/EditMarkupEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lcom/github/kotlintelegrambot/Bot;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/EditMarkupEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/EditMarkupEffectResult : io/github/youndie/telek/telegram/effect/handler/TelegramEffectSuccess {
+	public fun <init> (JJ)V
+	public fun getChatId ()J
+	public fun getMessageId ()J
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/EditMessageEffectHandler : io/github/youndie/telek/telegram/effect/handler/TelegramEffectHandler {
+	public fun <init> ()V
+	public fun handle (Lcom/github/kotlintelegrambot/Bot;Lio/github/youndie/telek/telegram/effect/EditMessageEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lcom/github/kotlintelegrambot/Bot;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/EditMessageEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/EditMessageEffectResult : io/github/youndie/telek/telegram/effect/handler/TelegramEffectSuccess {
+	public fun <init> (JJ)V
+	public fun getChatId ()J
+	public fun getMessageId ()J
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/SendMessageEffectHandler : io/github/youndie/telek/telegram/effect/handler/TelegramEffectHandler {
+	public fun <init> ()V
+	public fun handle (Lcom/github/kotlintelegrambot/Bot;Lio/github/youndie/telek/telegram/effect/SendMessageEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lcom/github/kotlintelegrambot/Bot;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/SendMessageEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/SendMessageEffectResult : io/github/youndie/telek/telegram/effect/handler/TelegramEffectSuccess {
+	public fun <init> (JJ)V
+	public fun getChatId ()J
+	public fun getMessageId ()J
+}
+
+public abstract interface class io/github/youndie/telek/telegram/effect/handler/TelegramAsyncEffectHandler : io/github/youndie/telek/AsyncEffectHandler {
+	public abstract fun handle (Lcom/github/kotlintelegrambot/Bot;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/TelegramAsyncEffectHandler$DefaultImpls {
+	public static fun handle (Lio/github/youndie/telek/telegram/effect/handler/TelegramAsyncEffectHandler;Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/TelegramEffectError : io/github/youndie/telek/EffectResult {
+	public fun <init> (JLcom/github/kotlintelegrambot/types/TelegramBotResult$Error;)V
+	public final fun getChatId ()J
+	public final fun getError ()Lcom/github/kotlintelegrambot/types/TelegramBotResult$Error;
+}
+
+public abstract interface class io/github/youndie/telek/telegram/effect/handler/TelegramEffectHandler : io/github/youndie/telek/EffectHandler {
+	public abstract fun handle (Lcom/github/kotlintelegrambot/Bot;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/telegram/effect/handler/TelegramEffectHandler$DefaultImpls {
+	public static fun handle (Lio/github/youndie/telek/telegram/effect/handler/TelegramEffectHandler;Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/telegram/effect/TelegramEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract class io/github/youndie/telek/telegram/effect/handler/TelegramEffectSuccess : io/github/youndie/telek/EffectResult {
+	public fun <init> ()V
+	public abstract fun getChatId ()J
+	public abstract fun getMessageId ()J
+}
+

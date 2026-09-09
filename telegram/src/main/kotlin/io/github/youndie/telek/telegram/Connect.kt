@@ -7,7 +7,7 @@ import io.github.youndie.telek.Callback
 import io.github.youndie.telek.Message
 import io.github.youndie.telek.Telek
 
-fun com.github.kotlintelegrambot.dispatcher.Dispatcher.connect(
+public fun com.github.kotlintelegrambot.dispatcher.Dispatcher.connect(
     telek: Telek,
     contextSource: TelegramContextSource,
 ) {

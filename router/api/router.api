@@ -1,0 +1,63 @@
+public final class io/github/youndie/telek/router/CommonRoute {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/telek/router/CommonRoute;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/router/CommonRoute;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/router/CommonRoute;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAction ()Ljava/lang/String;
+	public final fun getParams ()Ljava/lang/String;
+	public final fun getScope ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/telek/router/Route {
+	public fun encode ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/router/Route$DefaultImpls {
+	public static fun encode (Lio/github/youndie/telek/router/Route;)Ljava/lang/String;
+}
+
+public abstract interface annotation class io/github/youndie/telek/router/RouteContext : java/lang/annotation/Annotation {
+	public abstract fun action ()Ljava/lang/String;
+	public abstract fun scope ()Ljava/lang/String;
+}
+
+public final synthetic class io/github/youndie/telek/router/RouteContext$Impl : io/github/youndie/telek/router/RouteContext {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final synthetic fun action ()Ljava/lang/String;
+	public final synthetic fun scope ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/telek/router/RouteDecoder {
+	public abstract fun decode (Ljava/lang/String;)Lio/github/youndie/telek/router/Route;
+}
+
+public final class io/github/youndie/telek/router/RouteRegistry {
+	public fun <init> ()V
+	public final fun canDecode (Ljava/lang/String;)Z
+	public final fun decode (Ljava/lang/String;)Lio/github/youndie/telek/router/Route;
+	public final fun getDecoders ()Ljava/util/Map;
+}
+
+public final class io/github/youndie/telek/router/RouteUtils {
+	public static final field INSTANCE Lio/github/youndie/telek/router/RouteUtils;
+	public final fun encodeRouteDynamic (Lio/github/youndie/telek/router/Route;)Ljava/lang/String;
+	public final fun getRouteContext (Lkotlinx/serialization/descriptors/SerialDescriptor;)Lkotlin/Pair;
+}
+
+public final class io/github/youndie/telek/router/RoutesKt {
+	public static final fun parseCommonRoute (Ljava/lang/String;)Lio/github/youndie/telek/router/CommonRoute;
+	public static final fun routes (Lkotlin/jvm/functions/Function1;)Lio/github/youndie/telek/router/RouteRegistry;
+}
+
+public abstract class io/github/youndie/telek/router/StateDispatcherWithRoutes : io/github/youndie/telek/StateDispatcher {
+	public fun <init> ()V
+	public fun canHandleCallback (Ljava/lang/String;)Z
+	protected abstract fun getRouteRegistry ()Lio/github/youndie/telek/router/RouteRegistry;
+}
+

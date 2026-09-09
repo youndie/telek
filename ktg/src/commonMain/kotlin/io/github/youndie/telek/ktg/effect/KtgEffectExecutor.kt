@@ -7,7 +7,7 @@ import io.github.youndie.telek.EffectRegistry
 import io.github.youndie.telek.TelekLogger
 import io.github.youndie.telek.ktg.KtgContextSource
 
-fun ktgEffectExecutor(
+public fun ktgEffectExecutor(
     contextSource: KtgContextSource,
     effectRegistry: EffectRegistry = defaultEffectRegistry(),
     failurePolicy: EffectFailurePolicy = EffectFailurePolicy.CONTINUE,

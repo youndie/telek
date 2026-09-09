@@ -7,7 +7,7 @@ import io.github.youndie.telek.EffectRegistry
 import io.github.youndie.telek.TelekLogger
 import io.github.youndie.telek.telegram.TelegramContextSource
 
-fun telegramEffectExecutor(
+public fun telegramEffectExecutor(
     contextSource: TelegramContextSource,
     effectRegistry: EffectRegistry = defaultEffectRegistry(),
     failurePolicy: EffectFailurePolicy = EffectFailurePolicy.CONTINUE,

@@ -6,6 +6,6 @@ package io.github.youndie.telek
  * flow: it's routed purely by the chat's current state (see [StateDispatcher.transition] overload
  * that takes an [Event]), never by command or callback data.
  */
-interface Event {
-    val chatId: Long
+public interface Event {
+    public val chatId: Long
 }

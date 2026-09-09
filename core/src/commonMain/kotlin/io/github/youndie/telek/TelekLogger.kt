@@ -1,6 +1,6 @@
 package io.github.youndie.telek
 
-enum class TelekLogLevel {
+public enum class TelekLogLevel {
     DEBUG,
     WARN,
     ERROR,
@@ -12,27 +12,27 @@ enum class TelekLogLevel {
  * whatever the consumer already uses (slf4j, kotlin-logging, ...) — telek has no opinion on the
  * concrete backend and does not depend on one.
  */
-interface TelekLogger {
-    fun log(
+public interface TelekLogger {
+    public fun log(
         level: TelekLogLevel,
         message: String,
         error: Throwable? = null,
     )
 
-    fun debug(message: String) = log(TelekLogLevel.DEBUG, message)
+    public fun debug(message: String): Unit = log(TelekLogLevel.DEBUG, message)
 
-    fun warn(
+    public fun warn(
         message: String,
         error: Throwable? = null,
-    ) = log(TelekLogLevel.WARN, message, error)
+    ): Unit = log(TelekLogLevel.WARN, message, error)
 
-    fun error(
+    public fun error(
         message: String,
         error: Throwable? = null,
-    ) = log(TelekLogLevel.ERROR, message, error)
+    ): Unit = log(TelekLogLevel.ERROR, message, error)
 
-    companion object {
-        val NoOp: TelekLogger =
+    public companion object {
+        public val NoOp: TelekLogger =
             object : TelekLogger {
                 override fun log(
                     level: TelekLogLevel,

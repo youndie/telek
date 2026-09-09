@@ -1,3 +1,3 @@
 package io.github.youndie.telek
 
-interface Effect
+public interface Effect

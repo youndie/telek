@@ -6,7 +6,7 @@ import com.github.kotlintelegrambot.entities.ParseMode
 import io.github.youndie.telek.EffectResult
 import io.github.youndie.telek.telegram.effect.SendMessageEffect
 
-class SendMessageEffectHandler : TelegramEffectHandler<SendMessageEffect> {
+public class SendMessageEffectHandler : TelegramEffectHandler<SendMessageEffect> {
     override suspend fun handle(
         bot: Bot,
         effect: SendMessageEffect,

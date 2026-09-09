@@ -13,18 +13,21 @@ import kotlinx.atomicfu.locks.synchronized
  * guarantee the caller already provides, and doing it locally is easy to get subtly wrong (e.g.
  * reading state before acquiring a lock, or leaking a lock/mutex map that's never cleaned up).
  */
-interface UserStateStore {
-    suspend fun get(chatId: Long): State?
+public interface UserStateStore {
+    public suspend fun get(chatId: Long): State?
 
-    suspend fun update(
+    public suspend fun update(
         chatId: Long,
         block: suspend (State?) -> UpdateResult,
     ): UpdateResult
 
-    suspend fun clear(chatId: Long)
+    public suspend fun clear(chatId: Long)
 }
 
-class DefaultUserStateStore : UserStateStore {
+// `internal`, not `public`: this is the default `Telek` falls back to, and a consumer either
+// takes it by not passing one or supplies their own `UserStateStore` — which stays public. The
+// only code that names this class is this module and its tests.
+internal class DefaultUserStateStore : UserStateStore {
     // Per the contract above this never needs to serialize *one chat's* update against itself —
     // only to keep the map itself consistent across different chatIds, which are genuinely
     // concurrent. A short non-suspending critical section around each map operation is all that

@@ -14,7 +14,7 @@ import io.github.youndie.telek.ktg.effect.KtgEffect
  * turns it into an [io.github.youndie.telek.EffectFailed] that reaches
  * [io.github.youndie.telek.TelekInterceptor.onError].
  */
-interface KtgEffectHandler<T : KtgEffect> : EffectHandler<T> {
+public interface KtgEffectHandler<T : KtgEffect> : EffectHandler<T> {
     override suspend fun handle(
         context: ExecutionContext,
         effect: T,
@@ -26,7 +26,7 @@ interface KtgEffectHandler<T : KtgEffect> : EffectHandler<T> {
         return handle(context.bot, effect)
     }
 
-    suspend fun handle(
+    public suspend fun handle(
         bot: TelegramBot,
         effect: T,
     ): EffectResult

@@ -1,0 +1,4 @@
+public final class io/github/youndie/telek/router/RouterTelegramKt {
+	public static final fun callback (Lio/github/youndie/telek/telegram/RowBuilder;Ljava/lang/String;Lio/github/youndie/telek/router/Route;)V
+}
+

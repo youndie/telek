@@ -15,6 +15,14 @@ plugins {
 // force an `expect/actual` for `Dispatchers.IO`, which lives in coroutines' `concurrent` source set
 // rather than in `common`, with nothing asking for it.
 kotlin {
+    // THE SHAPE, NOT ONLY THE VISIBILITY. `explicitApi()` makes the compiler ask what is public;
+    // it cannot see that a `val` became a function, a parameter was renamed, or a default was
+    // dropped. All three compile here and break a consumer at link time. The dump turns each of
+    // them into a diff somebody has to approve. Explained here once, for the eight published
+    // modules that carry the same two lines.
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation {}
+
     jvm {
         withSourcesJar()
     }

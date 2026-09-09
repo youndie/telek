@@ -7,7 +7,7 @@ import io.github.youndie.telek.telegram.RowBuilder
  * `:router`'s core encode/decode logic can be used with a different transport without dragging
  * `:telegram` along.
  */
-fun RowBuilder.callback(
+public fun RowBuilder.callback(
     name: String,
     route: Route,
 ) {

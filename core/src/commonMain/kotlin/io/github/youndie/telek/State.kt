@@ -1,7 +1,7 @@
 package io.github.youndie.telek
 
-interface State
+public interface State
 
-interface FinalState
+public interface FinalState
 
-data object EmptyState : State
+public data object EmptyState : State

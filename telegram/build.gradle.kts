@@ -6,6 +6,11 @@ plugins {
     id("io.github.youndie.sborka.lint")
 }
 
+kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation {}
+}
+
 dependencies {
     implementation(projects.core)
     implementation(libs.kotlinTelegramBot)

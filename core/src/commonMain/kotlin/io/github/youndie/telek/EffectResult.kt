@@ -1,9 +1,9 @@
 package io.github.youndie.telek
 
-interface EffectResult
+public interface EffectResult
 
-object EffectSuccess : EffectResult
+public object EffectSuccess : EffectResult
 
-class EffectFailed(
-    val error: Throwable,
+public class EffectFailed(
+    public val error: Throwable,
 ) : EffectResult

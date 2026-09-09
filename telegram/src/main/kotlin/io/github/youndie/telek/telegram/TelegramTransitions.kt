@@ -7,7 +7,7 @@ import io.github.youndie.telek.telegram.effect.EditMarkupEffect
 import io.github.youndie.telek.telegram.effect.EditMessageEffect
 import io.github.youndie.telek.telegram.effect.SendMessageEffect
 
-fun <S : State> TransitionBuilder<S>.sendMessage(
+public fun <S : State> TransitionBuilder<S>.sendMessage(
     chatId: Long,
     message: TelegramTextBuilder.() -> Unit,
     keyboard: (InlineKeyboardBuilder.() -> Unit)? = null,
@@ -19,7 +19,7 @@ fun <S : State> TransitionBuilder<S>.sendMessage(
     )
 }
 
-fun <S : State> TransitionBuilder<S>.editMessage(
+public fun <S : State> TransitionBuilder<S>.editMessage(
     chatId: Long,
     messageId: Long,
     message: TelegramTextBuilder.() -> Unit,
@@ -33,7 +33,7 @@ fun <S : State> TransitionBuilder<S>.editMessage(
     )
 }
 
-fun <S : State> TransitionBuilder<S>.sendMessage(
+public fun <S : State> TransitionBuilder<S>.sendMessage(
     chatId: Long,
     text: String,
     markup: InlineKeyboardMarkup? = null,
@@ -41,7 +41,7 @@ fun <S : State> TransitionBuilder<S>.sendMessage(
     add(SendMessageEffect(chatId, text, markup))
 }
 
-fun <S : State> TransitionBuilder<S>.editMessage(
+public fun <S : State> TransitionBuilder<S>.editMessage(
     chatId: Long,
     messageId: Long,
     text: String,
@@ -50,7 +50,7 @@ fun <S : State> TransitionBuilder<S>.editMessage(
     add(EditMessageEffect(chatId, messageId, text, markup))
 }
 
-fun <S : State> TransitionBuilder<S>.editMarkup(
+public fun <S : State> TransitionBuilder<S>.editMarkup(
     chatId: Long,
     messageId: Long,
     markup: InlineKeyboardMarkup? = null,
