@@ -1,23 +1,23 @@
 package io.github.youndie.telek
 
 @DslMarker
-annotation class WizardDsl
+public annotation class WizardDsl
 
-inline fun <S : State> transition(block: TransitionBuilder<S>.() -> Unit): TransitionResult<S> =
+public inline fun <S : State> transition(block: TransitionBuilder<S>.() -> Unit): TransitionResult<S> =
     TransitionBuilder<S>().apply(block).build()
 
-fun <S : State> noTransition(state: S) = TransitionResult(state)
+public fun <S : State> noTransition(state: S): TransitionResult<S> = TransitionResult(state)
 
 @WizardDsl
-class TransitionBuilder<S : State> {
+public class TransitionBuilder<S : State> {
     private val effects = mutableListOf<Effect>()
-    lateinit var newState: S
+    public lateinit var newState: S
 
-    fun add(effect: Effect) {
+    public fun add(effect: Effect) {
         effects += effect
     }
 
-    fun build(): TransitionResult<S> {
+    public fun build(): TransitionResult<S> {
         check(::newState.isInitialized) {
             "TransitionBuilder.newState was never set — did you forget `newState = ...` inside " +
                 "this `transition { }` block? (${effects.size} effect(s) were added before this failed)"
@@ -26,7 +26,7 @@ class TransitionBuilder<S : State> {
     }
 }
 
-data class TransitionResult<S : State>(
+public data class TransitionResult<S : State>(
     val newState: S,
     val effects: List<Effect> = emptyList(),
 )

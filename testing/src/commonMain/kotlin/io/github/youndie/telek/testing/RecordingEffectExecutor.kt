@@ -20,14 +20,14 @@ import io.github.youndie.telek.Event
  * `EffectExecutorImpl` would (along with the effect's [Debounced.debounceKey], if it has one), so
  * `Telek` routes the resulting event — and any debounce cancellation — back into the FSM for real.
  */
-class RecordingEffectExecutor(
+public class RecordingEffectExecutor(
     private val resultsFor: (Effect) -> EffectResult = { EffectSuccess },
     private val asyncWorkFor: (Effect) -> (suspend () -> Event?)? = { null },
 ) : EffectExecutor {
     private val _executed = mutableListOf<List<Effect>>()
-    val executed: List<List<Effect>> get() = _executed
+    public val executed: List<List<Effect>> get() = _executed
 
-    val effects: List<Effect> get() = _executed.flatten()
+    public val effects: List<Effect> get() = _executed.flatten()
 
     override suspend fun execute(
         effects: List<Effect>,

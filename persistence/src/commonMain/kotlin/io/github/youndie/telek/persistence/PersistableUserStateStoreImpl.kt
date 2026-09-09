@@ -15,8 +15,8 @@ import kotlinx.atomicfu.locks.synchronized
  * chatIds, which genuinely are concurrent — the equivalent of the `ConcurrentHashMap` this used to
  * be before the module went multiplatform.
  */
-class PersistableUserStateStoreImpl<T : State>(
-    val stateStorage: StateStorage<T>,
+public class PersistableUserStateStoreImpl<T : State>(
+    public val stateStorage: StateStorage<T>,
 ) : UserStateStore {
     private val lock = SynchronizedObject()
     private val states = mutableMapOf<Long, State>()

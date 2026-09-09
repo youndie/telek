@@ -1,7 +1,7 @@
 package io.github.youndie.telek
 
-interface EffectHandler<E : Effect> {
-    suspend fun handle(
+public interface EffectHandler<E : Effect> {
+    public suspend fun handle(
         context: ExecutionContext,
         effect: E,
     ): EffectResult

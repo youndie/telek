@@ -8,7 +8,7 @@ import io.github.youndie.telek.telegram.TelegramContext
 import io.github.youndie.telek.telegram.effect.TelegramEffect
 
 /** [TelegramEffectHandler]'s async counterpart — see [AsyncEffectHandler]. */
-interface TelegramAsyncEffectHandler<T : TelegramEffect> : AsyncEffectHandler<T> {
+public interface TelegramAsyncEffectHandler<T : TelegramEffect> : AsyncEffectHandler<T> {
     override suspend fun handle(
         context: ExecutionContext,
         effect: T,
@@ -20,7 +20,7 @@ interface TelegramAsyncEffectHandler<T : TelegramEffect> : AsyncEffectHandler<T>
         return handle(context.bot, effect)
     }
 
-    suspend fun handle(
+    public suspend fun handle(
         bot: Bot,
         effect: T,
     ): Event?

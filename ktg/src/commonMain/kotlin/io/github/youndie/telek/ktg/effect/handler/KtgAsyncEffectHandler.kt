@@ -8,7 +8,7 @@ import io.github.youndie.telek.ktg.KtgContext
 import io.github.youndie.telek.ktg.effect.KtgEffect
 
 /** [KtgEffectHandler]'s async counterpart — see [AsyncEffectHandler]. */
-interface KtgAsyncEffectHandler<T : KtgEffect> : AsyncEffectHandler<T> {
+public interface KtgAsyncEffectHandler<T : KtgEffect> : AsyncEffectHandler<T> {
     override suspend fun handle(
         context: ExecutionContext,
         effect: T,
@@ -20,7 +20,7 @@ interface KtgAsyncEffectHandler<T : KtgEffect> : AsyncEffectHandler<T> {
         return handle(context.bot, effect)
     }
 
-    suspend fun handle(
+    public suspend fun handle(
         bot: TelegramBot,
         effect: T,
     ): Event?

@@ -7,7 +7,7 @@ import dev.inmo.tgbotapi.types.toChatId
 import io.github.youndie.telek.EffectResult
 import io.github.youndie.telek.ktg.effect.EditMarkupEffect
 
-class EditMarkupEffectHandler : KtgEffectHandler<EditMarkupEffect> {
+public class EditMarkupEffectHandler : KtgEffectHandler<EditMarkupEffect> {
     override suspend fun handle(
         bot: TelegramBot,
         effect: EditMarkupEffect,

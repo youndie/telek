@@ -11,7 +11,7 @@ import io.github.youndie.telek.TransitionResult
  * Attach it to a dispatcher under test via `dispatcher.attach(syncTransitionGate)` to observe
  * what `transitionGate.post { ... }` calls would have produced.
  */
-class SyncTransitionGate<S : State>(
+public class SyncTransitionGate<S : State>(
     private var currentState: S,
     private val onPost: (TransitionResult<S>) -> Unit = {},
 ) : TransitionGate<S> {
@@ -24,5 +24,5 @@ class SyncTransitionGate<S : State>(
         onPost(result)
     }
 
-    fun currentState(): S = currentState
+    public fun currentState(): S = currentState
 }

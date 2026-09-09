@@ -4,39 +4,39 @@ import com.github.kotlintelegrambot.entities.InlineKeyboardMarkup
 import com.github.kotlintelegrambot.entities.keyboard.InlineKeyboardButton
 
 @DslMarker
-annotation class InlineKeyboardMarkupDsl
+public annotation class InlineKeyboardMarkupDsl
 
 @InlineKeyboardMarkupDsl
-class InlineKeyboardBuilder {
+public class InlineKeyboardBuilder {
     private val rows = mutableListOf<List<InlineKeyboardButton>>()
 
-    fun row(block: RowBuilder.() -> Unit) {
+    public fun row(block: RowBuilder.() -> Unit) {
         rows += RowBuilder().apply(block).build()
     }
 
-    fun build(): InlineKeyboardMarkup = InlineKeyboardMarkup.create(rows)
+    public fun build(): InlineKeyboardMarkup = InlineKeyboardMarkup.create(rows)
 }
 
 @InlineKeyboardMarkupDsl
-class RowBuilder {
+public class RowBuilder {
     private val buttons = mutableListOf<InlineKeyboardButton>()
 
-    fun callback(
+    public fun callback(
         text: String,
         data: String,
     ) {
         buttons += InlineKeyboardButton.CallbackData(text, data)
     }
 
-    fun url(
+    public fun url(
         text: String,
         url: String,
     ) {
         buttons += InlineKeyboardButton.Url(text, url)
     }
 
-    fun build(): List<InlineKeyboardButton> = buttons
+    public fun build(): List<InlineKeyboardButton> = buttons
 }
 
-fun inlineKeyboard(block: InlineKeyboardBuilder.() -> Unit): InlineKeyboardMarkup =
+public fun inlineKeyboard(block: InlineKeyboardBuilder.() -> Unit): InlineKeyboardMarkup =
     InlineKeyboardBuilder().apply(block).build()

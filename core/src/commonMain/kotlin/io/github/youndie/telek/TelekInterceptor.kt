@@ -1,20 +1,20 @@
 package io.github.youndie.telek
 
-interface TelekInterceptor {
-    fun onBeforeInput(
+public interface TelekInterceptor {
+    public fun onBeforeInput(
         chatId: Long,
         input: Input,
     ) {
     }
 
-    fun onAfterStateChanged(
+    public fun onAfterStateChanged(
         chatId: Long,
         oldState: State?,
         newState: State,
     ) {
     }
 
-    fun onError(
+    public fun onError(
         chatId: Long,
         input: Input?,
         error: Throwable,

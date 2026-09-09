@@ -6,7 +6,7 @@ import io.github.youndie.telek.EffectFailed
 import io.github.youndie.telek.EffectResult
 import io.github.youndie.telek.telegram.effect.EditMarkupEffect
 
-class EditMarkupEffectHandler : TelegramEffectHandler<EditMarkupEffect> {
+public class EditMarkupEffectHandler : TelegramEffectHandler<EditMarkupEffect> {
     override suspend fun handle(
         bot: Bot,
         effect: EditMarkupEffect,

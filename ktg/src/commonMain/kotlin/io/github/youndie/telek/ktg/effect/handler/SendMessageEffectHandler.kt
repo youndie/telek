@@ -7,7 +7,7 @@ import dev.inmo.tgbotapi.types.toChatId
 import io.github.youndie.telek.EffectResult
 import io.github.youndie.telek.ktg.effect.SendMessageEffect
 
-class SendMessageEffectHandler : KtgEffectHandler<SendMessageEffect> {
+public class SendMessageEffectHandler : KtgEffectHandler<SendMessageEffect> {
     override suspend fun handle(
         bot: TelegramBot,
         effect: SendMessageEffect,

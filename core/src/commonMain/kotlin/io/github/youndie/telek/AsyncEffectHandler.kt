@@ -10,8 +10,8 @@ package io.github.youndie.telek
  * Register with [EffectRegistry.registerAsync], not [EffectRegistry.register] — an effect class
  * should be registered as one or the other, never both.
  */
-interface AsyncEffectHandler<E : Effect> {
-    suspend fun handle(
+public interface AsyncEffectHandler<E : Effect> {
+    public suspend fun handle(
         context: ExecutionContext,
         effect: E,
     ): Event?

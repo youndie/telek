@@ -1,5 +1,5 @@
 package io.github.youndie.telek
 
-fun interface InitialStateProvider {
-    fun initialState(chatId: Long): State
+public fun interface InitialStateProvider {
+    public fun initialState(chatId: Long): State
 }

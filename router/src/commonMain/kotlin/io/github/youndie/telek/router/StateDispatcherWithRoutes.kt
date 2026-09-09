@@ -3,7 +3,7 @@ package io.github.youndie.telek.router
 import io.github.youndie.telek.State
 import io.github.youndie.telek.StateDispatcher
 
-abstract class StateDispatcherWithRoutes<S : State> : StateDispatcher<S>() {
+public abstract class StateDispatcherWithRoutes<S : State> : StateDispatcher<S>() {
     protected abstract val routeRegistry: RouteRegistry
 
     override fun canHandleCallback(data: String): Boolean {

@@ -11,9 +11,9 @@ import kotlinx.serialization.properties.Properties
 import kotlinx.serialization.properties.decodeFromStringMap
 import kotlinx.serialization.properties.encodeToStringMap
 
-inline fun <reified T : Route> Callback.isRouteOf(registry: RouteRegistry): Boolean = registry.typeIs<T>(data)
+public inline fun <reified T : Route> Callback.isRouteOf(registry: RouteRegistry): Boolean = registry.typeIs<T>(data)
 
-inline fun <reified T : Route> Callback.tryDecode(registry: RouteRegistry): T? =
+public inline fun <reified T : Route> Callback.tryDecode(registry: RouteRegistry): T? =
     if (registry.typeIs<T>(data)) registry.decode(data) else null
 
 /**
@@ -27,22 +27,22 @@ inline fun <reified T : Route> Callback.tryDecode(registry: RouteRegistry): T? =
 @SerialInfo
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class RouteContext(
+public annotation class RouteContext(
     val scope: String,
     val action: String,
 )
 
-interface Route {
-    fun encode(): String = RouteUtils.encodeRouteDynamic(this)
+public interface Route {
+    public fun encode(): String = RouteUtils.encodeRouteDynamic(this)
 }
 
-data class CommonRoute(
+public data class CommonRoute(
     val scope: String,
     val action: String,
     val params: String? = null,
 )
 
-fun parseCommonRoute(raw: String): CommonRoute {
+public fun parseCommonRoute(raw: String): CommonRoute {
     val parts = raw.split(":", limit = 3)
     require(parts.size >= 2) { "Invalid route string: $raw" }
     return CommonRoute(
@@ -52,12 +52,12 @@ fun parseCommonRoute(raw: String): CommonRoute {
     )
 }
 
-inline fun <reified T : Any> encodeParams(instance: T): String {
+public inline fun <reified T : Any> encodeParams(instance: T): String {
     val map = Properties.encodeToStringMap(instance)
     return map.entries.joinToString("_") { "${it.key}_${it.value}" }
 }
 
-inline fun <reified T : Any> decodeParams(params: String?): T {
+public inline fun <reified T : Any> decodeParams(params: String?): T {
     require(!params.isNullOrBlank()) { "Empty params for ${T::class.simpleName}" }
     val map =
         params
@@ -68,26 +68,31 @@ inline fun <reified T : Any> decodeParams(params: String?): T {
     return Properties.decodeFromStringMap(map)
 }
 
-fun interface RouteDecoder<T : Route> {
-    fun decode(raw: String): T
+public fun interface RouteDecoder<T : Route> {
+    public fun decode(raw: String): T
 }
 
-fun routes(block: RouteRegistry.() -> Unit) = RouteRegistry().apply(block)
+public fun routes(block: RouteRegistry.() -> Unit): RouteRegistry = RouteRegistry().apply(block)
 
-class RouteRegistry {
-    val decoders = mutableMapOf<Pair<String, String>, RouteDecoder<out Route>>()
+public class RouteRegistry {
+    // `@PublishedApi internal` and not `public`: nothing outside this file names it, and the only
+    // reason it cannot simply be `internal` is that the `register` functions below are `inline` —
+    // an inline body may only touch declarations at least as visible as itself. This keeps the
+    // registry's storage out of the API while leaving those functions able to fill it.
+    @PublishedApi
+    internal val decoders: MutableMap<Pair<String, String>, RouteDecoder<out Route>> = mutableMapOf()
 
-    inline fun <reified T : Route> register(noinline decoder: (String) -> T) {
+    public inline fun <reified T : Route> register(noinline decoder: (String) -> T) {
         val (scope, action) = requireContext<T>()
         decoders[scope to action] = RouteDecoder(decoder)
     }
 
-    inline fun <reified T : Route> register() {
+    public inline fun <reified T : Route> register() {
         val (scope, action) = requireContext<T>()
         decoders[scope to action] = RouteDecoder { raw -> RouteUtils.decodeRoute<T>(raw) }
     }
 
-    inline fun <reified T : Route> typeIs(raw: String): Boolean {
+    public inline fun <reified T : Route> typeIs(raw: String): Boolean {
         if (!canDecode(raw)) return false
         val (rawScope, rawAction) = parseCommonRoute(raw)
         val (scope, action) = requireContext<T>()
@@ -95,7 +100,7 @@ class RouteRegistry {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Route> decode(raw: String): T {
+    public fun <T : Route> decode(raw: String): T {
         val (scope, action) = parseCommonRoute(raw)
         val decoder =
             decoders[scope to action]
@@ -103,7 +108,7 @@ class RouteRegistry {
         return decoder.decode(raw) as T
     }
 
-    fun canDecode(raw: String): Boolean =
+    public fun canDecode(raw: String): Boolean =
         runCatching {
             parseCommonRoute(raw)
         }.fold({ (scope, action) ->

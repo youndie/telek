@@ -6,39 +6,39 @@ import dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons.URLInlineKeyboardBu
 import dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup
 
 @DslMarker
-annotation class InlineKeyboardMarkupDsl
+public annotation class InlineKeyboardMarkupDsl
 
 @InlineKeyboardMarkupDsl
-class InlineKeyboardBuilder {
+public class InlineKeyboardBuilder {
     private val rows = mutableListOf<List<InlineKeyboardButton>>()
 
-    fun row(block: RowBuilder.() -> Unit) {
+    public fun row(block: RowBuilder.() -> Unit) {
         rows += RowBuilder().apply(block).build()
     }
 
-    fun build(): InlineKeyboardMarkup = InlineKeyboardMarkup(rows)
+    public fun build(): InlineKeyboardMarkup = InlineKeyboardMarkup(rows)
 }
 
 @InlineKeyboardMarkupDsl
-class RowBuilder {
+public class RowBuilder {
     private val buttons = mutableListOf<InlineKeyboardButton>()
 
-    fun callback(
+    public fun callback(
         text: String,
         data: String,
     ) {
         buttons += CallbackDataInlineKeyboardButton(text, data)
     }
 
-    fun url(
+    public fun url(
         text: String,
         url: String,
     ) {
         buttons += URLInlineKeyboardButton(text, url)
     }
 
-    fun build(): List<InlineKeyboardButton> = buttons
+    public fun build(): List<InlineKeyboardButton> = buttons
 }
 
-fun inlineKeyboard(block: InlineKeyboardBuilder.() -> Unit): InlineKeyboardMarkup =
+public fun inlineKeyboard(block: InlineKeyboardBuilder.() -> Unit): InlineKeyboardMarkup =
     InlineKeyboardBuilder().apply(block).build()

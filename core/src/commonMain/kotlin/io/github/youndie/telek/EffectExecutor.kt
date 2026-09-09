@@ -2,7 +2,7 @@ package io.github.youndie.telek
 
 import kotlinx.coroutines.withContext
 
-interface EffectExecutor {
+public interface EffectExecutor {
     /**
      * Runs [effects] and returns one [EffectResult] per *synchronous* effect, in order. An effect
      * registered as async (see [EffectRegistry.registerAsync]) produces no [EffectResult] here —
@@ -13,14 +13,14 @@ interface EffectExecutor {
      * routing a non-null [Event] back into the FSM. [dispatchAsync] is expected to be
      * fire-and-forget from this method's perspective.
      */
-    suspend fun execute(
+    public suspend fun execute(
         effects: List<Effect>,
         dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
     ): List<EffectResult>
 }
 
 /** What to do when an effect in a batch fails. */
-enum class EffectFailurePolicy {
+public enum class EffectFailurePolicy {
     /** Keep running the remaining effects in the batch (matches telek's historical behavior). */
     CONTINUE,
 
@@ -39,7 +39,7 @@ enum class EffectFailurePolicy {
  * workers run on. Async handlers (see [AsyncEffectHandler]) are handed to the caller-supplied
  * `dispatchAsync` as-is; where they actually run is up to the caller.
  */
-class EffectExecutorImpl(
+public class EffectExecutorImpl(
     private val effectRegistry: EffectRegistry,
     private val context: suspend () -> ExecutionContext,
     private val failurePolicy: EffectFailurePolicy = EffectFailurePolicy.CONTINUE,

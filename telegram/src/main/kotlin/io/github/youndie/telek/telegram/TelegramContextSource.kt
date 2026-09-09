@@ -11,12 +11,12 @@ import kotlinx.coroutines.CompletableDeferred
  * instance between [telegramEffectExecutor] and [connect] so the executor can await the same bot
  * the dispatcher observes, without [io.github.youndie.telek.Telek] needing to own or track it.
  */
-class TelegramContextSource {
+public class TelegramContextSource {
     private val botDeferred = CompletableDeferred<Bot>()
 
     internal fun provide(bot: Bot) {
         botDeferred.complete(bot)
     }
 
-    suspend fun context(): TelegramContext = TelegramContext(botDeferred.await())
+    public suspend fun context(): TelegramContext = TelegramContext(botDeferred.await())
 }

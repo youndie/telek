@@ -1,15 +1,15 @@
 package io.github.youndie.telek
 
-interface Input {
-    val chatId: Long
+public interface Input {
+    public val chatId: Long
 }
 
-data class Message(
+public data class Message(
     override val chatId: Long,
     val text: String,
 ) : Input
 
-data class Callback(
+public data class Callback(
     override val chatId: Long,
     val messageId: Long,
     val data: String,

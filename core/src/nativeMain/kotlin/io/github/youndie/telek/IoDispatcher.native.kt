@@ -15,6 +15,6 @@ import kotlinx.coroutines.newFixedThreadPoolContext
  * never pays for the threads. Deliberately never closed — its lifetime is the process's.
  */
 @OptIn(DelicateCoroutinesApi::class)
-actual val telekIoDispatcher: CoroutineDispatcher by lazy {
+public actual val telekIoDispatcher: CoroutineDispatcher by lazy {
     newFixedThreadPoolContext(nThreads = 64, name = "telek-io")
 }

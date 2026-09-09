@@ -5,7 +5,7 @@ import io.github.youndie.telek.ktg.effect.handler.EditMarkupEffectHandler
 import io.github.youndie.telek.ktg.effect.handler.EditMessageEffectHandler
 import io.github.youndie.telek.ktg.effect.handler.SendMessageEffectHandler
 
-fun defaultEffectRegistry() =
+public fun defaultEffectRegistry(): EffectRegistry =
     EffectRegistry().apply {
         register(SendMessageEffect::class, SendMessageEffectHandler())
         register(EditMessageEffect::class, EditMessageEffectHandler())
