@@ -50,7 +50,10 @@ public class Telek(
     ) {
         if (input != null) interceptors.forEach { it.onBeforeInput(chatId, input) }
 
-        runCatching {
+        // `try` and not `runCatching`: the cancellation was already rethrown below, but from
+        // inside `onFailure`, which is a shape no reader -- and no rule -- can check at a
+        // glance. The behaviour is unchanged; what changed is that it is now visible.
+        try {
             val result =
                 userStateStore.update(chatId) { current ->
                     val state = current ?: initialStateProvider.initialState(chatId)
@@ -79,8 +82,9 @@ public class Telek(
             interceptors.forEach {
                 it.onAfterStateChanged(chatId, result.oldState, result.newState)
             }
-        }.onFailure { e ->
-            if (e is CancellationException) throw e
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
             interceptors.forEach { it.onError(chatId, input, e) }
         }
     }

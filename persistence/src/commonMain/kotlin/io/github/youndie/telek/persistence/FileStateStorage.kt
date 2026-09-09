@@ -42,6 +42,10 @@ public open class FileStateStorage<T : State>(
         state: T,
     ): Unit =
         withContext(telekIoDispatcher) {
+            @Suppress(
+                "ktlint:kapkan:cancellation-swallowed",
+                "file IO with no suspension point inside, so no cancellation can arrive here",
+            )
             runCatching {
                 val tmp = dir / "$chatId.json.tmp"
                 val target = dir / "$chatId.json"
@@ -54,6 +58,10 @@ public open class FileStateStorage<T : State>(
 
     override suspend fun load(chatId: Long): T? =
         withContext(telekIoDispatcher) {
+            @Suppress(
+                "ktlint:kapkan:cancellation-swallowed",
+                "file IO with no suspension point inside, so getOrNull has no cancellation to hide",
+            )
             runCatching {
                 val file = dir / "$chatId.json"
                 if (!fileSystem.exists(file)) return@withContext null

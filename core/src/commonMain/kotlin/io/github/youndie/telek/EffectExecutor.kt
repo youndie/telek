@@ -1,6 +1,7 @@
 package io.github.youndie.telek
 
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.cancellation.CancellationException
 
 public interface EffectExecutor {
     /**
@@ -74,23 +75,36 @@ public class EffectExecutorImpl(
         effect: Effect,
         handler: AsyncEffectHandler<Effect>,
     ): Event? =
-        runCatching { handler.handle(context, effect) }
-            .onFailure { logger.error("Async effect ${effect::class.simpleName} failed: ${it.message}", it) }
-            .getOrNull()
+        // `try` and not `runCatching`: this handler suspends, and `runCatching { … }.getOrNull()`
+        // answers `null` for a cancelled effect exactly as it does for a failed one. `null` here
+        // means "produced no event", so the caller went on as if the effect had simply had nothing
+        // to say — while the coroutine that was cancelled kept running.
+        try {
+            handler.handle(context, effect)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            logger.error("Async effect ${effect::class.simpleName} failed: ${e.message}", e)
+            null
+        }
 
     private suspend fun executeOne(
         context: ExecutionContext,
         effect: Effect,
     ): EffectResult =
         withContext(telekIoDispatcher) {
-            runCatching {
+            // The handler suspends, so a `runCatching` here folded a cancellation into
+            // `EffectFailed` — and the state machine reads `EffectFailed` as "this effect went
+            // wrong", compensating for a transition nobody is waiting on any more.
+            try {
                 @Suppress("UNCHECKED_CAST")
                 (effectRegistry.get(effect::class) as? EffectHandler<Effect>)?.handle(context, effect)
-            }.fold({
-                it ?: EffectFailed(IllegalStateException("EffectHandler not found for ${effect::class.simpleName}"))
-            }, { e ->
+                    ?: EffectFailed(IllegalStateException("EffectHandler not found for ${effect::class.simpleName}"))
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
                 logger.error("Effect ${effect::class.simpleName} failed: ${e.message}", e)
                 EffectFailed(e)
-            })
+            }
         }
 }
