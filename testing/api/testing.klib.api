@@ -1,0 +1,27 @@
+// Klib ABI Dump
+// Targets: [linuxArm64, linuxX64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie.telek:testing>
+final class <#A: io.github.youndie.telek/State> io.github.youndie.telek.testing/SyncTransitionGate : io.github.youndie.telek/TransitionGate<#A> { // io.github.youndie.telek.testing/SyncTransitionGate|null[0]
+    constructor <init>(#A, kotlin/Function1<io.github.youndie.telek/TransitionResult<#A>, kotlin/Unit> = ...) // io.github.youndie.telek.testing/SyncTransitionGate.<init>|<init>(1:0;kotlin.Function1<io.github.youndie.telek.TransitionResult<1:0>,kotlin.Unit>){}[0]
+
+    final fun currentState(): #A // io.github.youndie.telek.testing/SyncTransitionGate.currentState|currentState(){}[0]
+    final fun post(kotlin/Long, kotlin/Function1<#A, io.github.youndie.telek/TransitionResult<#A>>) // io.github.youndie.telek.testing/SyncTransitionGate.post|post(kotlin.Long;kotlin.Function1<1:0,io.github.youndie.telek.TransitionResult<1:0>>){}[0]
+}
+
+final class io.github.youndie.telek.testing/RecordingEffectExecutor : io.github.youndie.telek/EffectExecutor { // io.github.youndie.telek.testing/RecordingEffectExecutor|null[0]
+    constructor <init>(kotlin/Function1<io.github.youndie.telek/Effect, io.github.youndie.telek/EffectResult> = ..., kotlin/Function1<io.github.youndie.telek/Effect, kotlin.coroutines/SuspendFunction0<io.github.youndie.telek/Event?>?> = ...) // io.github.youndie.telek.testing/RecordingEffectExecutor.<init>|<init>(kotlin.Function1<io.github.youndie.telek.Effect,io.github.youndie.telek.EffectResult>;kotlin.Function1<io.github.youndie.telek.Effect,kotlin.coroutines.SuspendFunction0<io.github.youndie.telek.Event?>?>){}[0]
+
+    final val effects // io.github.youndie.telek.testing/RecordingEffectExecutor.effects|{}effects[0]
+        final fun <get-effects>(): kotlin.collections/List<io.github.youndie.telek/Effect> // io.github.youndie.telek.testing/RecordingEffectExecutor.effects.<get-effects>|<get-effects>(){}[0]
+    final val executed // io.github.youndie.telek.testing/RecordingEffectExecutor.executed|{}executed[0]
+        final fun <get-executed>(): kotlin.collections/List<kotlin.collections/List<io.github.youndie.telek/Effect>> // io.github.youndie.telek.testing/RecordingEffectExecutor.executed.<get-executed>|<get-executed>(){}[0]
+
+    final suspend fun execute(kotlin.collections/List<io.github.youndie.telek/Effect>, kotlin/Function2<kotlin/Any?, kotlin.coroutines/SuspendFunction0<io.github.youndie.telek/Event?>, kotlin/Unit>): kotlin.collections/List<io.github.youndie.telek/EffectResult> // io.github.youndie.telek.testing/RecordingEffectExecutor.execute|execute(kotlin.collections.List<io.github.youndie.telek.Effect>;kotlin.Function2<kotlin.Any?,kotlin.coroutines.SuspendFunction0<io.github.youndie.telek.Event?>,kotlin.Unit>){}[0]
+}
+
+final object io.github.youndie.telek.testing/TestExecutionContext : io.github.youndie.telek/ExecutionContext // io.github.youndie.telek.testing/TestExecutionContext|null[0]

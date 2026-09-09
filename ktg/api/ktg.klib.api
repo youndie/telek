@@ -1,0 +1,199 @@
+// Klib ABI Dump
+// Targets: [linuxArm64, linuxX64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie.telek:ktg>
+open annotation class io.github.youndie.telek.ktg/InlineKeyboardMarkupDsl : kotlin/Annotation { // io.github.youndie.telek.ktg/InlineKeyboardMarkupDsl|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg/InlineKeyboardMarkupDsl.<init>|<init>(){}[0]
+}
+
+open annotation class io.github.youndie.telek.ktg/TelegramMessageDsl : kotlin/Annotation { // io.github.youndie.telek.ktg/TelegramMessageDsl|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg/TelegramMessageDsl.<init>|<init>(){}[0]
+}
+
+abstract interface <#A: io.github.youndie.telek.ktg.effect/KtgEffect> io.github.youndie.telek.ktg.effect.handler/KtgAsyncEffectHandler : io.github.youndie.telek/AsyncEffectHandler<#A> { // io.github.youndie.telek.ktg.effect.handler/KtgAsyncEffectHandler|null[0]
+    abstract suspend fun handle(dev.inmo.tgbotapi.bot/RequestsExecutor, #A): io.github.youndie.telek/Event? // io.github.youndie.telek.ktg.effect.handler/KtgAsyncEffectHandler.handle|handle(dev.inmo.tgbotapi.bot.RequestsExecutor;1:0){}[0]
+    open suspend fun handle(io.github.youndie.telek/ExecutionContext, #A): io.github.youndie.telek/Event? // io.github.youndie.telek.ktg.effect.handler/KtgAsyncEffectHandler.handle|handle(io.github.youndie.telek.ExecutionContext;1:0){}[0]
+}
+
+abstract interface <#A: io.github.youndie.telek.ktg.effect/KtgEffect> io.github.youndie.telek.ktg.effect.handler/KtgEffectHandler : io.github.youndie.telek/EffectHandler<#A> { // io.github.youndie.telek.ktg.effect.handler/KtgEffectHandler|null[0]
+    abstract suspend fun handle(dev.inmo.tgbotapi.bot/RequestsExecutor, #A): io.github.youndie.telek/EffectResult // io.github.youndie.telek.ktg.effect.handler/KtgEffectHandler.handle|handle(dev.inmo.tgbotapi.bot.RequestsExecutor;1:0){}[0]
+    open suspend fun handle(io.github.youndie.telek/ExecutionContext, #A): io.github.youndie.telek/EffectResult // io.github.youndie.telek.ktg.effect.handler/KtgEffectHandler.handle|handle(io.github.youndie.telek.ExecutionContext;1:0){}[0]
+}
+
+abstract interface io.github.youndie.telek.ktg.effect/KtgEffect : io.github.youndie.telek/Effect // io.github.youndie.telek.ktg.effect/KtgEffect|null[0]
+
+abstract class io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess : io.github.youndie.telek/EffectResult { // io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess.<init>|<init>(){}[0]
+
+    abstract val chatId // io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess.chatId|{}chatId[0]
+        abstract fun <get-chatId>(): kotlin/Long // io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess.chatId.<get-chatId>|<get-chatId>(){}[0]
+    abstract val messageId // io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess.messageId|{}messageId[0]
+        abstract fun <get-messageId>(): kotlin/Long // io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess.messageId.<get-messageId>|<get-messageId>(){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectHandler : io.github.youndie.telek.ktg.effect.handler/KtgEffectHandler<io.github.youndie.telek.ktg.effect/EditMarkupEffect> { // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectHandler|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectHandler.<init>|<init>(){}[0]
+
+    final suspend fun handle(dev.inmo.tgbotapi.bot/RequestsExecutor, io.github.youndie.telek.ktg.effect/EditMarkupEffect): io.github.youndie.telek/EffectResult // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectHandler.handle|handle(dev.inmo.tgbotapi.bot.RequestsExecutor;io.github.youndie.telek.ktg.effect.EditMarkupEffect){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectResult : io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess { // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectResult|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long) // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectResult.<init>|<init>(kotlin.Long;kotlin.Long){}[0]
+
+    final val chatId // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectResult.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectResult.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val messageId // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectResult.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek.ktg.effect.handler/EditMarkupEffectResult.messageId.<get-messageId>|<get-messageId>(){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect.handler/EditMessageEffectHandler : io.github.youndie.telek.ktg.effect.handler/KtgEffectHandler<io.github.youndie.telek.ktg.effect/EditMessageEffect> { // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectHandler|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectHandler.<init>|<init>(){}[0]
+
+    final suspend fun handle(dev.inmo.tgbotapi.bot/RequestsExecutor, io.github.youndie.telek.ktg.effect/EditMessageEffect): io.github.youndie.telek/EffectResult // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectHandler.handle|handle(dev.inmo.tgbotapi.bot.RequestsExecutor;io.github.youndie.telek.ktg.effect.EditMessageEffect){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect.handler/EditMessageEffectResult : io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess { // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectResult|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long) // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectResult.<init>|<init>(kotlin.Long;kotlin.Long){}[0]
+
+    final val chatId // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectResult.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectResult.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val messageId // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectResult.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek.ktg.effect.handler/EditMessageEffectResult.messageId.<get-messageId>|<get-messageId>(){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect.handler/SendMessageEffectHandler : io.github.youndie.telek.ktg.effect.handler/KtgEffectHandler<io.github.youndie.telek.ktg.effect/SendMessageEffect> { // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectHandler|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectHandler.<init>|<init>(){}[0]
+
+    final suspend fun handle(dev.inmo.tgbotapi.bot/RequestsExecutor, io.github.youndie.telek.ktg.effect/SendMessageEffect): io.github.youndie.telek/EffectResult // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectHandler.handle|handle(dev.inmo.tgbotapi.bot.RequestsExecutor;io.github.youndie.telek.ktg.effect.SendMessageEffect){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect.handler/SendMessageEffectResult : io.github.youndie.telek.ktg.effect.handler/KtgEffectSuccess { // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectResult|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long) // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectResult.<init>|<init>(kotlin.Long;kotlin.Long){}[0]
+
+    final val chatId // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectResult.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectResult.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val messageId // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectResult.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek.ktg.effect.handler/SendMessageEffectResult.messageId.<get-messageId>|<get-messageId>(){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect/EditMarkupEffect : io.github.youndie.telek.ktg.effect/KtgEffect { // io.github.youndie.telek.ktg.effect/EditMarkupEffect|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long, dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...) // io.github.youndie.telek.ktg.effect/EditMarkupEffect.<init>|<init>(kotlin.Long;kotlin.Long;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){}[0]
+
+    final val chatId // io.github.youndie.telek.ktg.effect/EditMarkupEffect.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek.ktg.effect/EditMarkupEffect.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val markup // io.github.youndie.telek.ktg.effect/EditMarkupEffect.markup|{}markup[0]
+        final fun <get-markup>(): dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? // io.github.youndie.telek.ktg.effect/EditMarkupEffect.markup.<get-markup>|<get-markup>(){}[0]
+    final val messageId // io.github.youndie.telek.ktg.effect/EditMarkupEffect.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek.ktg.effect/EditMarkupEffect.messageId.<get-messageId>|<get-messageId>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek.ktg.effect/EditMarkupEffect.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.youndie.telek.ktg.effect/EditMarkupEffect.component2|component2(){}[0]
+    final fun component3(): dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? // io.github.youndie.telek.ktg.effect/EditMarkupEffect.component3|component3(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Long = ..., dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...): io.github.youndie.telek.ktg.effect/EditMarkupEffect // io.github.youndie.telek.ktg.effect/EditMarkupEffect.copy|copy(kotlin.Long;kotlin.Long;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek.ktg.effect/EditMarkupEffect.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek.ktg.effect/EditMarkupEffect.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek.ktg.effect/EditMarkupEffect.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect/EditMessageEffect : io.github.youndie.telek.ktg.effect/KtgEffect { // io.github.youndie.telek.ktg.effect/EditMessageEffect|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long, kotlin/String, dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...) // io.github.youndie.telek.ktg.effect/EditMessageEffect.<init>|<init>(kotlin.Long;kotlin.Long;kotlin.String;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){}[0]
+
+    final val chatId // io.github.youndie.telek.ktg.effect/EditMessageEffect.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek.ktg.effect/EditMessageEffect.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val markup // io.github.youndie.telek.ktg.effect/EditMessageEffect.markup|{}markup[0]
+        final fun <get-markup>(): dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? // io.github.youndie.telek.ktg.effect/EditMessageEffect.markup.<get-markup>|<get-markup>(){}[0]
+    final val messageId // io.github.youndie.telek.ktg.effect/EditMessageEffect.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek.ktg.effect/EditMessageEffect.messageId.<get-messageId>|<get-messageId>(){}[0]
+    final val text // io.github.youndie.telek.ktg.effect/EditMessageEffect.text|{}text[0]
+        final fun <get-text>(): kotlin/String // io.github.youndie.telek.ktg.effect/EditMessageEffect.text.<get-text>|<get-text>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek.ktg.effect/EditMessageEffect.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.youndie.telek.ktg.effect/EditMessageEffect.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.telek.ktg.effect/EditMessageEffect.component3|component3(){}[0]
+    final fun component4(): dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? // io.github.youndie.telek.ktg.effect/EditMessageEffect.component4|component4(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Long = ..., kotlin/String = ..., dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...): io.github.youndie.telek.ktg.effect/EditMessageEffect // io.github.youndie.telek.ktg.effect/EditMessageEffect.copy|copy(kotlin.Long;kotlin.Long;kotlin.String;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek.ktg.effect/EditMessageEffect.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek.ktg.effect/EditMessageEffect.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek.ktg.effect/EditMessageEffect.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek.ktg.effect/SendMessageEffect : io.github.youndie.telek.ktg.effect/KtgEffect { // io.github.youndie.telek.ktg.effect/SendMessageEffect|null[0]
+    constructor <init>(kotlin/Long, kotlin/String, dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...) // io.github.youndie.telek.ktg.effect/SendMessageEffect.<init>|<init>(kotlin.Long;kotlin.String;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){}[0]
+
+    final val chatId // io.github.youndie.telek.ktg.effect/SendMessageEffect.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek.ktg.effect/SendMessageEffect.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val markup // io.github.youndie.telek.ktg.effect/SendMessageEffect.markup|{}markup[0]
+        final fun <get-markup>(): dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? // io.github.youndie.telek.ktg.effect/SendMessageEffect.markup.<get-markup>|<get-markup>(){}[0]
+    final val text // io.github.youndie.telek.ktg.effect/SendMessageEffect.text|{}text[0]
+        final fun <get-text>(): kotlin/String // io.github.youndie.telek.ktg.effect/SendMessageEffect.text.<get-text>|<get-text>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek.ktg.effect/SendMessageEffect.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.telek.ktg.effect/SendMessageEffect.component2|component2(){}[0]
+    final fun component3(): dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? // io.github.youndie.telek.ktg.effect/SendMessageEffect.component3|component3(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/String = ..., dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...): io.github.youndie.telek.ktg.effect/SendMessageEffect // io.github.youndie.telek.ktg.effect/SendMessageEffect.copy|copy(kotlin.Long;kotlin.String;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek.ktg.effect/SendMessageEffect.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek.ktg.effect/SendMessageEffect.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek.ktg.effect/SendMessageEffect.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek.ktg/InlineKeyboardBuilder { // io.github.youndie.telek.ktg/InlineKeyboardBuilder|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg/InlineKeyboardBuilder.<init>|<init>(){}[0]
+
+    final fun build(): dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup // io.github.youndie.telek.ktg/InlineKeyboardBuilder.build|build(){}[0]
+    final fun row(kotlin/Function1<io.github.youndie.telek.ktg/RowBuilder, kotlin/Unit>) // io.github.youndie.telek.ktg/InlineKeyboardBuilder.row|row(kotlin.Function1<io.github.youndie.telek.ktg.RowBuilder,kotlin.Unit>){}[0]
+}
+
+final class io.github.youndie.telek.ktg/KtgContext : io.github.youndie.telek/ExecutionContext { // io.github.youndie.telek.ktg/KtgContext|null[0]
+    constructor <init>(dev.inmo.tgbotapi.bot/RequestsExecutor) // io.github.youndie.telek.ktg/KtgContext.<init>|<init>(dev.inmo.tgbotapi.bot.RequestsExecutor){}[0]
+
+    final val bot // io.github.youndie.telek.ktg/KtgContext.bot|{}bot[0]
+        final fun <get-bot>(): dev.inmo.tgbotapi.bot/RequestsExecutor // io.github.youndie.telek.ktg/KtgContext.bot.<get-bot>|<get-bot>(){}[0]
+}
+
+final class io.github.youndie.telek.ktg/KtgContextSource { // io.github.youndie.telek.ktg/KtgContextSource|null[0]
+    constructor <init>(dev.inmo.tgbotapi.bot/RequestsExecutor? = ...) // io.github.youndie.telek.ktg/KtgContextSource.<init>|<init>(dev.inmo.tgbotapi.bot.RequestsExecutor?){}[0]
+
+    final fun provide(dev.inmo.tgbotapi.bot/RequestsExecutor) // io.github.youndie.telek.ktg/KtgContextSource.provide|provide(dev.inmo.tgbotapi.bot.RequestsExecutor){}[0]
+    final suspend fun context(): io.github.youndie.telek.ktg/KtgContext // io.github.youndie.telek.ktg/KtgContextSource.context|context(){}[0]
+}
+
+final class io.github.youndie.telek.ktg/RowBuilder { // io.github.youndie.telek.ktg/RowBuilder|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg/RowBuilder.<init>|<init>(){}[0]
+
+    final fun build(): kotlin.collections/List<dev.inmo.tgbotapi.types.buttons.InlineKeyboardButtons/InlineKeyboardButton> // io.github.youndie.telek.ktg/RowBuilder.build|build(){}[0]
+    final fun callback(kotlin/String, kotlin/String) // io.github.youndie.telek.ktg/RowBuilder.callback|callback(kotlin.String;kotlin.String){}[0]
+    final fun url(kotlin/String, kotlin/String) // io.github.youndie.telek.ktg/RowBuilder.url|url(kotlin.String;kotlin.String){}[0]
+}
+
+final class io.github.youndie.telek.ktg/TelegramTextBuilder { // io.github.youndie.telek.ktg/TelegramTextBuilder|null[0]
+    constructor <init>() // io.github.youndie.telek.ktg/TelegramTextBuilder.<init>|<init>(){}[0]
+
+    final fun <#A1: kotlin/Any?> list(kotlin.collections/List<#A1>, kotlin/Function2<io.github.youndie.telek.ktg/TelegramTextBuilder, #A1, kotlin/Unit>) // io.github.youndie.telek.ktg/TelegramTextBuilder.list|list(kotlin.collections.List<0:0>;kotlin.Function2<io.github.youndie.telek.ktg.TelegramTextBuilder,0:0,kotlin.Unit>){0§<kotlin.Any?>}[0]
+    final fun bold(kotlin/String) // io.github.youndie.telek.ktg/TelegramTextBuilder.bold|bold(kotlin.String){}[0]
+    final fun br() // io.github.youndie.telek.ktg/TelegramTextBuilder.br|br(){}[0]
+    final fun br2() // io.github.youndie.telek.ktg/TelegramTextBuilder.br2|br2(){}[0]
+    final fun build(): kotlin/String // io.github.youndie.telek.ktg/TelegramTextBuilder.build|build(){}[0]
+    final fun row(kotlin/Function1<io.github.youndie.telek.ktg/TelegramTextBuilder, kotlin/Unit>) // io.github.youndie.telek.ktg/TelegramTextBuilder.row|row(kotlin.Function1<io.github.youndie.telek.ktg.TelegramTextBuilder,kotlin.Unit>){}[0]
+    final fun text(kotlin/String) // io.github.youndie.telek.ktg/TelegramTextBuilder.text|text(kotlin.String){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek.ktg/TelegramTextBuilder.toString|toString(){}[0]
+}
+
+final val io.github.youndie.telek.ktg/telekChatId // io.github.youndie.telek.ktg/telekChatId|@dev.inmo.tgbotapi.types.message.abstracts.Message{}telekChatId[0]
+    final fun (dev.inmo.tgbotapi.types.message.abstracts/Message).<get-telekChatId>(): kotlin/Long // io.github.youndie.telek.ktg/telekChatId.<get-telekChatId>|<get-telekChatId>@dev.inmo.tgbotapi.types.message.abstracts.Message(){}[0]
+
+final fun (dev.inmo.tgbotapi.extensions.behaviour_builder/BehaviourContext).io.github.youndie.telek.ktg/connect(io.github.youndie.telek/Telek, io.github.youndie.telek.ktg/KtgContextSource, kotlin/Boolean = ...) // io.github.youndie.telek.ktg/connect|connect@dev.inmo.tgbotapi.extensions.behaviour_builder.BehaviourContext(io.github.youndie.telek.Telek;io.github.youndie.telek.ktg.KtgContextSource;kotlin.Boolean){}[0]
+final fun (dev.inmo.tgbotapi.types.message.abstracts/ContentMessage<dev.inmo.tgbotapi.types.message.content/TextContent>).io.github.youndie.telek.ktg/asTelekInput(): io.github.youndie.telek/Message // io.github.youndie.telek.ktg/asTelekInput|asTelekInput@dev.inmo.tgbotapi.types.message.abstracts.ContentMessage<dev.inmo.tgbotapi.types.message.content.TextContent>(){}[0]
+final fun (dev.inmo.tgbotapi.types.queries.callback/DataCallbackQuery).io.github.youndie.telek.ktg/asTelekInput(): io.github.youndie.telek/Callback? // io.github.youndie.telek.ktg/asTelekInput|asTelekInput@dev.inmo.tgbotapi.types.queries.callback.DataCallbackQuery(){}[0]
+final fun <#A: io.github.youndie.telek/State> (io.github.youndie.telek/TransitionBuilder<#A>).io.github.youndie.telek.ktg/editMarkup(kotlin/Long, kotlin/Long, dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...) // io.github.youndie.telek.ktg/editMarkup|editMarkup@io.github.youndie.telek.TransitionBuilder<0:0>(kotlin.Long;kotlin.Long;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){0§<io.github.youndie.telek.State>}[0]
+final fun <#A: io.github.youndie.telek/State> (io.github.youndie.telek/TransitionBuilder<#A>).io.github.youndie.telek.ktg/editMessage(kotlin/Long, kotlin/Long, kotlin/Function1<io.github.youndie.telek.ktg/TelegramTextBuilder, kotlin/Unit>, kotlin/Function1<io.github.youndie.telek.ktg/InlineKeyboardBuilder, kotlin/Unit>? = ...) // io.github.youndie.telek.ktg/editMessage|editMessage@io.github.youndie.telek.TransitionBuilder<0:0>(kotlin.Long;kotlin.Long;kotlin.Function1<io.github.youndie.telek.ktg.TelegramTextBuilder,kotlin.Unit>;kotlin.Function1<io.github.youndie.telek.ktg.InlineKeyboardBuilder,kotlin.Unit>?){0§<io.github.youndie.telek.State>}[0]
+final fun <#A: io.github.youndie.telek/State> (io.github.youndie.telek/TransitionBuilder<#A>).io.github.youndie.telek.ktg/editMessage(kotlin/Long, kotlin/Long, kotlin/String, dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...) // io.github.youndie.telek.ktg/editMessage|editMessage@io.github.youndie.telek.TransitionBuilder<0:0>(kotlin.Long;kotlin.Long;kotlin.String;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){0§<io.github.youndie.telek.State>}[0]
+final fun <#A: io.github.youndie.telek/State> (io.github.youndie.telek/TransitionBuilder<#A>).io.github.youndie.telek.ktg/sendMessage(kotlin/Long, kotlin/Function1<io.github.youndie.telek.ktg/TelegramTextBuilder, kotlin/Unit>, kotlin/Function1<io.github.youndie.telek.ktg/InlineKeyboardBuilder, kotlin/Unit>? = ...) // io.github.youndie.telek.ktg/sendMessage|sendMessage@io.github.youndie.telek.TransitionBuilder<0:0>(kotlin.Long;kotlin.Function1<io.github.youndie.telek.ktg.TelegramTextBuilder,kotlin.Unit>;kotlin.Function1<io.github.youndie.telek.ktg.InlineKeyboardBuilder,kotlin.Unit>?){0§<io.github.youndie.telek.State>}[0]
+final fun <#A: io.github.youndie.telek/State> (io.github.youndie.telek/TransitionBuilder<#A>).io.github.youndie.telek.ktg/sendMessage(kotlin/Long, kotlin/String, dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup? = ...) // io.github.youndie.telek.ktg/sendMessage|sendMessage@io.github.youndie.telek.TransitionBuilder<0:0>(kotlin.Long;kotlin.String;dev.inmo.tgbotapi.types.buttons.InlineKeyboardMarkup?){0§<io.github.youndie.telek.State>}[0]
+final fun io.github.youndie.telek.ktg.effect/defaultEffectRegistry(): io.github.youndie.telek/EffectRegistry // io.github.youndie.telek.ktg.effect/defaultEffectRegistry|defaultEffectRegistry(){}[0]
+final fun io.github.youndie.telek.ktg.effect/ktgEffectExecutor(io.github.youndie.telek.ktg/KtgContextSource, io.github.youndie.telek/EffectRegistry = ..., io.github.youndie.telek/EffectFailurePolicy = ..., io.github.youndie.telek/TelekLogger = ...): io.github.youndie.telek/EffectExecutor // io.github.youndie.telek.ktg.effect/ktgEffectExecutor|ktgEffectExecutor(io.github.youndie.telek.ktg.KtgContextSource;io.github.youndie.telek.EffectRegistry;io.github.youndie.telek.EffectFailurePolicy;io.github.youndie.telek.TelekLogger){}[0]
+final fun io.github.youndie.telek.ktg/inlineKeyboard(kotlin/Function1<io.github.youndie.telek.ktg/InlineKeyboardBuilder, kotlin/Unit>): dev.inmo.tgbotapi.types.buttons/InlineKeyboardMarkup // io.github.youndie.telek.ktg/inlineKeyboard|inlineKeyboard(kotlin.Function1<io.github.youndie.telek.ktg.InlineKeyboardBuilder,kotlin.Unit>){}[0]
+final fun io.github.youndie.telek.ktg/telegramMessage(kotlin/Function1<io.github.youndie.telek.ktg/TelegramTextBuilder, kotlin/Unit>): kotlin/String // io.github.youndie.telek.ktg/telegramMessage|telegramMessage(kotlin.Function1<io.github.youndie.telek.ktg.TelegramTextBuilder,kotlin.Unit>){}[0]

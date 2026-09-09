@@ -1,0 +1,274 @@
+// Klib ABI Dump
+// Targets: [linuxArm64, linuxX64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <io.github.youndie.telek:core>
+open annotation class io.github.youndie.telek/WizardDsl : kotlin/Annotation { // io.github.youndie.telek/WizardDsl|null[0]
+    constructor <init>() // io.github.youndie.telek/WizardDsl.<init>|<init>(){}[0]
+}
+
+final enum class io.github.youndie.telek/EffectFailurePolicy : kotlin/Enum<io.github.youndie.telek/EffectFailurePolicy> { // io.github.youndie.telek/EffectFailurePolicy|null[0]
+    enum entry CONTINUE // io.github.youndie.telek/EffectFailurePolicy.CONTINUE|null[0]
+    enum entry FAIL_FAST // io.github.youndie.telek/EffectFailurePolicy.FAIL_FAST|null[0]
+
+    final val entries // io.github.youndie.telek/EffectFailurePolicy.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.telek/EffectFailurePolicy> // io.github.youndie.telek/EffectFailurePolicy.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.telek/EffectFailurePolicy // io.github.youndie.telek/EffectFailurePolicy.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.telek/EffectFailurePolicy> // io.github.youndie.telek/EffectFailurePolicy.values|values#static(){}[0]
+}
+
+final enum class io.github.youndie.telek/TelekLogLevel : kotlin/Enum<io.github.youndie.telek/TelekLogLevel> { // io.github.youndie.telek/TelekLogLevel|null[0]
+    enum entry DEBUG // io.github.youndie.telek/TelekLogLevel.DEBUG|null[0]
+    enum entry ERROR // io.github.youndie.telek/TelekLogLevel.ERROR|null[0]
+    enum entry WARN // io.github.youndie.telek/TelekLogLevel.WARN|null[0]
+
+    final val entries // io.github.youndie.telek/TelekLogLevel.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.telek/TelekLogLevel> // io.github.youndie.telek/TelekLogLevel.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.telek/TelekLogLevel // io.github.youndie.telek/TelekLogLevel.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.telek/TelekLogLevel> // io.github.youndie.telek/TelekLogLevel.values|values#static(){}[0]
+}
+
+abstract fun interface io.github.youndie.telek/InitialStateProvider { // io.github.youndie.telek/InitialStateProvider|null[0]
+    abstract fun initialState(kotlin/Long): io.github.youndie.telek/State // io.github.youndie.telek/InitialStateProvider.initialState|initialState(kotlin.Long){}[0]
+}
+
+abstract interface <#A: io.github.youndie.telek/Effect> io.github.youndie.telek/AsyncEffectHandler { // io.github.youndie.telek/AsyncEffectHandler|null[0]
+    abstract suspend fun handle(io.github.youndie.telek/ExecutionContext, #A): io.github.youndie.telek/Event? // io.github.youndie.telek/AsyncEffectHandler.handle|handle(io.github.youndie.telek.ExecutionContext;1:0){}[0]
+}
+
+abstract interface <#A: io.github.youndie.telek/Effect> io.github.youndie.telek/EffectHandler { // io.github.youndie.telek/EffectHandler|null[0]
+    abstract suspend fun handle(io.github.youndie.telek/ExecutionContext, #A): io.github.youndie.telek/EffectResult // io.github.youndie.telek/EffectHandler.handle|handle(io.github.youndie.telek.ExecutionContext;1:0){}[0]
+}
+
+abstract interface <#A: io.github.youndie.telek/State, #B: io.github.youndie.telek/Input> io.github.youndie.telek/StateMachine { // io.github.youndie.telek/StateMachine|null[0]
+    abstract fun transition(#A, #B): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/StateMachine.transition|transition(1:0;1:1){}[0]
+}
+
+abstract interface <#A: io.github.youndie.telek/State> io.github.youndie.telek/StateStorage { // io.github.youndie.telek/StateStorage|null[0]
+    abstract suspend fun delete(kotlin/Long) // io.github.youndie.telek/StateStorage.delete|delete(kotlin.Long){}[0]
+    abstract suspend fun load(kotlin/Long): #A? // io.github.youndie.telek/StateStorage.load|load(kotlin.Long){}[0]
+    abstract suspend fun save(kotlin/Long, #A) // io.github.youndie.telek/StateStorage.save|save(kotlin.Long;1:0){}[0]
+}
+
+abstract interface <#A: io.github.youndie.telek/State> io.github.youndie.telek/TransitionGate { // io.github.youndie.telek/TransitionGate|null[0]
+    abstract fun post(kotlin/Long, kotlin/Function1<#A, io.github.youndie.telek/TransitionResult<#A>>) // io.github.youndie.telek/TransitionGate.post|post(kotlin.Long;kotlin.Function1<1:0,io.github.youndie.telek.TransitionResult<1:0>>){}[0]
+}
+
+abstract interface io.github.youndie.telek/Debounced { // io.github.youndie.telek/Debounced|null[0]
+    abstract val debounceKey // io.github.youndie.telek/Debounced.debounceKey|{}debounceKey[0]
+        abstract fun <get-debounceKey>(): kotlin/Any // io.github.youndie.telek/Debounced.debounceKey.<get-debounceKey>|<get-debounceKey>(){}[0]
+}
+
+abstract interface io.github.youndie.telek/Dispatcher { // io.github.youndie.telek/Dispatcher|null[0]
+    abstract val startCommand // io.github.youndie.telek/Dispatcher.startCommand|{}startCommand[0]
+        abstract fun <get-startCommand>(): kotlin/String // io.github.youndie.telek/Dispatcher.startCommand.<get-startCommand>|<get-startCommand>(){}[0]
+}
+
+abstract interface io.github.youndie.telek/Effect // io.github.youndie.telek/Effect|null[0]
+
+abstract interface io.github.youndie.telek/EffectExecutor { // io.github.youndie.telek/EffectExecutor|null[0]
+    abstract suspend fun execute(kotlin.collections/List<io.github.youndie.telek/Effect>, kotlin/Function2<kotlin/Any?, kotlin.coroutines/SuspendFunction0<io.github.youndie.telek/Event?>, kotlin/Unit>): kotlin.collections/List<io.github.youndie.telek/EffectResult> // io.github.youndie.telek/EffectExecutor.execute|execute(kotlin.collections.List<io.github.youndie.telek.Effect>;kotlin.Function2<kotlin.Any?,kotlin.coroutines.SuspendFunction0<io.github.youndie.telek.Event?>,kotlin.Unit>){}[0]
+}
+
+abstract interface io.github.youndie.telek/EffectResult // io.github.youndie.telek/EffectResult|null[0]
+
+abstract interface io.github.youndie.telek/Event { // io.github.youndie.telek/Event|null[0]
+    abstract val chatId // io.github.youndie.telek/Event.chatId|{}chatId[0]
+        abstract fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/Event.chatId.<get-chatId>|<get-chatId>(){}[0]
+}
+
+abstract interface io.github.youndie.telek/ExecutionContext // io.github.youndie.telek/ExecutionContext|null[0]
+
+abstract interface io.github.youndie.telek/FinalState // io.github.youndie.telek/FinalState|null[0]
+
+abstract interface io.github.youndie.telek/FindDispatcherStrategy { // io.github.youndie.telek/FindDispatcherStrategy|null[0]
+    abstract fun findDispatcher(io.github.youndie.telek/State?, io.github.youndie.telek/Input? = ...): io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>? // io.github.youndie.telek/FindDispatcherStrategy.findDispatcher|findDispatcher(io.github.youndie.telek.State?;io.github.youndie.telek.Input?){}[0]
+}
+
+abstract interface io.github.youndie.telek/Input { // io.github.youndie.telek/Input|null[0]
+    abstract val chatId // io.github.youndie.telek/Input.chatId|{}chatId[0]
+        abstract fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/Input.chatId.<get-chatId>|<get-chatId>(){}[0]
+}
+
+abstract interface io.github.youndie.telek/State // io.github.youndie.telek/State|null[0]
+
+abstract interface io.github.youndie.telek/TelekInterceptor { // io.github.youndie.telek/TelekInterceptor|null[0]
+    open fun onAfterStateChanged(kotlin/Long, io.github.youndie.telek/State?, io.github.youndie.telek/State) // io.github.youndie.telek/TelekInterceptor.onAfterStateChanged|onAfterStateChanged(kotlin.Long;io.github.youndie.telek.State?;io.github.youndie.telek.State){}[0]
+    open fun onBeforeInput(kotlin/Long, io.github.youndie.telek/Input) // io.github.youndie.telek/TelekInterceptor.onBeforeInput|onBeforeInput(kotlin.Long;io.github.youndie.telek.Input){}[0]
+    open fun onError(kotlin/Long, io.github.youndie.telek/Input?, kotlin/Throwable) // io.github.youndie.telek/TelekInterceptor.onError|onError(kotlin.Long;io.github.youndie.telek.Input?;kotlin.Throwable){}[0]
+}
+
+abstract interface io.github.youndie.telek/TelekLogger { // io.github.youndie.telek/TelekLogger|null[0]
+    abstract fun log(io.github.youndie.telek/TelekLogLevel, kotlin/String, kotlin/Throwable? = ...) // io.github.youndie.telek/TelekLogger.log|log(io.github.youndie.telek.TelekLogLevel;kotlin.String;kotlin.Throwable?){}[0]
+    open fun debug(kotlin/String) // io.github.youndie.telek/TelekLogger.debug|debug(kotlin.String){}[0]
+    open fun error(kotlin/String, kotlin/Throwable? = ...) // io.github.youndie.telek/TelekLogger.error|error(kotlin.String;kotlin.Throwable?){}[0]
+    open fun warn(kotlin/String, kotlin/Throwable? = ...) // io.github.youndie.telek/TelekLogger.warn|warn(kotlin.String;kotlin.Throwable?){}[0]
+
+    final object Companion { // io.github.youndie.telek/TelekLogger.Companion|null[0]
+        final val NoOp // io.github.youndie.telek/TelekLogger.Companion.NoOp|{}NoOp[0]
+            final fun <get-NoOp>(): io.github.youndie.telek/TelekLogger // io.github.youndie.telek/TelekLogger.Companion.NoOp.<get-NoOp>|<get-NoOp>(){}[0]
+    }
+}
+
+abstract interface io.github.youndie.telek/UserStateStore { // io.github.youndie.telek/UserStateStore|null[0]
+    abstract suspend fun clear(kotlin/Long) // io.github.youndie.telek/UserStateStore.clear|clear(kotlin.Long){}[0]
+    abstract suspend fun get(kotlin/Long): io.github.youndie.telek/State? // io.github.youndie.telek/UserStateStore.get|get(kotlin.Long){}[0]
+    abstract suspend fun update(kotlin/Long, kotlin.coroutines/SuspendFunction1<io.github.youndie.telek/State?, io.github.youndie.telek/UpdateResult>): io.github.youndie.telek/UpdateResult // io.github.youndie.telek/UserStateStore.update|update(kotlin.Long;kotlin.coroutines.SuspendFunction1<io.github.youndie.telek.State?,io.github.youndie.telek.UpdateResult>){}[0]
+}
+
+abstract class <#A: io.github.youndie.telek/State> io.github.youndie.telek/StateDispatcher : io.github.youndie.telek/Dispatcher, io.github.youndie.telek/StateMachine<#A, io.github.youndie.telek/Input> { // io.github.youndie.telek/StateDispatcher|null[0]
+    constructor <init>() // io.github.youndie.telek/StateDispatcher.<init>|<init>(){}[0]
+
+    abstract val stateClass // io.github.youndie.telek/StateDispatcher.stateClass|{}stateClass[0]
+        abstract fun <get-stateClass>(): kotlin.reflect/KClass<#A> // io.github.youndie.telek/StateDispatcher.stateClass.<get-stateClass>|<get-stateClass>(){}[0]
+
+    final var transitionGate // io.github.youndie.telek/StateDispatcher.transitionGate|{}transitionGate[0]
+        final fun <get-transitionGate>(): io.github.youndie.telek/TransitionGate<#A> // io.github.youndie.telek/StateDispatcher.transitionGate.<get-transitionGate>|<get-transitionGate>(){}[0]
+        final fun <set-transitionGate>(io.github.youndie.telek/TransitionGate<#A>) // io.github.youndie.telek/StateDispatcher.transitionGate.<set-transitionGate>|<set-transitionGate>(io.github.youndie.telek.TransitionGate<1:0>){}[0]
+
+    final fun attach(io.github.youndie.telek/TransitionGate<#A>) // io.github.youndie.telek/StateDispatcher.attach|attach(io.github.youndie.telek.TransitionGate<1:0>){}[0]
+    final fun handle(io.github.youndie.telek/State, io.github.youndie.telek/Input): io.github.youndie.telek/TransitionResult<#A>? // io.github.youndie.telek/StateDispatcher.handle|handle(io.github.youndie.telek.State;io.github.youndie.telek.Input){}[0]
+    final fun handleEvent(io.github.youndie.telek/State, io.github.youndie.telek/Event): io.github.youndie.telek/TransitionResult<#A>? // io.github.youndie.telek/StateDispatcher.handleEvent|handleEvent(io.github.youndie.telek.State;io.github.youndie.telek.Event){}[0]
+    open fun canHandleCallback(kotlin/String): kotlin/Boolean // io.github.youndie.telek/StateDispatcher.canHandleCallback|canHandleCallback(kotlin.String){}[0]
+    open fun entry(io.github.youndie.telek/Input): io.github.youndie.telek/TransitionResult<#A>? // io.github.youndie.telek/StateDispatcher.entry|entry(io.github.youndie.telek.Input){}[0]
+    open fun onEffectResult(io.github.youndie.telek/State, io.github.youndie.telek/EffectResult) // io.github.youndie.telek/StateDispatcher.onEffectResult|onEffectResult(io.github.youndie.telek.State;io.github.youndie.telek.EffectResult){}[0]
+    open fun onEffectResults(io.github.youndie.telek/State, kotlin.collections/List<io.github.youndie.telek/EffectResult>) // io.github.youndie.telek/StateDispatcher.onEffectResults|onEffectResults(io.github.youndie.telek.State;kotlin.collections.List<io.github.youndie.telek.EffectResult>){}[0]
+    open fun transition(#A, io.github.youndie.telek/Event): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/StateDispatcher.transition|transition(1:0;io.github.youndie.telek.Event){}[0]
+}
+
+final class <#A: io.github.youndie.telek/State> io.github.youndie.telek/TransitionBuilder { // io.github.youndie.telek/TransitionBuilder|null[0]
+    constructor <init>() // io.github.youndie.telek/TransitionBuilder.<init>|<init>(){}[0]
+
+    final var newState // io.github.youndie.telek/TransitionBuilder.newState|{}newState[0]
+        final fun <get-newState>(): #A // io.github.youndie.telek/TransitionBuilder.newState.<get-newState>|<get-newState>(){}[0]
+        final fun <set-newState>(#A) // io.github.youndie.telek/TransitionBuilder.newState.<set-newState>|<set-newState>(1:0){}[0]
+
+    final fun add(io.github.youndie.telek/Effect) // io.github.youndie.telek/TransitionBuilder.add|add(io.github.youndie.telek.Effect){}[0]
+    final fun build(): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/TransitionBuilder.build|build(){}[0]
+}
+
+final class <#A: io.github.youndie.telek/State> io.github.youndie.telek/TransitionResult { // io.github.youndie.telek/TransitionResult|null[0]
+    constructor <init>(#A, kotlin.collections/List<io.github.youndie.telek/Effect> = ...) // io.github.youndie.telek/TransitionResult.<init>|<init>(1:0;kotlin.collections.List<io.github.youndie.telek.Effect>){}[0]
+
+    final val effects // io.github.youndie.telek/TransitionResult.effects|{}effects[0]
+        final fun <get-effects>(): kotlin.collections/List<io.github.youndie.telek/Effect> // io.github.youndie.telek/TransitionResult.effects.<get-effects>|<get-effects>(){}[0]
+    final val newState // io.github.youndie.telek/TransitionResult.newState|{}newState[0]
+        final fun <get-newState>(): #A // io.github.youndie.telek/TransitionResult.newState.<get-newState>|<get-newState>(){}[0]
+
+    final fun component1(): #A // io.github.youndie.telek/TransitionResult.component1|component1(){}[0]
+    final fun component2(): kotlin.collections/List<io.github.youndie.telek/Effect> // io.github.youndie.telek/TransitionResult.component2|component2(){}[0]
+    final fun copy(#A = ..., kotlin.collections/List<io.github.youndie.telek/Effect> = ...): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/TransitionResult.copy|copy(1:0;kotlin.collections.List<io.github.youndie.telek.Effect>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/TransitionResult.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/TransitionResult.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/TransitionResult.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek/Callback : io.github.youndie.telek/Input { // io.github.youndie.telek/Callback|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long, kotlin/String) // io.github.youndie.telek/Callback.<init>|<init>(kotlin.Long;kotlin.Long;kotlin.String){}[0]
+
+    final val chatId // io.github.youndie.telek/Callback.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/Callback.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val data // io.github.youndie.telek/Callback.data|{}data[0]
+        final fun <get-data>(): kotlin/String // io.github.youndie.telek/Callback.data.<get-data>|<get-data>(){}[0]
+    final val messageId // io.github.youndie.telek/Callback.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek/Callback.messageId.<get-messageId>|<get-messageId>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek/Callback.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.youndie.telek/Callback.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.telek/Callback.component3|component3(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Long = ..., kotlin/String = ...): io.github.youndie.telek/Callback // io.github.youndie.telek/Callback.copy|copy(kotlin.Long;kotlin.Long;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/Callback.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/Callback.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/Callback.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek/DefaultFindDispatcherStrategy : io.github.youndie.telek/FindDispatcherStrategy { // io.github.youndie.telek/DefaultFindDispatcherStrategy|null[0]
+    constructor <init>(kotlin.collections/List<io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>>) // io.github.youndie.telek/DefaultFindDispatcherStrategy.<init>|<init>(kotlin.collections.List<io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>>){}[0]
+
+    final fun findDispatcher(io.github.youndie.telek/State?, io.github.youndie.telek/Input?): io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>? // io.github.youndie.telek/DefaultFindDispatcherStrategy.findDispatcher|findDispatcher(io.github.youndie.telek.State?;io.github.youndie.telek.Input?){}[0]
+}
+
+final class io.github.youndie.telek/EffectExecutorImpl : io.github.youndie.telek/EffectExecutor { // io.github.youndie.telek/EffectExecutorImpl|null[0]
+    constructor <init>(io.github.youndie.telek/EffectRegistry, kotlin.coroutines/SuspendFunction0<io.github.youndie.telek/ExecutionContext>, io.github.youndie.telek/EffectFailurePolicy = ..., io.github.youndie.telek/TelekLogger = ...) // io.github.youndie.telek/EffectExecutorImpl.<init>|<init>(io.github.youndie.telek.EffectRegistry;kotlin.coroutines.SuspendFunction0<io.github.youndie.telek.ExecutionContext>;io.github.youndie.telek.EffectFailurePolicy;io.github.youndie.telek.TelekLogger){}[0]
+
+    final suspend fun execute(kotlin.collections/List<io.github.youndie.telek/Effect>, kotlin/Function2<kotlin/Any?, kotlin.coroutines/SuspendFunction0<io.github.youndie.telek/Event?>, kotlin/Unit>): kotlin.collections/List<io.github.youndie.telek/EffectResult> // io.github.youndie.telek/EffectExecutorImpl.execute|execute(kotlin.collections.List<io.github.youndie.telek.Effect>;kotlin.Function2<kotlin.Any?,kotlin.coroutines.SuspendFunction0<io.github.youndie.telek.Event?>,kotlin.Unit>){}[0]
+}
+
+final class io.github.youndie.telek/EffectFailed : io.github.youndie.telek/EffectResult { // io.github.youndie.telek/EffectFailed|null[0]
+    constructor <init>(kotlin/Throwable) // io.github.youndie.telek/EffectFailed.<init>|<init>(kotlin.Throwable){}[0]
+
+    final val error // io.github.youndie.telek/EffectFailed.error|{}error[0]
+        final fun <get-error>(): kotlin/Throwable // io.github.youndie.telek/EffectFailed.error.<get-error>|<get-error>(){}[0]
+}
+
+final class io.github.youndie.telek/EffectRegistry { // io.github.youndie.telek/EffectRegistry|null[0]
+    constructor <init>() // io.github.youndie.telek/EffectRegistry.<init>|<init>(){}[0]
+
+    final fun <#A1: io.github.youndie.telek/Effect> register(kotlin.reflect/KClass<#A1>, io.github.youndie.telek/EffectHandler<#A1>) // io.github.youndie.telek/EffectRegistry.register|register(kotlin.reflect.KClass<0:0>;io.github.youndie.telek.EffectHandler<0:0>){0§<io.github.youndie.telek.Effect>}[0]
+    final fun <#A1: io.github.youndie.telek/Effect> registerAsync(kotlin.reflect/KClass<#A1>, io.github.youndie.telek/AsyncEffectHandler<#A1>) // io.github.youndie.telek/EffectRegistry.registerAsync|registerAsync(kotlin.reflect.KClass<0:0>;io.github.youndie.telek.AsyncEffectHandler<0:0>){0§<io.github.youndie.telek.Effect>}[0]
+    final fun get(kotlin.reflect/KClass<out io.github.youndie.telek/Effect>): io.github.youndie.telek/EffectHandler<*>? // io.github.youndie.telek/EffectRegistry.get|get(kotlin.reflect.KClass<out|io.github.youndie.telek.Effect>){}[0]
+    final fun getAsync(kotlin.reflect/KClass<out io.github.youndie.telek/Effect>): io.github.youndie.telek/AsyncEffectHandler<*>? // io.github.youndie.telek/EffectRegistry.getAsync|getAsync(kotlin.reflect.KClass<out|io.github.youndie.telek.Effect>){}[0]
+}
+
+final class io.github.youndie.telek/Message : io.github.youndie.telek/Input { // io.github.youndie.telek/Message|null[0]
+    constructor <init>(kotlin/Long, kotlin/String) // io.github.youndie.telek/Message.<init>|<init>(kotlin.Long;kotlin.String){}[0]
+
+    final val chatId // io.github.youndie.telek/Message.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/Message.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val text // io.github.youndie.telek/Message.text|{}text[0]
+        final fun <get-text>(): kotlin/String // io.github.youndie.telek/Message.text.<get-text>|<get-text>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek/Message.component1|component1(){}[0]
+    final fun component2(): kotlin/String // io.github.youndie.telek/Message.component2|component2(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/String = ...): io.github.youndie.telek/Message // io.github.youndie.telek/Message.copy|copy(kotlin.Long;kotlin.String){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/Message.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/Message.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/Message.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek/Telek { // io.github.youndie.telek/Telek|null[0]
+    constructor <init>(kotlinx.coroutines/CoroutineScope = ..., io.github.youndie.telek/UserStateStore = ..., kotlin.collections/List<io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>>, io.github.youndie.telek/InitialStateProvider = ..., kotlin.collections/List<io.github.youndie.telek/TelekInterceptor> = ..., io.github.youndie.telek/EffectExecutor, io.github.youndie.telek/FindDispatcherStrategy = ..., kotlin.time/Duration = ..., kotlin/Int = ..., io.github.youndie.telek/TelekLogger = ...) // io.github.youndie.telek/Telek.<init>|<init>(kotlinx.coroutines.CoroutineScope;io.github.youndie.telek.UserStateStore;kotlin.collections.List<io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>>;io.github.youndie.telek.InitialStateProvider;kotlin.collections.List<io.github.youndie.telek.TelekInterceptor>;io.github.youndie.telek.EffectExecutor;io.github.youndie.telek.FindDispatcherStrategy;kotlin.time.Duration;kotlin.Int;io.github.youndie.telek.TelekLogger){}[0]
+
+    final fun onInput(kotlin/Long, io.github.youndie.telek/Input) // io.github.youndie.telek/Telek.onInput|onInput(kotlin.Long;io.github.youndie.telek.Input){}[0]
+}
+
+final class io.github.youndie.telek/UpdateResult { // io.github.youndie.telek/UpdateResult|null[0]
+    constructor <init>(io.github.youndie.telek/State?, io.github.youndie.telek/State, kotlin.collections/List<io.github.youndie.telek/Effect>, io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>?) // io.github.youndie.telek/UpdateResult.<init>|<init>(io.github.youndie.telek.State?;io.github.youndie.telek.State;kotlin.collections.List<io.github.youndie.telek.Effect>;io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>?){}[0]
+
+    final val dispatcher // io.github.youndie.telek/UpdateResult.dispatcher|{}dispatcher[0]
+        final fun <get-dispatcher>(): io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>? // io.github.youndie.telek/UpdateResult.dispatcher.<get-dispatcher>|<get-dispatcher>(){}[0]
+    final val effects // io.github.youndie.telek/UpdateResult.effects|{}effects[0]
+        final fun <get-effects>(): kotlin.collections/List<io.github.youndie.telek/Effect> // io.github.youndie.telek/UpdateResult.effects.<get-effects>|<get-effects>(){}[0]
+    final val newState // io.github.youndie.telek/UpdateResult.newState|{}newState[0]
+        final fun <get-newState>(): io.github.youndie.telek/State // io.github.youndie.telek/UpdateResult.newState.<get-newState>|<get-newState>(){}[0]
+    final val oldState // io.github.youndie.telek/UpdateResult.oldState|{}oldState[0]
+        final fun <get-oldState>(): io.github.youndie.telek/State? // io.github.youndie.telek/UpdateResult.oldState.<get-oldState>|<get-oldState>(){}[0]
+
+    final fun component1(): io.github.youndie.telek/State? // io.github.youndie.telek/UpdateResult.component1|component1(){}[0]
+    final fun component2(): io.github.youndie.telek/State // io.github.youndie.telek/UpdateResult.component2|component2(){}[0]
+    final fun component3(): kotlin.collections/List<io.github.youndie.telek/Effect> // io.github.youndie.telek/UpdateResult.component3|component3(){}[0]
+    final fun component4(): io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>? // io.github.youndie.telek/UpdateResult.component4|component4(){}[0]
+    final fun copy(io.github.youndie.telek/State? = ..., io.github.youndie.telek/State = ..., kotlin.collections/List<io.github.youndie.telek/Effect> = ..., io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>? = ...): io.github.youndie.telek/UpdateResult // io.github.youndie.telek/UpdateResult.copy|copy(io.github.youndie.telek.State?;io.github.youndie.telek.State;kotlin.collections.List<io.github.youndie.telek.Effect>;io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/UpdateResult.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/UpdateResult.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/UpdateResult.toString|toString(){}[0]
+}
+
+final object io.github.youndie.telek/EffectSuccess : io.github.youndie.telek/EffectResult // io.github.youndie.telek/EffectSuccess|null[0]
+
+final object io.github.youndie.telek/EmptyState : io.github.youndie.telek/State { // io.github.youndie.telek/EmptyState|null[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/EmptyState.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/EmptyState.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/EmptyState.toString|toString(){}[0]
+}
+
+final val io.github.youndie.telek/telekIoDispatcher // io.github.youndie.telek/telekIoDispatcher|{}telekIoDispatcher[0]
+    final fun <get-telekIoDispatcher>(): kotlinx.coroutines/CoroutineDispatcher // io.github.youndie.telek/telekIoDispatcher.<get-telekIoDispatcher>|<get-telekIoDispatcher>(){}[0]
+
+final fun <#A: io.github.youndie.telek/State> io.github.youndie.telek/noTransition(#A): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/noTransition|noTransition(0:0){0§<io.github.youndie.telek.State>}[0]
+final inline fun <#A: io.github.youndie.telek/State> io.github.youndie.telek/transition(kotlin/Function1<io.github.youndie.telek/TransitionBuilder<#A>, kotlin/Unit>): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/transition|transition(kotlin.Function1<io.github.youndie.telek.TransitionBuilder<0:0>,kotlin.Unit>){0§<io.github.youndie.telek.State>}[0]

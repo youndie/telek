@@ -1,0 +1,25 @@
+public class io/github/youndie/telek/persistence/FileStateStorage : io/github/youndie/telek/StateStorage {
+	public static final field Companion Lio/github/youndie/telek/persistence/FileStateStorage$Companion;
+	public fun <init> (Lokio/Path;Lkotlinx/serialization/KSerializer;Lio/github/youndie/telek/TelekLogger;Lokio/FileSystem;)V
+	public synthetic fun <init> (Lokio/Path;Lkotlinx/serialization/KSerializer;Lio/github/youndie/telek/TelekLogger;Lokio/FileSystem;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun delete (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun load (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun save (JLio/github/youndie/telek/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/persistence/FileStateStorage$Companion {
+	public final fun getJson ()Lkotlinx/serialization/json/Json;
+}
+
+public final class io/github/youndie/telek/persistence/PersistableUserStateStoreImpl : io/github/youndie/telek/UserStateStore {
+	public fun <init> (Lio/github/youndie/telek/StateStorage;)V
+	public fun clear (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun get (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun getStateStorage ()Lio/github/youndie/telek/StateStorage;
+	public fun update (JLkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/persistence/SystemFileSystem_jvmKt {
+	public static final fun getSystemFileSystem ()Lokio/FileSystem;
+}
+

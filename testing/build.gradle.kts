@@ -15,6 +15,9 @@ plugins {
 // force an `expect/actual` for `Dispatchers.IO`, which lives in coroutines' `concurrent` source set
 // rather than in `common`, with nothing asking for it.
 kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation {}
+
     jvm {
         withSourcesJar()
     }

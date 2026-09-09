@@ -1,0 +1,266 @@
+public abstract interface class io/github/youndie/telek/AsyncEffectHandler {
+	public abstract fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/Callback : io/github/youndie/telek/Input {
+	public fun <init> (JJLjava/lang/String;)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun copy (JJLjava/lang/String;)Lio/github/youndie/telek/Callback;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/Callback;JJLjava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/Callback;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getChatId ()J
+	public final fun getData ()Ljava/lang/String;
+	public final fun getMessageId ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/telek/Debounced {
+	public abstract fun getDebounceKey ()Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/DefaultFindDispatcherStrategy : io/github/youndie/telek/FindDispatcherStrategy {
+	public fun <init> (Ljava/util/List;)V
+	public fun findDispatcher (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Input;)Lio/github/youndie/telek/StateDispatcher;
+}
+
+public abstract interface class io/github/youndie/telek/Dispatcher {
+	public abstract fun getStartCommand ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/telek/Effect {
+}
+
+public abstract interface class io/github/youndie/telek/EffectExecutor {
+	public abstract fun execute (Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/EffectExecutorImpl : io/github/youndie/telek/EffectExecutor {
+	public fun <init> (Lio/github/youndie/telek/EffectRegistry;Lkotlin/jvm/functions/Function1;Lio/github/youndie/telek/EffectFailurePolicy;Lio/github/youndie/telek/TelekLogger;)V
+	public synthetic fun <init> (Lio/github/youndie/telek/EffectRegistry;Lkotlin/jvm/functions/Function1;Lio/github/youndie/telek/EffectFailurePolicy;Lio/github/youndie/telek/TelekLogger;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun execute (Ljava/util/List;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/EffectFailed : io/github/youndie/telek/EffectResult {
+	public fun <init> (Ljava/lang/Throwable;)V
+	public final fun getError ()Ljava/lang/Throwable;
+}
+
+public final class io/github/youndie/telek/EffectFailurePolicy : java/lang/Enum {
+	public static final field CONTINUE Lio/github/youndie/telek/EffectFailurePolicy;
+	public static final field FAIL_FAST Lio/github/youndie/telek/EffectFailurePolicy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/youndie/telek/EffectFailurePolicy;
+	public static fun values ()[Lio/github/youndie/telek/EffectFailurePolicy;
+}
+
+public abstract interface class io/github/youndie/telek/EffectHandler {
+	public abstract fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/EffectRegistry {
+	public fun <init> ()V
+	public final fun get (Lkotlin/reflect/KClass;)Lio/github/youndie/telek/EffectHandler;
+	public final fun getAsync (Lkotlin/reflect/KClass;)Lio/github/youndie/telek/AsyncEffectHandler;
+	public final fun register (Lkotlin/reflect/KClass;Lio/github/youndie/telek/EffectHandler;)V
+	public final fun registerAsync (Lkotlin/reflect/KClass;Lio/github/youndie/telek/AsyncEffectHandler;)V
+}
+
+public abstract interface class io/github/youndie/telek/EffectResult {
+}
+
+public final class io/github/youndie/telek/EffectSuccess : io/github/youndie/telek/EffectResult {
+	public static final field INSTANCE Lio/github/youndie/telek/EffectSuccess;
+}
+
+public final class io/github/youndie/telek/EmptyState : io/github/youndie/telek/State {
+	public static final field INSTANCE Lio/github/youndie/telek/EmptyState;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/telek/Event {
+	public abstract fun getChatId ()J
+}
+
+public abstract interface class io/github/youndie/telek/ExecutionContext {
+}
+
+public abstract interface class io/github/youndie/telek/FinalState {
+}
+
+public abstract interface class io/github/youndie/telek/FindDispatcherStrategy {
+	public abstract fun findDispatcher (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Input;)Lio/github/youndie/telek/StateDispatcher;
+	public static synthetic fun findDispatcher$default (Lio/github/youndie/telek/FindDispatcherStrategy;Lio/github/youndie/telek/State;Lio/github/youndie/telek/Input;ILjava/lang/Object;)Lio/github/youndie/telek/StateDispatcher;
+}
+
+public final class io/github/youndie/telek/FindDispatcherStrategy$DefaultImpls {
+	public static synthetic fun findDispatcher$default (Lio/github/youndie/telek/FindDispatcherStrategy;Lio/github/youndie/telek/State;Lio/github/youndie/telek/Input;ILjava/lang/Object;)Lio/github/youndie/telek/StateDispatcher;
+}
+
+public abstract interface class io/github/youndie/telek/InitialStateProvider {
+	public abstract fun initialState (J)Lio/github/youndie/telek/State;
+}
+
+public abstract interface class io/github/youndie/telek/Input {
+	public abstract fun getChatId ()J
+}
+
+public final class io/github/youndie/telek/IoDispatcher_jvmKt {
+	public static final fun getTelekIoDispatcher ()Lkotlinx/coroutines/CoroutineDispatcher;
+}
+
+public final class io/github/youndie/telek/Message : io/github/youndie/telek/Input {
+	public fun <init> (JLjava/lang/String;)V
+	public final fun component1 ()J
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (JLjava/lang/String;)Lio/github/youndie/telek/Message;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/Message;JLjava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/Message;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getChatId ()J
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/telek/State {
+}
+
+public abstract class io/github/youndie/telek/StateDispatcher : io/github/youndie/telek/Dispatcher, io/github/youndie/telek/StateMachine {
+	protected field transitionGate Lio/github/youndie/telek/TransitionGate;
+	public fun <init> ()V
+	public final fun attach (Lio/github/youndie/telek/TransitionGate;)V
+	public fun canHandleCallback (Ljava/lang/String;)Z
+	public fun entry (Lio/github/youndie/telek/Input;)Lio/github/youndie/telek/TransitionResult;
+	public abstract fun getStateClass ()Lkotlin/reflect/KClass;
+	protected final fun getTransitionGate ()Lio/github/youndie/telek/TransitionGate;
+	public final fun handle (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Input;)Lio/github/youndie/telek/TransitionResult;
+	public final fun handleEvent (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Event;)Lio/github/youndie/telek/TransitionResult;
+	public fun onEffectResult (Lio/github/youndie/telek/State;Lio/github/youndie/telek/EffectResult;)V
+	public fun onEffectResults (Lio/github/youndie/telek/State;Ljava/util/List;)V
+	protected final fun setTransitionGate (Lio/github/youndie/telek/TransitionGate;)V
+	public fun transition (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Event;)Lio/github/youndie/telek/TransitionResult;
+}
+
+public abstract interface class io/github/youndie/telek/StateMachine {
+	public abstract fun transition (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Input;)Lio/github/youndie/telek/TransitionResult;
+}
+
+public abstract interface class io/github/youndie/telek/StateStorage {
+	public abstract fun delete (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun load (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun save (JLio/github/youndie/telek/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class io/github/youndie/telek/Telek {
+	public synthetic fun <init> (Lkotlinx/coroutines/CoroutineScope;Lio/github/youndie/telek/UserStateStore;Ljava/util/List;Lio/github/youndie/telek/InitialStateProvider;Ljava/util/List;Lio/github/youndie/telek/EffectExecutor;Lio/github/youndie/telek/FindDispatcherStrategy;JILio/github/youndie/telek/TelekLogger;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lkotlinx/coroutines/CoroutineScope;Lio/github/youndie/telek/UserStateStore;Ljava/util/List;Lio/github/youndie/telek/InitialStateProvider;Ljava/util/List;Lio/github/youndie/telek/EffectExecutor;Lio/github/youndie/telek/FindDispatcherStrategy;JILio/github/youndie/telek/TelekLogger;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun onInput (JLio/github/youndie/telek/Input;)V
+}
+
+public abstract interface class io/github/youndie/telek/TelekInterceptor {
+	public fun onAfterStateChanged (JLio/github/youndie/telek/State;Lio/github/youndie/telek/State;)V
+	public fun onBeforeInput (JLio/github/youndie/telek/Input;)V
+	public fun onError (JLio/github/youndie/telek/Input;Ljava/lang/Throwable;)V
+}
+
+public final class io/github/youndie/telek/TelekInterceptor$DefaultImpls {
+	public static fun onAfterStateChanged (Lio/github/youndie/telek/TelekInterceptor;JLio/github/youndie/telek/State;Lio/github/youndie/telek/State;)V
+	public static fun onBeforeInput (Lio/github/youndie/telek/TelekInterceptor;JLio/github/youndie/telek/Input;)V
+	public static fun onError (Lio/github/youndie/telek/TelekInterceptor;JLio/github/youndie/telek/Input;Ljava/lang/Throwable;)V
+}
+
+public final class io/github/youndie/telek/TelekLogLevel : java/lang/Enum {
+	public static final field DEBUG Lio/github/youndie/telek/TelekLogLevel;
+	public static final field ERROR Lio/github/youndie/telek/TelekLogLevel;
+	public static final field WARN Lio/github/youndie/telek/TelekLogLevel;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/youndie/telek/TelekLogLevel;
+	public static fun values ()[Lio/github/youndie/telek/TelekLogLevel;
+}
+
+public abstract interface class io/github/youndie/telek/TelekLogger {
+	public static final field Companion Lio/github/youndie/telek/TelekLogger$Companion;
+	public fun debug (Ljava/lang/String;)V
+	public fun error (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun error$default (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public abstract fun log (Lio/github/youndie/telek/TelekLogLevel;Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun log$default (Lio/github/youndie/telek/TelekLogger;Lio/github/youndie/telek/TelekLogLevel;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public fun warn (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun warn$default (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/telek/TelekLogger$Companion {
+	public final fun getNoOp ()Lio/github/youndie/telek/TelekLogger;
+}
+
+public final class io/github/youndie/telek/TelekLogger$DefaultImpls {
+	public static fun debug (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;)V
+	public static fun error (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun error$default (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public static synthetic fun log$default (Lio/github/youndie/telek/TelekLogger;Lio/github/youndie/telek/TelekLogLevel;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+	public static fun warn (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;Ljava/lang/Throwable;)V
+	public static synthetic fun warn$default (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/telek/TransitionBuilder {
+	public field newState Lio/github/youndie/telek/State;
+	public fun <init> ()V
+	public final fun add (Lio/github/youndie/telek/Effect;)V
+	public final fun build ()Lio/github/youndie/telek/TransitionResult;
+	public final fun getNewState ()Lio/github/youndie/telek/State;
+	public final fun setNewState (Lio/github/youndie/telek/State;)V
+}
+
+public final class io/github/youndie/telek/TransitionBuilderKt {
+	public static final fun noTransition (Lio/github/youndie/telek/State;)Lio/github/youndie/telek/TransitionResult;
+	public static final fun transition (Lkotlin/jvm/functions/Function1;)Lio/github/youndie/telek/TransitionResult;
+}
+
+public abstract interface class io/github/youndie/telek/TransitionGate {
+	public abstract fun post (JLkotlin/jvm/functions/Function1;)V
+}
+
+public final class io/github/youndie/telek/TransitionResult {
+	public fun <init> (Lio/github/youndie/telek/State;Ljava/util/List;)V
+	public synthetic fun <init> (Lio/github/youndie/telek/State;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/youndie/telek/State;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Lio/github/youndie/telek/State;Ljava/util/List;)Lio/github/youndie/telek/TransitionResult;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/TransitionResult;Lio/github/youndie/telek/State;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/telek/TransitionResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEffects ()Ljava/util/List;
+	public final fun getNewState ()Lio/github/youndie/telek/State;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/UpdateResult {
+	public fun <init> (Lio/github/youndie/telek/State;Lio/github/youndie/telek/State;Ljava/util/List;Lio/github/youndie/telek/StateDispatcher;)V
+	public final fun component1 ()Lio/github/youndie/telek/State;
+	public final fun component2 ()Lio/github/youndie/telek/State;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Lio/github/youndie/telek/StateDispatcher;
+	public final fun copy (Lio/github/youndie/telek/State;Lio/github/youndie/telek/State;Ljava/util/List;Lio/github/youndie/telek/StateDispatcher;)Lio/github/youndie/telek/UpdateResult;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/UpdateResult;Lio/github/youndie/telek/State;Lio/github/youndie/telek/State;Ljava/util/List;Lio/github/youndie/telek/StateDispatcher;ILjava/lang/Object;)Lio/github/youndie/telek/UpdateResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDispatcher ()Lio/github/youndie/telek/StateDispatcher;
+	public final fun getEffects ()Ljava/util/List;
+	public final fun getNewState ()Lio/github/youndie/telek/State;
+	public final fun getOldState ()Lio/github/youndie/telek/State;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class io/github/youndie/telek/UserStateStore {
+	public abstract fun clear (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun get (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun update (JLkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface annotation class io/github/youndie/telek/WizardDsl : java/lang/annotation/Annotation {
+}
+
