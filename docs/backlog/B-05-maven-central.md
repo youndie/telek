@@ -105,3 +105,42 @@ Central.
 the strength of `sborka.central=true`: configuration is not publication, and the criterion that
 would prove publication — a cold-cache scratch project resolving from `mavenCentral()` — is exactly
 the one that cannot run until the release is real.
+
+## Half the question, answered — 2026-09-17
+
+**`:telegram` goes to Central with everything else, and the README says why the second repository
+is there.** This settles the fact B-19 carried in; the other half — who dispatches and who releases
+— is untouched and still the owner's.
+
+- **The choice was never between two repositories and one.** A consumer of `:telegram` needs
+  JitPack either way: kotlin-telegram-bot is 404 on Central and 200 on JitPack, and that is true of
+  the module, not of where telek is served from. Publishing `:telegram` to Central inherits that
+  requirement; it does not create it.
+- **The alternative is worse for exactly the consumer it was meant to protect.** "`:ktg` on Central,
+  `:telegram` on snapshots" leaves a `:telegram` user adding JitPack *and* a personal Reposilite,
+  and the Reposilite is the bigger ask by far — it is one account's server, which is the sentence
+  that opens this item.
+- **It is not on offer anyway, and that was checked rather than assumed.** `sborka.central` is read
+  with `providers.gradleProperty` in the shared `publish` convention, so it is one flag for the
+  whole repository. The only module-level control is applying `io.github.youndie.sborka.publish` or
+  not — which is how `docs-samples` stays unpublished — and dropping it from `:telegram` would take
+  that module off the **snapshot** repository too, where its current consumers resolve it. So the
+  real options are all modules or none.
+- **The instructions already exist and are already checked.** [B-19](B-19-telegram-needs-a-repository-nobody-mentions.md)
+  put the JitPack line in `README.md`'s installation block, scoped to
+  `io.github.kotlin-telegram-bot.*`, saying what it is for, what the failure looks like without it,
+  and that `:ktg` needs none of it. `ci/consumer` copies that block, so the two cannot drift
+  silently.
+- **`:ktg` is where a reader is pointed, and it costs nothing extra.** ktgbotapi is on Central.
+  `:telegram` is in maintenance; documenting one extra repository for it is cheaper than vendoring
+  kotlin-telegram-bot, and much cheaper than leaving the module unresolvable.
+
+**What this predicts, and where it would be caught.** A POM on Central naming a dependency Central
+cannot serve is unusual but not forbidden — Central validates the bundle, not the resolvability of
+its transitive graph. If the upload disagrees, the staged bundle is where that shows up, before
+anything is permanent, and the fallback is to drop `sborka.publish` from `:telegram` and
+`:router-telegram` and say in the README that those two stay on snapshots. Named here so whoever
+dispatches recognises it instead of rediscovering it.
+
+So AC 3 — `README.md` no longer naming Reposilite — now means: Central for the coordinates, JitPack
+kept and kept explained. Not Reposilite.
