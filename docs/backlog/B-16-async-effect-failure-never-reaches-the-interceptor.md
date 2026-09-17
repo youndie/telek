@@ -1,7 +1,7 @@
 ---
 id: B-16
 title: "An async effect that throws reaches no interceptor, only the logger"
-status: open
+status: wip
 priority: P2
 size: S
 stage: stage-3-debts

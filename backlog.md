@@ -59,7 +59,7 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 | [B-06](docs/backlog/B-06-github-release.md) `[ ]` | Tag the release and put the notes where a stranger looks for them | P1 | XS | B-05 |
 | [B-07](docs/backlog/B-07-real-bot-in-production.md) `[ ]` | A bot that is not a sample: telek in production, as a native binary on :ktg | P1 | L | B-05 |
 | [B-08](docs/backlog/B-08-state-slot.md) `[ ]` | StateSlot: a bot with a user profile has nowhere to put it | P2 | M | B-07 |
-| [B-16](docs/backlog/B-16-async-effect-failure-never-reaches-the-interceptor.md) `[ ]` | An async effect that throws reaches no interceptor, only the logger | P2 | S | - |
+| [B-16](docs/backlog/B-16-async-effect-failure-never-reaches-the-interceptor.md) `[~]` | An async effect that throws reaches no interceptor, only the logger | P2 | S | - |
 
 ## Closed (11)
 
