@@ -1,7 +1,7 @@
 ---
 id: B-03
 title: "Input is a text message or a callback, so no wizard can ask for a photo"
-status: open
+status: wip
 priority: P1
 size: M
 stage: stage-0-input-model
