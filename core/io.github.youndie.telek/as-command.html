@@ -2,8 +2,8 @@
 <html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>DefaultFindDispatcherStrategy</title>
-<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <title>asCommand</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
     <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
       if (storage == null) {
@@ -19,22 +19,22 @@
       }
     </script>
 <script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
-<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
-<link href="../../../styles/style.css" rel="Stylesheet">
-<link href="../../../styles/main.css" rel="Stylesheet">
-<link href="../../../styles/prism.css" rel="Stylesheet">
-<link href="../../../styles/logo-styles.css" rel="Stylesheet">
-<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
-<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
-<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
-<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
-<script type="text/javascript" src="../../../scripts/main.js" defer></script>
-<script type="text/javascript" src="../../../scripts/prism.js" async></script>
-<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script></head>
 <body>
 <div class="root">
     <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
-<a class="library-name--link" href="../../../index.html" tabindex="1">
+<a class="library-name--link" href="../../index.html" tabindex="1">
                     telek
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
@@ -90,12 +90,12 @@
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" data-page-type="member" id="content" pageids="core::io.github.youndie.telek/DefaultFindDispatcherStrategy/DefaultFindDispatcherStrategy/#kotlin.collections.List[io.github.youndie.telek.StateDispatcher[io.github.youndie.telek.State]]#kotlin.String?/PointingToDeclaration//1239919082">
-  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">io.github.youndie.telek</a><span class="delimiter">/</span><a href="index.html">DefaultFindDispatcherStrategy</a><span class="delimiter">/</span><span class="current">DefaultFindDispatcherStrategy</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="core::io.github.youndie.telek//asCommand/io.github.youndie.telek.Message#/PointingToDeclaration//1239919082">
+  <div class="breadcrumbs"><a href="../index.html">core</a><span class="delimiter">/</span><a href="index.html">io.github.youndie.telek</a><span class="delimiter">/</span><span class="current">asCommand</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Default</span><wbr><span>Find</span><wbr><span>Dispatcher</span><wbr><span><span>Strategy</span></span></h1>
+    <h1 class="cover"><span>as</span><wbr><span><span>Command</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dispatchers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-state-dispatcher/index.html">StateDispatcher</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../-state/index.html">State</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">botUsername<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>bot</span><wbr><span><span>Username</span></span></u></div></span></div><div><div class="title"><p class="paragraph">the bot's own <code class="lang-kotlin">@name</code>, without the <code class="lang-kotlin">@</code>. Telegram appends <code class="lang-kotlin">@botname</code> to a command whenever more than one bot can see the chat, and that suffix is the only thing saying which bot was meant. Left <code class="lang-kotlin">null</code> — the default, because telek cannot know the name on its own — a command addressed to <i>any</i> bot is handled, which is right in a private chat and in a group with one bot, and wrong in a group with two: this bot would answer commands meant for the other. Pass the name and a command addressed elsewhere stops being a command here; it reaches the current state's dispatcher as the ordinary message it is, rather than vanishing.</p></div></div></div></div></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">fun </span><a href="-message/index.html">Message</a><span class="token punctuation">.</span><a href="as-command.html"><span class="token function">asCommand</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-command/index.html">Command</a><span class="token operator">?</span></div><p class="paragraph">Parses <a href="-message/text.html">Message.text</a> as a command, or returns <code class="lang-kotlin">null</code> when it is not one.</p><p class="paragraph">Splitting happens at the first whitespace rather than at a space, because a command pasted with a newline after it is still that command — Telegram's own clients produce it.</p></div></div>
 </div>
     <div class="footer">
         <div class="footer--container">
