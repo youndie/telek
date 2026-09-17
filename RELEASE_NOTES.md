@@ -1,6 +1,10 @@
 # Release notes
 
-## Unreleased
+## 0.4.0
+
+The conversation key, the input model, and the API surface a consumer actually sees. Most of what
+follows is breaking, and all of it breaks in the same direction: telek now says what it means
+instead of implying it, and says it at compile time where it used to decide silently.
 
 **A conversation is no longer keyed by its `chatId`.** State, the per-conversation actor, the
 inbox and the stored file are all filed under a new `ConversationKey` — a chat, or a person within
