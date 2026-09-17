@@ -1,7 +1,7 @@
 ---
 id: B-09
 title: "onEffectResults cannot say which result came from which effect"
-status: open
+status: wip
 priority: P2
 size: S/M
 stage: stage-3-debts
