@@ -11,12 +11,11 @@ rootProject.name = "telek-consumer"
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        // WORKING AROUND B-19, DELIBERATELY NOT FIXED HERE. :telegram and :router-telegram depend
-        // on kotlin-telegram-bot, which is on JitPack and not on Maven Central -- and the README's
-        // installation block does not say so, so a consumer following it gets "Could not find
-        // io.github.kotlin-telegram-bot…" and no reason to suspect telek. Filtered to the group it
-        // answers for: an unfiltered repository takes part in resolving everything, and when it is
-        // unreachable Gradle disables it and fails artifacts that were perfectly fine.
+        // What the README's installation block now says, copied from it -- which is the point:
+        // :telegram and :router-telegram depend on kotlin-telegram-bot, which is on JitPack and not
+        // on Maven Central. This consumer is what noticed that the instructions omitted it (B-19),
+        // so it is also what keeps them honest: if the README ever loses this line, the two stop
+        // matching and somebody has to decide which was right.
         maven("https://jitpack.io") {
             content { includeGroupByRegex("io\\.github\\.kotlin-telegram-bot.*") }
         }
@@ -35,12 +34,11 @@ dependencyResolutionManagement {
         maven(providers.gradleProperty("telek.repo").getOrElse("https://reposilite.kotlin.website/snapshots")) {
             content { includeGroupAndSubgroups("io.github.youndie") }
         }
-        // WORKING AROUND B-19, DELIBERATELY NOT FIXED HERE. :telegram and :router-telegram depend
-        // on kotlin-telegram-bot, which is on JitPack and not on Maven Central -- and the README's
-        // installation block does not say so, so a consumer following it gets "Could not find
-        // io.github.kotlin-telegram-bot…" and no reason to suspect telek. Filtered to the group it
-        // answers for: an unfiltered repository takes part in resolving everything, and when it is
-        // unreachable Gradle disables it and fails artifacts that were perfectly fine.
+        // What the README's installation block now says, copied from it -- which is the point:
+        // :telegram and :router-telegram depend on kotlin-telegram-bot, which is on JitPack and not
+        // on Maven Central. This consumer is what noticed that the instructions omitted it (B-19),
+        // so it is also what keeps them honest: if the README ever loses this line, the two stop
+        // matching and somebody has to decide which was right.
         maven("https://jitpack.io") {
             content { includeGroupByRegex("io\\.github\\.kotlin-telegram-bot.*") }
         }

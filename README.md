@@ -26,6 +26,19 @@ repositories {
         name = "reposiliteRepositorySnapshots"
         url = uri("https://reposilite.kotlin.website/snapshots")
     }
+
+    // ONLY IF YOU USE `telegram` OR `router-telegram`. kotlin-telegram-bot is published on JitPack
+    // and not on Maven Central, so without this the build fails with "Could not find
+    // io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram" — an error that names somebody
+    // else's library and gives you no reason to suspect this page. `ktg` needs none of it:
+    // ktgbotapi is on Maven Central, which is one more reason it is the transport.
+    //
+    // Filtered to the group it answers for. An unfiltered repository takes part in resolving every
+    // dependency, and when it is unreachable Gradle disables it and fails artifacts that were
+    // perfectly fine.
+    maven("https://jitpack.io") {
+        content { includeGroupByRegex("io\\.github\\.kotlin-telegram-bot.*") }
+    }
 }
 
 dependencies {
