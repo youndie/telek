@@ -18,25 +18,25 @@ import kotlinx.coroutines.yield
 import kotlin.time.Duration
 
 /**
- * Runs the work submitted for a given chatId strictly sequentially, one task at a time, in
- * submission order — regardless of how many callers concurrently call [submit] for that chatId.
- * Work submitted for different chatIds runs fully in parallel. Also lets a chat's async effects
- * (see [launchAsync]) run independently of that ordering, while still being tied to the chat's
- * lifecycle so they're cancelled when the chat goes idle.
+ * Runs the work submitted for a given [ConversationKey] strictly sequentially, one task at a time,
+ * in submission order — regardless of how many callers concurrently call [submit] for that key.
+ * Work submitted for different keys runs fully in parallel, and in a group two members are two
+ * keys. Also lets a conversation's async effects (see [launchAsync]) run independently of that
+ * ordering, while still being tied to its lifecycle so they're cancelled when it goes idle.
  *
- * This is what lets [Telek] guarantee in-order processing per chat without any locking in
+ * This is what lets [Telek] guarantee in-order processing per conversation without any locking in
  * [UserStateStore] implementations: at most one [update][UserStateStore.update] call for a given
- * chatId is ever in flight, so implementations do not need to serialize themselves.
+ * key is ever in flight, so implementations do not need to serialize themselves.
  *
- * A worker for a chatId is torn down after [idleTimeout] of inactivity and transparently
- * recreated on the next [submit] for that chatId, so memory use is bounded by *currently active*
- * chats rather than by every chatId ever seen.
+ * A worker is torn down after [idleTimeout] of inactivity and transparently recreated on the next
+ * [submit] for that key, so memory use is bounded by *currently active* conversations rather than
+ * by every key ever seen.
  *
- * [submit] never suspends waiting for room: each chat's inbox holds at most [inboxCapacity]
- * pending tasks. Once full, further [submit] calls for that chat **drop** the new task and log a
- * warning via [logger] rather than growing without bound or blocking the caller — a chat that's
- * producing input faster than it can be processed (e.g. a user hammering an inline button) loses
- * the newest input instead of exhausting memory or stalling whoever calls [submit].
+ * [submit] never suspends waiting for room: each conversation's inbox holds at most
+ * [inboxCapacity] pending tasks. Once full, further [submit] calls for it **drop** the new task and
+ * log a warning via [logger] rather than growing without bound or blocking the caller — a
+ * conversation producing input faster than it can be processed (e.g. a user hammering an inline
+ * button) loses the newest input instead of exhausting memory or stalling whoever calls [submit].
  */
 internal class ChatWorkers(
     private val scope: CoroutineScope,
@@ -49,7 +49,7 @@ internal class ChatWorkers(
     // section here is a single map lookup/insert/removal that never suspends — see [workerFor] for
     // why worker *construction* is deliberately kept outside the lock.
     private val workersLock = SynchronizedObject()
-    private val workers = mutableMapOf<Long, Worker>()
+    private val workers = mutableMapOf<ConversationKey, Worker>()
 
     /**
      * `computeIfAbsent`'s replacement. A [Worker] must not be built while [workersLock] is held:
@@ -58,25 +58,25 @@ internal class ChatWorkers(
      * the lock, published under it, and only started if it actually won the insert — a loser is
      * simply dropped, never having started anything.
      */
-    private fun workerFor(chatId: Long): Worker {
-        synchronized(workersLock) { workers[chatId] }?.let { return it }
+    private fun workerFor(key: ConversationKey): Worker {
+        synchronized(workersLock) { workers[key] }?.let { return it }
 
-        val candidate = Worker(chatId)
-        val winner = synchronized(workersLock) { workers.getOrPut(chatId) { candidate } }
+        val candidate = Worker(key)
+        val winner = synchronized(workersLock) { workers.getOrPut(key) { candidate } }
         if (winner === candidate) candidate.start()
         return winner
     }
 
     /**
-     * Enqueues [task] for [chatId] and returns once it has either been accepted or dropped — not
-     * once it has run. See the class doc for what happens when that chat's inbox is full.
+     * Enqueues [task] for [key] and returns once it has either been accepted or dropped — not
+     * once it has run. See the class doc for what happens when that inbox is full.
      */
     suspend fun submit(
-        chatId: Long,
+        key: ConversationKey,
         task: suspend () -> Unit,
     ) {
         while (true) {
-            val worker = workerFor(chatId)
+            val worker = workerFor(key)
             when (worker.trySend(task)) {
                 SendOutcome.ACCEPTED -> {
                     return
@@ -92,7 +92,7 @@ internal class ChatWorkers(
                 }
 
                 SendOutcome.DROPPED -> {
-                    logger.warn("Dropping input for chatId=$chatId — inbox is full (capacity=$inboxCapacity)")
+                    logger.warn("Dropping input for $key — inbox is full (capacity=$inboxCapacity)")
                     return
                 }
             }
@@ -102,28 +102,29 @@ internal class ChatWorkers(
     /**
      * Launches [task] independently of [submit]'s ordering — for async effects, which must not
      * block the transition that produced them. Fire-and-forget: doesn't wait for [task], and
-     * [task] is cancelled if this chat's worker retires (see [Worker.retire]).
+     * [task] is cancelled if this conversation's worker retires (see [Worker.retire]).
      *
-     * If [key] is non-null (see [Debounced]), any previously launched, still-running [task] for
-     * this same chat and [key] is cancelled first — at most one debounced job per (chatId, key)
-     * runs at a time. `null` (the default) means "never auto-cancelled".
+     * If [debounceKey] is non-null (see [Debounced]), any previously launched, still-running
+     * [task] for this same conversation and [debounceKey] is cancelled first — at most one
+     * debounced job per (key, debounceKey) runs at a time. `null` (the default) means "never
+     * auto-cancelled".
      *
-     * Must be called from within a task already running on that chat's worker (i.e. from inside a
-     * [submit]ted task — which is exactly where [Telek] calls it from, while executing a chat's
-     * effects), so the worker is guaranteed to still be live and not mid-retirement.
+     * Must be called from within a task already running on that conversation's worker (i.e. from
+     * inside a [submit]ted task — which is exactly where [Telek] calls it from, while executing
+     * its effects), so the worker is guaranteed to still be live and not mid-retirement.
      */
     fun launchAsync(
-        chatId: Long,
-        key: Any? = null,
+        key: ConversationKey,
+        debounceKey: Any? = null,
         task: suspend () -> Unit,
     ) {
-        workerFor(chatId).launchAsync(key, task)
+        workerFor(key).launchAsync(debounceKey, task)
     }
 
     private enum class SendOutcome { ACCEPTED, RETIRED, DROPPED }
 
     private inner class Worker(
-        private val chatId: Long,
+        private val key: ConversationKey,
     ) {
         // A dedicated scope per worker (not just `scope.launch` directly) is what lets async
         // effects launched via [launchAsync] be cancelled as a group when this worker retires,
@@ -169,20 +170,20 @@ internal class ChatWorkers(
             }
 
         fun launchAsync(
-            key: Any?,
+            debounceKey: Any?,
             task: suspend () -> Unit,
         ) {
-            if (key != null) {
+            if (debounceKey != null) {
                 // Read under the lock, cancel outside it: cancellation can synchronously run the
                 // previous job's own completion handler, which takes this same lock.
-                synchronized(debouncedLock) { debouncedJobs[key] }?.cancel()
+                synchronized(debouncedLock) { debouncedJobs[debounceKey] }?.cancel()
             }
             val job = workerScope.launch { task() }
-            if (key != null) {
-                synchronized(debouncedLock) { debouncedJobs[key] = job }
+            if (debounceKey != null) {
+                synchronized(debouncedLock) { debouncedJobs[debounceKey] = job }
                 job.invokeOnCompletion {
                     synchronized(debouncedLock) {
-                        if (debouncedJobs[key] === job) debouncedJobs.remove(key)
+                        if (debouncedJobs[debounceKey] === job) debouncedJobs.remove(debounceKey)
                     }
                 }
             }
@@ -224,7 +225,7 @@ internal class ChatWorkers(
          * only *after* that's fully done removes this worker from the map. Removing from the map
          * only at the end, rather than up front, is what stops a replacement worker from being
          * created and running concurrently with this one's tail end — see [submit]. Finally
-         * cancels [workerScope], stopping any still-in-flight async effects for this chat.
+         * cancels [workerScope], stopping any still-in-flight async effects for it.
          * Returns whether this worker actually retired.
          */
         private suspend fun retire(): Boolean {
@@ -243,9 +244,9 @@ internal class ChatWorkers(
                 val leftover = inbox.tryReceive().getOrNull() ?: break
                 leftover()
             }
-            // Remove-if-still-us: a replacement worker may already have taken this chatId's slot.
+            // Remove-if-still-us: a replacement worker may already have taken this key's slot.
             synchronized(workersLock) {
-                if (workers[chatId] === this) workers.remove(chatId)
+                if (workers[key] === this) workers.remove(key)
             }
             workerScope.cancel()
             return true

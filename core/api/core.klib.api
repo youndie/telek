@@ -21,6 +21,18 @@ final enum class io.github.youndie.telek/EffectFailurePolicy : kotlin/Enum<io.gi
     final fun values(): kotlin/Array<io.github.youndie.telek/EffectFailurePolicy> // io.github.youndie.telek/EffectFailurePolicy.values|values#static(){}[0]
 }
 
+final enum class io.github.youndie.telek/Keying : kotlin/Enum<io.github.youndie.telek/Keying> { // io.github.youndie.telek/Keying|null[0]
+    enum entry PerChat // io.github.youndie.telek/Keying.PerChat|null[0]
+    enum entry PerUserInChat // io.github.youndie.telek/Keying.PerUserInChat|null[0]
+
+    final val entries // io.github.youndie.telek/Keying.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.telek/Keying> // io.github.youndie.telek/Keying.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun key(kotlin/Long, kotlin/Long?): io.github.youndie.telek/ConversationKey // io.github.youndie.telek/Keying.key|key(kotlin.Long;kotlin.Long?){}[0]
+    final fun valueOf(kotlin/String): io.github.youndie.telek/Keying // io.github.youndie.telek/Keying.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.telek/Keying> // io.github.youndie.telek/Keying.values|values#static(){}[0]
+}
+
 final enum class io.github.youndie.telek/TelekLogLevel : kotlin/Enum<io.github.youndie.telek/TelekLogLevel> { // io.github.youndie.telek/TelekLogLevel|null[0]
     enum entry DEBUG // io.github.youndie.telek/TelekLogLevel.DEBUG|null[0]
     enum entry ERROR // io.github.youndie.telek/TelekLogLevel.ERROR|null[0]
@@ -34,7 +46,7 @@ final enum class io.github.youndie.telek/TelekLogLevel : kotlin/Enum<io.github.y
 }
 
 abstract fun interface io.github.youndie.telek/InitialStateProvider { // io.github.youndie.telek/InitialStateProvider|null[0]
-    abstract fun initialState(kotlin/Long): io.github.youndie.telek/State // io.github.youndie.telek/InitialStateProvider.initialState|initialState(kotlin.Long){}[0]
+    abstract fun initialState(io.github.youndie.telek/ConversationKey): io.github.youndie.telek/State // io.github.youndie.telek/InitialStateProvider.initialState|initialState(io.github.youndie.telek.ConversationKey){}[0]
 }
 
 abstract interface <#A: io.github.youndie.telek/Effect> io.github.youndie.telek/AsyncEffectHandler { // io.github.youndie.telek/AsyncEffectHandler|null[0]
@@ -50,13 +62,13 @@ abstract interface <#A: io.github.youndie.telek/State, #B: io.github.youndie.tel
 }
 
 abstract interface <#A: io.github.youndie.telek/State> io.github.youndie.telek/StateStorage { // io.github.youndie.telek/StateStorage|null[0]
-    abstract suspend fun delete(kotlin/Long) // io.github.youndie.telek/StateStorage.delete|delete(kotlin.Long){}[0]
-    abstract suspend fun load(kotlin/Long): #A? // io.github.youndie.telek/StateStorage.load|load(kotlin.Long){}[0]
-    abstract suspend fun save(kotlin/Long, #A) // io.github.youndie.telek/StateStorage.save|save(kotlin.Long;1:0){}[0]
+    abstract suspend fun delete(io.github.youndie.telek/ConversationKey) // io.github.youndie.telek/StateStorage.delete|delete(io.github.youndie.telek.ConversationKey){}[0]
+    abstract suspend fun load(io.github.youndie.telek/ConversationKey): #A? // io.github.youndie.telek/StateStorage.load|load(io.github.youndie.telek.ConversationKey){}[0]
+    abstract suspend fun save(io.github.youndie.telek/ConversationKey, #A) // io.github.youndie.telek/StateStorage.save|save(io.github.youndie.telek.ConversationKey;1:0){}[0]
 }
 
 abstract interface <#A: io.github.youndie.telek/State> io.github.youndie.telek/TransitionGate { // io.github.youndie.telek/TransitionGate|null[0]
-    abstract fun post(kotlin/Long, kotlin/Function1<#A, io.github.youndie.telek/TransitionResult<#A>>) // io.github.youndie.telek/TransitionGate.post|post(kotlin.Long;kotlin.Function1<1:0,io.github.youndie.telek.TransitionResult<1:0>>){}[0]
+    abstract fun post(io.github.youndie.telek/ConversationKey, kotlin/Function1<#A, io.github.youndie.telek/TransitionResult<#A>>) // io.github.youndie.telek/TransitionGate.post|post(io.github.youndie.telek.ConversationKey;kotlin.Function1<1:0,io.github.youndie.telek.TransitionResult<1:0>>){}[0]
 }
 
 abstract interface io.github.youndie.telek/Debounced { // io.github.youndie.telek/Debounced|null[0]
@@ -98,9 +110,9 @@ abstract interface io.github.youndie.telek/Input { // io.github.youndie.telek/In
 abstract interface io.github.youndie.telek/State // io.github.youndie.telek/State|null[0]
 
 abstract interface io.github.youndie.telek/TelekInterceptor { // io.github.youndie.telek/TelekInterceptor|null[0]
-    open fun onAfterStateChanged(kotlin/Long, io.github.youndie.telek/State?, io.github.youndie.telek/State) // io.github.youndie.telek/TelekInterceptor.onAfterStateChanged|onAfterStateChanged(kotlin.Long;io.github.youndie.telek.State?;io.github.youndie.telek.State){}[0]
-    open fun onBeforeInput(kotlin/Long, io.github.youndie.telek/Input) // io.github.youndie.telek/TelekInterceptor.onBeforeInput|onBeforeInput(kotlin.Long;io.github.youndie.telek.Input){}[0]
-    open fun onError(kotlin/Long, io.github.youndie.telek/Input?, kotlin/Throwable) // io.github.youndie.telek/TelekInterceptor.onError|onError(kotlin.Long;io.github.youndie.telek.Input?;kotlin.Throwable){}[0]
+    open fun onAfterStateChanged(io.github.youndie.telek/ConversationKey, io.github.youndie.telek/State?, io.github.youndie.telek/State) // io.github.youndie.telek/TelekInterceptor.onAfterStateChanged|onAfterStateChanged(io.github.youndie.telek.ConversationKey;io.github.youndie.telek.State?;io.github.youndie.telek.State){}[0]
+    open fun onBeforeInput(io.github.youndie.telek/ConversationKey, io.github.youndie.telek/Input) // io.github.youndie.telek/TelekInterceptor.onBeforeInput|onBeforeInput(io.github.youndie.telek.ConversationKey;io.github.youndie.telek.Input){}[0]
+    open fun onError(io.github.youndie.telek/ConversationKey, io.github.youndie.telek/Input?, kotlin/Throwable) // io.github.youndie.telek/TelekInterceptor.onError|onError(io.github.youndie.telek.ConversationKey;io.github.youndie.telek.Input?;kotlin.Throwable){}[0]
 }
 
 abstract interface io.github.youndie.telek/TelekLogger { // io.github.youndie.telek/TelekLogger|null[0]
@@ -116,9 +128,9 @@ abstract interface io.github.youndie.telek/TelekLogger { // io.github.youndie.te
 }
 
 abstract interface io.github.youndie.telek/UserStateStore { // io.github.youndie.telek/UserStateStore|null[0]
-    abstract suspend fun clear(kotlin/Long) // io.github.youndie.telek/UserStateStore.clear|clear(kotlin.Long){}[0]
-    abstract suspend fun get(kotlin/Long): io.github.youndie.telek/State? // io.github.youndie.telek/UserStateStore.get|get(kotlin.Long){}[0]
-    abstract suspend fun update(kotlin/Long, kotlin.coroutines/SuspendFunction1<io.github.youndie.telek/State?, io.github.youndie.telek/UpdateResult>): io.github.youndie.telek/UpdateResult // io.github.youndie.telek/UserStateStore.update|update(kotlin.Long;kotlin.coroutines.SuspendFunction1<io.github.youndie.telek.State?,io.github.youndie.telek.UpdateResult>){}[0]
+    abstract suspend fun clear(io.github.youndie.telek/ConversationKey) // io.github.youndie.telek/UserStateStore.clear|clear(io.github.youndie.telek.ConversationKey){}[0]
+    abstract suspend fun get(io.github.youndie.telek/ConversationKey): io.github.youndie.telek/State? // io.github.youndie.telek/UserStateStore.get|get(io.github.youndie.telek.ConversationKey){}[0]
+    abstract suspend fun update(io.github.youndie.telek/ConversationKey, kotlin.coroutines/SuspendFunction1<io.github.youndie.telek/State?, io.github.youndie.telek/UpdateResult>): io.github.youndie.telek/UpdateResult // io.github.youndie.telek/UserStateStore.update|update(io.github.youndie.telek.ConversationKey;kotlin.coroutines.SuspendFunction1<io.github.youndie.telek.State?,io.github.youndie.telek.UpdateResult>){}[0]
 }
 
 abstract class <#A: io.github.youndie.telek/State> io.github.youndie.telek/StateDispatcher : io.github.youndie.telek/Dispatcher, io.github.youndie.telek/StateMachine<#A, io.github.youndie.telek/Input> { // io.github.youndie.telek/StateDispatcher|null[0]
@@ -187,6 +199,29 @@ final class io.github.youndie.telek/Callback : io.github.youndie.telek/Input { /
     final fun toString(): kotlin/String // io.github.youndie.telek/Callback.toString|toString(){}[0]
 }
 
+final class io.github.youndie.telek/ConversationKey { // io.github.youndie.telek/ConversationKey|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long? = ...) // io.github.youndie.telek/ConversationKey.<init>|<init>(kotlin.Long;kotlin.Long?){}[0]
+
+    final val chatId // io.github.youndie.telek/ConversationKey.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/ConversationKey.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val storageId // io.github.youndie.telek/ConversationKey.storageId|{}storageId[0]
+        final fun <get-storageId>(): kotlin/String // io.github.youndie.telek/ConversationKey.storageId.<get-storageId>|<get-storageId>(){}[0]
+    final val userId // io.github.youndie.telek/ConversationKey.userId|{}userId[0]
+        final fun <get-userId>(): kotlin/Long? // io.github.youndie.telek/ConversationKey.userId.<get-userId>|<get-userId>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek/ConversationKey.component1|component1(){}[0]
+    final fun component2(): kotlin/Long? // io.github.youndie.telek/ConversationKey.component2|component2(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Long? = ...): io.github.youndie.telek/ConversationKey // io.github.youndie.telek/ConversationKey.copy|copy(kotlin.Long;kotlin.Long?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/ConversationKey.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/ConversationKey.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/ConversationKey.toString|toString(){}[0]
+
+    final object Companion { // io.github.youndie.telek/ConversationKey.Companion|null[0]
+        final fun chat(kotlin/Long): io.github.youndie.telek/ConversationKey // io.github.youndie.telek/ConversationKey.Companion.chat|chat(kotlin.Long){}[0]
+        final fun chatAndUser(kotlin/Long, kotlin/Long): io.github.youndie.telek/ConversationKey // io.github.youndie.telek/ConversationKey.Companion.chatAndUser|chatAndUser(kotlin.Long;kotlin.Long){}[0]
+    }
+}
+
 final class io.github.youndie.telek/DefaultFindDispatcherStrategy : io.github.youndie.telek/FindDispatcherStrategy { // io.github.youndie.telek/DefaultFindDispatcherStrategy|null[0]
     constructor <init>(kotlin.collections/List<io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>>) // io.github.youndie.telek/DefaultFindDispatcherStrategy.<init>|<init>(kotlin.collections.List<io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>>){}[0]
 
@@ -234,7 +269,7 @@ final class io.github.youndie.telek/Message : io.github.youndie.telek/Input { //
 final class io.github.youndie.telek/Telek { // io.github.youndie.telek/Telek|null[0]
     constructor <init>(kotlinx.coroutines/CoroutineScope = ..., io.github.youndie.telek/UserStateStore = ..., kotlin.collections/List<io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>>, io.github.youndie.telek/InitialStateProvider = ..., kotlin.collections/List<io.github.youndie.telek/TelekInterceptor> = ..., io.github.youndie.telek/EffectExecutor, io.github.youndie.telek/FindDispatcherStrategy = ..., kotlin.time/Duration = ..., kotlin/Int = ..., io.github.youndie.telek/TelekLogger = ...) // io.github.youndie.telek/Telek.<init>|<init>(kotlinx.coroutines.CoroutineScope;io.github.youndie.telek.UserStateStore;kotlin.collections.List<io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>>;io.github.youndie.telek.InitialStateProvider;kotlin.collections.List<io.github.youndie.telek.TelekInterceptor>;io.github.youndie.telek.EffectExecutor;io.github.youndie.telek.FindDispatcherStrategy;kotlin.time.Duration;kotlin.Int;io.github.youndie.telek.TelekLogger){}[0]
 
-    final fun onInput(kotlin/Long, io.github.youndie.telek/Input) // io.github.youndie.telek/Telek.onInput|onInput(kotlin.Long;io.github.youndie.telek.Input){}[0]
+    final fun onInput(io.github.youndie.telek/ConversationKey, io.github.youndie.telek/Input) // io.github.youndie.telek/Telek.onInput|onInput(io.github.youndie.telek.ConversationKey;io.github.youndie.telek.Input){}[0]
 }
 
 final class io.github.youndie.telek/UpdateResult { // io.github.youndie.telek/UpdateResult|null[0]

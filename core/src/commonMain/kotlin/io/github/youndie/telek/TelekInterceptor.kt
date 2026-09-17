@@ -2,20 +2,20 @@ package io.github.youndie.telek
 
 public interface TelekInterceptor {
     public fun onBeforeInput(
-        chatId: Long,
+        key: ConversationKey,
         input: Input,
     ) {
     }
 
     public fun onAfterStateChanged(
-        chatId: Long,
+        key: ConversationKey,
         oldState: State?,
         newState: State,
     ) {
     }
 
     public fun onError(
-        chatId: Long,
+        key: ConversationKey,
         input: Input?,
         error: Throwable,
     ) {

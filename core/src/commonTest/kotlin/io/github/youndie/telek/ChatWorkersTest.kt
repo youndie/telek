@@ -2,6 +2,7 @@
 
 package io.github.youndie.telek
 
+import io.github.youndie.telek.support.key
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -23,7 +24,7 @@ class ChatWorkersTest {
             val workers = ChatWorkers(scope = this, idleTimeout = 15.minutes, inboxCapacity = 1000)
             val order = mutableListOf<Int>()
 
-            (1..50).forEach { i -> launch { workers.submit(chatId = 1) { order += i } } }
+            (1..50).forEach { i -> launch { workers.submit(key = key(1)) { order += i } } }
             advanceUntilIdle()
 
             assertEquals((1..50).toList(), order)
@@ -35,8 +36,8 @@ class ChatWorkersTest {
             val workers = ChatWorkers(scope = this, idleTimeout = 15.minutes, inboxCapacity = 1000)
             var chat2Completed = false
 
-            launch { workers.submit(chatId = 1) { delay(10.minutes) } }
-            launch { workers.submit(chatId = 2) { chat2Completed = true } }
+            launch { workers.submit(key = key(1)) { delay(10.minutes) } }
+            launch { workers.submit(key = key(2)) { chat2Completed = true } }
 
             // Only runs work already ready at the current instant of virtual time — chat 1's task
             // is parked on `delay`, not ready, so this proves chat 2 didn't queue up behind it.
@@ -52,14 +53,14 @@ class ChatWorkersTest {
             var firstRan = false
             var secondRan = false
 
-            workers.submit(chatId = 1) { firstRan = true }
+            workers.submit(key = key(1)) { firstRan = true }
             runCurrent()
             assertTrue(firstRan)
 
             advanceTimeBy(200.milliseconds) // idle past the timeout — the worker retires itself
             runCurrent()
 
-            workers.submit(chatId = 1) { secondRan = true }
+            workers.submit(key = key(1)) { secondRan = true }
             runCurrent()
 
             assertTrue(secondRan)
@@ -72,15 +73,15 @@ class ChatWorkersTest {
             var asyncCompleted = false
             var nextTaskRan = false
 
-            workers.submit(chatId = 1) {
-                workers.launchAsync(chatId = 1) {
+            workers.submit(key = key(1)) {
+                workers.launchAsync(key = key(1)) {
                     delay(10.minutes)
                     asyncCompleted = true
                 }
             }
             runCurrent()
 
-            workers.submit(chatId = 1) { nextTaskRan = true }
+            workers.submit(key = key(1)) { nextTaskRan = true }
             runCurrent()
 
             assertTrue(nextTaskRan)
@@ -94,8 +95,8 @@ class ChatWorkersTest {
             var completed = false
             var cancelled = false
 
-            workers.submit(chatId = 1) {
-                workers.launchAsync(chatId = 1) {
+            workers.submit(key = key(1)) {
+                workers.launchAsync(key = key(1)) {
                     try {
                         delay(10.minutes)
                         completed = true
@@ -134,20 +135,20 @@ class ChatWorkersTest {
             // Block the worker on a long-running first task so subsequent submits pile up in the
             // inbox instead of being drained immediately.
             launch {
-                workers.submit(chatId = 1) {
+                workers.submit(key = key(1)) {
                     delay(10.minutes)
                     ran += 0
                 }
             }
             runCurrent() // worker picks up task 0 and is now suspended inside it
 
-            launch { workers.submit(chatId = 1) { ran += 1 } }
-            launch { workers.submit(chatId = 1) { ran += 2 } } // inbox now full (capacity = 2)
+            launch { workers.submit(key = key(1)) { ran += 1 } }
+            launch { workers.submit(key = key(1)) { ran += 2 } } // inbox now full (capacity = 2)
             runCurrent()
-            launch { workers.submit(chatId = 1) { ran += 3 } } // dropped — inbox has no room
+            launch { workers.submit(key = key(1)) { ran += 3 } } // dropped — inbox has no room
             runCurrent()
 
-            assertTrue(warnings.any { it.contains("chatId=1") })
+            assertTrue(warnings.any { it.contains(key(1).toString()) })
 
             advanceTimeBy(11.minutes)
             runCurrent()
@@ -163,8 +164,8 @@ class ChatWorkersTest {
             var firstCancelled = false
             var secondCompleted = false
 
-            workers.submit(chatId = 1) {
-                workers.launchAsync(chatId = 1, key = "search") {
+            workers.submit(key = key(1)) {
+                workers.launchAsync(key = key(1), debounceKey = "search") {
                     try {
                         delay(10.minutes)
                     } catch (e: CancellationException) {
@@ -175,8 +176,8 @@ class ChatWorkersTest {
             }
             runCurrent() // let the first job actually start and suspend on delay before cancelling it
 
-            workers.submit(chatId = 1) {
-                workers.launchAsync(chatId = 1, key = "search") {
+            workers.submit(key = key(1)) {
+                workers.launchAsync(key = key(1), debounceKey = "search") {
                     secondCompleted = true
                 }
             }
@@ -193,8 +194,8 @@ class ChatWorkersTest {
             var firstCompleted = false
             var secondCompleted = false
 
-            workers.submit(chatId = 1) { workers.launchAsync(chatId = 1, key = "a") { firstCompleted = true } }
-            workers.submit(chatId = 1) { workers.launchAsync(chatId = 1, key = "b") { secondCompleted = true } }
+            workers.submit(key(1)) { workers.launchAsync(key(1), debounceKey = "a") { firstCompleted = true } }
+            workers.submit(key(1)) { workers.launchAsync(key(1), debounceKey = "b") { secondCompleted = true } }
             runCurrent()
 
             assertTrue(firstCompleted)
@@ -208,13 +209,13 @@ class ChatWorkersTest {
             var firstCompleted = false
             var secondCompleted = false
 
-            workers.submit(chatId = 1) {
-                workers.launchAsync(chatId = 1) {
+            workers.submit(key = key(1)) {
+                workers.launchAsync(key = key(1)) {
                     delay(1.milliseconds)
                     firstCompleted = true
                 }
             }
-            workers.submit(chatId = 1) { workers.launchAsync(chatId = 1) { secondCompleted = true } }
+            workers.submit(key = key(1)) { workers.launchAsync(key = key(1)) { secondCompleted = true } }
             runCurrent()
             advanceTimeBy(2.milliseconds)
             runCurrent()

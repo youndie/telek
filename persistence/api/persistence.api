@@ -2,9 +2,9 @@ public class io/github/youndie/telek/persistence/FileStateStorage : io/github/yo
 	public static final field Companion Lio/github/youndie/telek/persistence/FileStateStorage$Companion;
 	public fun <init> (Lokio/Path;Lkotlinx/serialization/KSerializer;Lio/github/youndie/telek/TelekLogger;Lokio/FileSystem;)V
 	public synthetic fun <init> (Lokio/Path;Lkotlinx/serialization/KSerializer;Lio/github/youndie/telek/TelekLogger;Lokio/FileSystem;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun delete (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun load (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun save (JLio/github/youndie/telek/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun delete (Lio/github/youndie/telek/ConversationKey;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun load (Lio/github/youndie/telek/ConversationKey;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun save (Lio/github/youndie/telek/ConversationKey;Lio/github/youndie/telek/State;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class io/github/youndie/telek/persistence/FileStateStorage$Companion {
@@ -13,10 +13,10 @@ public final class io/github/youndie/telek/persistence/FileStateStorage$Companio
 
 public final class io/github/youndie/telek/persistence/PersistableUserStateStoreImpl : io/github/youndie/telek/UserStateStore {
 	public fun <init> (Lio/github/youndie/telek/StateStorage;)V
-	public fun clear (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun get (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun clear (Lio/github/youndie/telek/ConversationKey;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun get (Lio/github/youndie/telek/ConversationKey;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun getStateStorage ()Lio/github/youndie/telek/StateStorage;
-	public fun update (JLkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun update (Lio/github/youndie/telek/ConversationKey;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class io/github/youndie/telek/persistence/SystemFileSystem_jvmKt {

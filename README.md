@@ -201,6 +201,38 @@ The router equivalent is `router-ktg` — same `RowBuilder.callback(name, route)
 `io.github.youndie.telek.ktg.RowBuilder`.
 
 
+### 🔑 What a conversation is keyed by
+
+A state machine has to file each conversation's state under something, and telek files it under a
+`ConversationKey` — **not** under the `chatId` a reply is addressed to. In a private chat the
+distinction never shows, because the chat has one person in it. In a group it shows at once: keyed
+by the chat alone, two members running the same wizard share one state, one worker and one inbox,
+and each one's reply advances the other's flow.
+
+```kotlin
+ConversationKey.chatAndUser(chatId = -1001234567890, userId = 42) // one person, in one chat
+ConversationKey.chat(chatId = -1001234567890)                     // the whole chat, shared
+```
+
+`connect()` derives the key for you, and how it does so is the `keying` parameter:
+
+```kotlin
+connect(telek, contextSource)                          // Keying.PerUserInChat — the default
+connect(telek, contextSource, keying = Keying.PerChat) // one state for the whole chat
+```
+
+`PerUserInChat` is the default because a wizard wants it and a group requires it; an update with no
+identifiable sender (a channel post, an automatic forward) falls back to the chat. Ask for
+`PerChat` when the state genuinely belongs to everyone — a poll, a group game.
+
+**`chatId` on an `Input`, an `Event` and every effect is the address**, unchanged: it is where the
+reply goes, and in a group it is the same number for everybody. A dispatcher goes on writing
+`sendMessage(input.chatId, ...)` and does not deal in keys at all — only the wiring does, which is
+why `Telek.onInput` takes the key as its own parameter rather than reading one off the input.
+
+A bot that needs a key telek does not model — per forum topic, say — builds one itself and calls
+`telek.onInput(key, input)` directly; the input adapters are public for exactly that.
+
 ### ⚡ Defining a Custom Effect
 
 *telek* lets you extend its behavior with **custom effects** —  
@@ -372,7 +404,7 @@ one bit of glue that needs a transport: the `RowBuilder.callback(name, route)` e
 Persist user states between bot restarts using the `persistence` module. It provides a simple JSON file storage and a `UserStateStore` implementation.
 
 Key components:
-- `FileStateStorage<T : State>` — saves/loads states as JSON files, one per `chatId`
+- `FileStateStorage<T : State>` — saves/loads states as JSON files, one per `ConversationKey`
 - `stateStorageOf<T>()` — convenience factory for `FileStateStorage`
 - `PersistableUserStateStoreImpl<T : State>` — drop‑in replacement for the default in‑memory store
 
@@ -385,7 +417,7 @@ Usage:
 ```kotlin
 // Suppose your flow uses states of type YourState : State
 val userStateStore = PersistableUserStateStoreImpl<YourState>(
-    stateStorageOf(dir = "./state".toPath()) // files like ./state/<chatId>.json
+    stateStorageOf(dir = "./state".toPath()) // ./state/<chatId>.<userId>.json, or <chatId>.json
 )
 
 val telek = Telek(

@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 
 public interface TransitionGate<S : State> {
     public fun post(
-        chatId: Long,
+        key: ConversationKey,
         reducer: (S) -> TransitionResult<S>,
     )
 }
@@ -17,9 +17,9 @@ internal class TelekTransitionGate<S : State>(
     private val kClass: KClass<S>,
 ) : TransitionGate<S> {
     override fun post(
-        chatId: Long,
+        key: ConversationKey,
         reducer: (S) -> TransitionResult<S>,
     ) {
-        telek.applyReducer(chatId, kClass, reducer)
+        telek.applyReducer(key, kClass, reducer)
     }
 }

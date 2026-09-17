@@ -1,5 +1,6 @@
 package io.github.youndie.telek.ktg
 
+import dev.inmo.tgbotapi.abstracts.OptionallyFromUser
 import dev.inmo.tgbotapi.types.message.abstracts.ContentMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.queries.callback.AbstractMessageCallbackQuery
@@ -16,6 +17,22 @@ import dev.inmo.tgbotapi.types.message.abstracts.Message as KtgMessage
  */
 public val KtgMessage.telekChatId: Long
     get() = chat.id.chatId.long
+
+/**
+ * Who sent it, `null` when nothing did that telek can name — a channel post, an automatic forward.
+ * A [Keying][io.github.youndie.telek.Keying] that wants a per-person key falls back to the chat in
+ * that case; see [io.github.youndie.telek.ConversationKey].
+ *
+ * A [dev.inmo.tgbotapi.types.chat.User] IS a chat in ktgbotapi's model (`User : PrivateChat`), so
+ * its id unwraps through exactly the same value classes as [telekChatId] does.
+ */
+public val KtgMessage.telekUserId: Long?
+    get() =
+        (this as? OptionallyFromUser)
+            ?.from
+            ?.id
+            ?.chatId
+            ?.long
 
 public fun ContentMessage<TextContent>.asTelekInput(): Message =
     Message(

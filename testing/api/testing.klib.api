@@ -10,7 +10,7 @@ final class <#A: io.github.youndie.telek/State> io.github.youndie.telek.testing/
     constructor <init>(#A, kotlin/Function1<io.github.youndie.telek/TransitionResult<#A>, kotlin/Unit> = ...) // io.github.youndie.telek.testing/SyncTransitionGate.<init>|<init>(1:0;kotlin.Function1<io.github.youndie.telek.TransitionResult<1:0>,kotlin.Unit>){}[0]
 
     final fun currentState(): #A // io.github.youndie.telek.testing/SyncTransitionGate.currentState|currentState(){}[0]
-    final fun post(kotlin/Long, kotlin/Function1<#A, io.github.youndie.telek/TransitionResult<#A>>) // io.github.youndie.telek.testing/SyncTransitionGate.post|post(kotlin.Long;kotlin.Function1<1:0,io.github.youndie.telek.TransitionResult<1:0>>){}[0]
+    final fun post(io.github.youndie.telek/ConversationKey, kotlin/Function1<#A, io.github.youndie.telek/TransitionResult<#A>>) // io.github.youndie.telek.testing/SyncTransitionGate.post|post(io.github.youndie.telek.ConversationKey;kotlin.Function1<1:0,io.github.youndie.telek.TransitionResult<1:0>>){}[0]
 }
 
 final class io.github.youndie.telek.testing/RecordingEffectExecutor : io.github.youndie.telek/EffectExecutor { // io.github.youndie.telek.testing/RecordingEffectExecutor|null[0]
