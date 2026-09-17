@@ -1,7 +1,7 @@
 ---
 id: B-03
 title: "Input is a text message or a callback, so no wizard can ask for a photo"
-status: open
+status: done
 priority: P1
 size: M
 stage: stage-0-input-model
@@ -42,3 +42,32 @@ dispatcher cannot see that the user answered at all.
   `core/src/commonMain/kotlin/io/github/youndie/telek/Telek.kt`,
   `ktg/src/commonMain/kotlin/io/github/youndie/telek/ktg/KtgInputs.kt`,
   `telegram/src/main/kotlin/io/github/youndie/telek/telegram/Connect.kt`.
+
+## Iteration 1 — 2026-09-17
+
+Done. `Photo`, `Document`, `Contact` and `Location` added, each carrying a `messageId` and — for the
+two that reference a file — a `FileRef` of `fileId`, `uniqueId` and `sizeBytes`. Adapters in `:ktg`
+only; `:telegram` is in maintenance as of [B-12](B-12-one-transport.md), and this is the first item
+that cashes that decision rather than paying for it twice.
+
+- **Routing did not have to change, and that turned out to be the finding rather than an
+  assumption.** Only a command and a callback carry routing information of their own, because only
+  they can arrive with no state to belong to; everything else already fell through to "route by the
+  conversation's current state", which is exactly what a wizard step wants. What the item called
+  "the part to get right once" was therefore a matter of documenting and testing an existing
+  property, not of writing a mechanism.
+- **The additivity criterion is shown, not asserted, twice over.** A test declares an `Input`
+  implementation *in the test file* and watches it reach a dispatcher with no line of `:core`
+  knowing it exists. And the regenerated ABI dumps are **purely additive** — the diff removes
+  nothing — which is the mechanical form of the same claim.
+- **A claim was narrowed because it could not be tested.** The first draft's KDoc said `Photo.file`
+  is "the largest size Telegram offered". `PhotoContent`'s collection is a value class over the size
+  list and cannot be built from a test without reaching into ktgbotapi's internals, so that claim
+  had no check behind it; it now says what is true and testable — the adapter carries
+  `content.media`, the size the transport designates.
+- **Verified against a mutation:** making the strategy refuse anything that is not a `Message` or a
+  `Callback` fails exactly four tests — the engine's photo wizard, the three routing tests — and
+  nothing else.
+- `:docs-samples` caught its own bug on the first pass, which is what it is for: the README's new
+  example needs `import io.github.youndie.telek.transition`, because inside a `StateDispatcher` the
+  bare name resolves to the member `transition(state, input)` instead.

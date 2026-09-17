@@ -1,12 +1,22 @@
 package io.github.youndie.telek.ktg
 
 import dev.inmo.tgbotapi.abstracts.OptionallyFromUser
+import dev.inmo.tgbotapi.types.files.TelegramMediaFile
 import dev.inmo.tgbotapi.types.message.abstracts.ContentMessage
+import dev.inmo.tgbotapi.types.message.content.ContactContent
+import dev.inmo.tgbotapi.types.message.content.DocumentContent
+import dev.inmo.tgbotapi.types.message.content.LocationContent
+import dev.inmo.tgbotapi.types.message.content.PhotoContent
 import dev.inmo.tgbotapi.types.message.content.TextContent
 import dev.inmo.tgbotapi.types.queries.callback.AbstractMessageCallbackQuery
 import dev.inmo.tgbotapi.types.queries.callback.DataCallbackQuery
 import io.github.youndie.telek.Callback
+import io.github.youndie.telek.Contact
+import io.github.youndie.telek.Document
+import io.github.youndie.telek.FileRef
+import io.github.youndie.telek.Location
 import io.github.youndie.telek.Message
+import io.github.youndie.telek.Photo
 import dev.inmo.tgbotapi.types.message.abstracts.Message as KtgMessage
 
 /**
@@ -52,3 +62,65 @@ public fun DataCallbackQuery.asTelekInput(): Callback? {
         data = data,
     )
 }
+
+/**
+ * ktgbotapi wraps each id and size in its own value class (`FileId`, `FileUniqueId`, `FileSize`);
+ * [FileRef] carries the plain values a dispatcher can hold, compare and store.
+ */
+public fun TelegramMediaFile.asTelekFileRef(): FileRef =
+    FileRef(
+        fileId = fileId.fileId,
+        uniqueId = fileUniqueId.string,
+        // ktgbotapi models the size as a ULong; telek's surface stays Long, which no real
+        // Telegram file can overflow (the API's own upload ceiling is 2 GB).
+        sizeBytes = fileSize?.bytes?.toLong(),
+    )
+
+/**
+ * Carries `content.media` — the size ktgbotapi designates for the collection — and not a pick of
+ * telek's own out of `mediaCollection`. telek does not model photo sizes: a wizard step keeps the
+ * photo, and a bot that wants a specific size asks the transport for it.
+ */
+public fun ContentMessage<PhotoContent>.asTelekInput(): Photo =
+    Photo(
+        chatId = telekChatId,
+        messageId = messageId.long,
+        file = content.media.asTelekFileRef(),
+        caption = content.text,
+    )
+
+public fun ContentMessage<DocumentContent>.asTelekInput(): Document =
+    Document(
+        chatId = telekChatId,
+        messageId = messageId.long,
+        file = content.media.asTelekFileRef(),
+        fileName = content.media.fileName,
+        mimeType = content.media.mimeType?.raw,
+        caption = content.text,
+    )
+
+public fun ContentMessage<ContactContent>.asTelekInput(): Contact =
+    Contact(
+        chatId = telekChatId,
+        messageId = messageId.long,
+        phoneNumber = content.contact.phoneNumber,
+        firstName = content.contact.firstName,
+        lastName = content.contact.lastName,
+        userId =
+            content.contact.userId
+                ?.chatId
+                ?.long,
+    )
+
+/**
+ * Latitude and longitude only, and a live location collapses to the point it was at. telek has no
+ * notion of a location that keeps moving — a wizard step that asks "where are you" is answered by a
+ * point, and anything richer is a bot's own [io.github.youndie.telek.Input].
+ */
+public fun ContentMessage<LocationContent>.asTelekInput(): Location =
+    Location(
+        chatId = telekChatId,
+        messageId = messageId.long,
+        latitude = content.location.latitude,
+        longitude = content.location.longitude,
+    )

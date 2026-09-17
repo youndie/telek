@@ -199,6 +199,34 @@ final class io.github.youndie.telek/Callback : io.github.youndie.telek/Input { /
     final fun toString(): kotlin/String // io.github.youndie.telek/Callback.toString|toString(){}[0]
 }
 
+final class io.github.youndie.telek/Contact : io.github.youndie.telek/Input { // io.github.youndie.telek/Contact|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long, kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/Long? = ...) // io.github.youndie.telek/Contact.<init>|<init>(kotlin.Long;kotlin.Long;kotlin.String;kotlin.String;kotlin.String?;kotlin.Long?){}[0]
+
+    final val chatId // io.github.youndie.telek/Contact.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/Contact.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val firstName // io.github.youndie.telek/Contact.firstName|{}firstName[0]
+        final fun <get-firstName>(): kotlin/String // io.github.youndie.telek/Contact.firstName.<get-firstName>|<get-firstName>(){}[0]
+    final val lastName // io.github.youndie.telek/Contact.lastName|{}lastName[0]
+        final fun <get-lastName>(): kotlin/String? // io.github.youndie.telek/Contact.lastName.<get-lastName>|<get-lastName>(){}[0]
+    final val messageId // io.github.youndie.telek/Contact.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek/Contact.messageId.<get-messageId>|<get-messageId>(){}[0]
+    final val phoneNumber // io.github.youndie.telek/Contact.phoneNumber|{}phoneNumber[0]
+        final fun <get-phoneNumber>(): kotlin/String // io.github.youndie.telek/Contact.phoneNumber.<get-phoneNumber>|<get-phoneNumber>(){}[0]
+    final val userId // io.github.youndie.telek/Contact.userId|{}userId[0]
+        final fun <get-userId>(): kotlin/Long? // io.github.youndie.telek/Contact.userId.<get-userId>|<get-userId>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek/Contact.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.youndie.telek/Contact.component2|component2(){}[0]
+    final fun component3(): kotlin/String // io.github.youndie.telek/Contact.component3|component3(){}[0]
+    final fun component4(): kotlin/String // io.github.youndie.telek/Contact.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.telek/Contact.component5|component5(){}[0]
+    final fun component6(): kotlin/Long? // io.github.youndie.telek/Contact.component6|component6(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Long = ..., kotlin/String = ..., kotlin/String = ..., kotlin/String? = ..., kotlin/Long? = ...): io.github.youndie.telek/Contact // io.github.youndie.telek/Contact.copy|copy(kotlin.Long;kotlin.Long;kotlin.String;kotlin.String;kotlin.String?;kotlin.Long?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/Contact.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/Contact.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/Contact.toString|toString(){}[0]
+}
+
 final class io.github.youndie.telek/ConversationKey { // io.github.youndie.telek/ConversationKey|null[0]
     constructor <init>(kotlin/Long, kotlin/Long? = ...) // io.github.youndie.telek/ConversationKey.<init>|<init>(kotlin.Long;kotlin.Long?){}[0]
 
@@ -228,6 +256,34 @@ final class io.github.youndie.telek/DefaultFindDispatcherStrategy : io.github.yo
     final fun findDispatcher(io.github.youndie.telek/State?, io.github.youndie.telek/Input?): io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>? // io.github.youndie.telek/DefaultFindDispatcherStrategy.findDispatcher|findDispatcher(io.github.youndie.telek.State?;io.github.youndie.telek.Input?){}[0]
 }
 
+final class io.github.youndie.telek/Document : io.github.youndie.telek/Input { // io.github.youndie.telek/Document|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long, io.github.youndie.telek/FileRef, kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.telek/Document.<init>|<init>(kotlin.Long;kotlin.Long;io.github.youndie.telek.FileRef;kotlin.String?;kotlin.String?;kotlin.String?){}[0]
+
+    final val caption // io.github.youndie.telek/Document.caption|{}caption[0]
+        final fun <get-caption>(): kotlin/String? // io.github.youndie.telek/Document.caption.<get-caption>|<get-caption>(){}[0]
+    final val chatId // io.github.youndie.telek/Document.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/Document.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val file // io.github.youndie.telek/Document.file|{}file[0]
+        final fun <get-file>(): io.github.youndie.telek/FileRef // io.github.youndie.telek/Document.file.<get-file>|<get-file>(){}[0]
+    final val fileName // io.github.youndie.telek/Document.fileName|{}fileName[0]
+        final fun <get-fileName>(): kotlin/String? // io.github.youndie.telek/Document.fileName.<get-fileName>|<get-fileName>(){}[0]
+    final val messageId // io.github.youndie.telek/Document.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek/Document.messageId.<get-messageId>|<get-messageId>(){}[0]
+    final val mimeType // io.github.youndie.telek/Document.mimeType|{}mimeType[0]
+        final fun <get-mimeType>(): kotlin/String? // io.github.youndie.telek/Document.mimeType.<get-mimeType>|<get-mimeType>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek/Document.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.youndie.telek/Document.component2|component2(){}[0]
+    final fun component3(): io.github.youndie.telek/FileRef // io.github.youndie.telek/Document.component3|component3(){}[0]
+    final fun component4(): kotlin/String? // io.github.youndie.telek/Document.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.telek/Document.component5|component5(){}[0]
+    final fun component6(): kotlin/String? // io.github.youndie.telek/Document.component6|component6(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Long = ..., io.github.youndie.telek/FileRef = ..., kotlin/String? = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.telek/Document // io.github.youndie.telek/Document.copy|copy(kotlin.Long;kotlin.Long;io.github.youndie.telek.FileRef;kotlin.String?;kotlin.String?;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/Document.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/Document.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/Document.toString|toString(){}[0]
+}
+
 final class io.github.youndie.telek/EffectExecutorImpl : io.github.youndie.telek/EffectExecutor { // io.github.youndie.telek/EffectExecutorImpl|null[0]
     constructor <init>(io.github.youndie.telek/EffectRegistry, kotlin.coroutines/SuspendFunction0<io.github.youndie.telek/ExecutionContext>, io.github.youndie.telek/EffectFailurePolicy = ..., io.github.youndie.telek/TelekLogger = ...) // io.github.youndie.telek/EffectExecutorImpl.<init>|<init>(io.github.youndie.telek.EffectRegistry;kotlin.coroutines.SuspendFunction0<io.github.youndie.telek.ExecutionContext>;io.github.youndie.telek.EffectFailurePolicy;io.github.youndie.telek.TelekLogger){}[0]
 
@@ -250,6 +306,47 @@ final class io.github.youndie.telek/EffectRegistry { // io.github.youndie.telek/
     final fun getAsync(kotlin.reflect/KClass<out io.github.youndie.telek/Effect>): io.github.youndie.telek/AsyncEffectHandler<*>? // io.github.youndie.telek/EffectRegistry.getAsync|getAsync(kotlin.reflect.KClass<out|io.github.youndie.telek.Effect>){}[0]
 }
 
+final class io.github.youndie.telek/FileRef { // io.github.youndie.telek/FileRef|null[0]
+    constructor <init>(kotlin/String, kotlin/String? = ..., kotlin/Long? = ...) // io.github.youndie.telek/FileRef.<init>|<init>(kotlin.String;kotlin.String?;kotlin.Long?){}[0]
+
+    final val fileId // io.github.youndie.telek/FileRef.fileId|{}fileId[0]
+        final fun <get-fileId>(): kotlin/String // io.github.youndie.telek/FileRef.fileId.<get-fileId>|<get-fileId>(){}[0]
+    final val sizeBytes // io.github.youndie.telek/FileRef.sizeBytes|{}sizeBytes[0]
+        final fun <get-sizeBytes>(): kotlin/Long? // io.github.youndie.telek/FileRef.sizeBytes.<get-sizeBytes>|<get-sizeBytes>(){}[0]
+    final val uniqueId // io.github.youndie.telek/FileRef.uniqueId|{}uniqueId[0]
+        final fun <get-uniqueId>(): kotlin/String? // io.github.youndie.telek/FileRef.uniqueId.<get-uniqueId>|<get-uniqueId>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.telek/FileRef.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // io.github.youndie.telek/FileRef.component2|component2(){}[0]
+    final fun component3(): kotlin/Long? // io.github.youndie.telek/FileRef.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String? = ..., kotlin/Long? = ...): io.github.youndie.telek/FileRef // io.github.youndie.telek/FileRef.copy|copy(kotlin.String;kotlin.String?;kotlin.Long?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/FileRef.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/FileRef.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/FileRef.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek/Location : io.github.youndie.telek/Input { // io.github.youndie.telek/Location|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long, kotlin/Double, kotlin/Double) // io.github.youndie.telek/Location.<init>|<init>(kotlin.Long;kotlin.Long;kotlin.Double;kotlin.Double){}[0]
+
+    final val chatId // io.github.youndie.telek/Location.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/Location.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val latitude // io.github.youndie.telek/Location.latitude|{}latitude[0]
+        final fun <get-latitude>(): kotlin/Double // io.github.youndie.telek/Location.latitude.<get-latitude>|<get-latitude>(){}[0]
+    final val longitude // io.github.youndie.telek/Location.longitude|{}longitude[0]
+        final fun <get-longitude>(): kotlin/Double // io.github.youndie.telek/Location.longitude.<get-longitude>|<get-longitude>(){}[0]
+    final val messageId // io.github.youndie.telek/Location.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek/Location.messageId.<get-messageId>|<get-messageId>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek/Location.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.youndie.telek/Location.component2|component2(){}[0]
+    final fun component3(): kotlin/Double // io.github.youndie.telek/Location.component3|component3(){}[0]
+    final fun component4(): kotlin/Double // io.github.youndie.telek/Location.component4|component4(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Long = ..., kotlin/Double = ..., kotlin/Double = ...): io.github.youndie.telek/Location // io.github.youndie.telek/Location.copy|copy(kotlin.Long;kotlin.Long;kotlin.Double;kotlin.Double){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/Location.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/Location.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/Location.toString|toString(){}[0]
+}
+
 final class io.github.youndie.telek/Message : io.github.youndie.telek/Input { // io.github.youndie.telek/Message|null[0]
     constructor <init>(kotlin/Long, kotlin/String) // io.github.youndie.telek/Message.<init>|<init>(kotlin.Long;kotlin.String){}[0]
 
@@ -264,6 +361,28 @@ final class io.github.youndie.telek/Message : io.github.youndie.telek/Input { //
     final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/Message.equals|equals(kotlin.Any?){}[0]
     final fun hashCode(): kotlin/Int // io.github.youndie.telek/Message.hashCode|hashCode(){}[0]
     final fun toString(): kotlin/String // io.github.youndie.telek/Message.toString|toString(){}[0]
+}
+
+final class io.github.youndie.telek/Photo : io.github.youndie.telek/Input { // io.github.youndie.telek/Photo|null[0]
+    constructor <init>(kotlin/Long, kotlin/Long, io.github.youndie.telek/FileRef, kotlin/String? = ...) // io.github.youndie.telek/Photo.<init>|<init>(kotlin.Long;kotlin.Long;io.github.youndie.telek.FileRef;kotlin.String?){}[0]
+
+    final val caption // io.github.youndie.telek/Photo.caption|{}caption[0]
+        final fun <get-caption>(): kotlin/String? // io.github.youndie.telek/Photo.caption.<get-caption>|<get-caption>(){}[0]
+    final val chatId // io.github.youndie.telek/Photo.chatId|{}chatId[0]
+        final fun <get-chatId>(): kotlin/Long // io.github.youndie.telek/Photo.chatId.<get-chatId>|<get-chatId>(){}[0]
+    final val file // io.github.youndie.telek/Photo.file|{}file[0]
+        final fun <get-file>(): io.github.youndie.telek/FileRef // io.github.youndie.telek/Photo.file.<get-file>|<get-file>(){}[0]
+    final val messageId // io.github.youndie.telek/Photo.messageId|{}messageId[0]
+        final fun <get-messageId>(): kotlin/Long // io.github.youndie.telek/Photo.messageId.<get-messageId>|<get-messageId>(){}[0]
+
+    final fun component1(): kotlin/Long // io.github.youndie.telek/Photo.component1|component1(){}[0]
+    final fun component2(): kotlin/Long // io.github.youndie.telek/Photo.component2|component2(){}[0]
+    final fun component3(): io.github.youndie.telek/FileRef // io.github.youndie.telek/Photo.component3|component3(){}[0]
+    final fun component4(): kotlin/String? // io.github.youndie.telek/Photo.component4|component4(){}[0]
+    final fun copy(kotlin/Long = ..., kotlin/Long = ..., io.github.youndie.telek/FileRef = ..., kotlin/String? = ...): io.github.youndie.telek/Photo // io.github.youndie.telek/Photo.copy|copy(kotlin.Long;kotlin.Long;io.github.youndie.telek.FileRef;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/Photo.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/Photo.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/Photo.toString|toString(){}[0]
 }
 
 final class io.github.youndie.telek/Telek { // io.github.youndie.telek/Telek|null[0]

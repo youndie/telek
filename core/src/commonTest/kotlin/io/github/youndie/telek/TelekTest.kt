@@ -95,6 +95,51 @@ private class AsyncDispatcher : StateDispatcher<TestState>() {
         }
 }
 
+private sealed interface PhotoFlowState : State {
+    data object AwaitingPhoto : PhotoFlowState
+
+    data class Received(
+        val fileId: String,
+    ) : PhotoFlowState
+}
+
+/**
+ * B-03's acceptance, and the whole point is what is NOT in it: no ktgbotapi type, no
+ * kotlin-telegram-bot type, no transport import at all. A wizard step asks for a photo and reads
+ * the file off telek's own [Photo].
+ */
+private class PhotoWizardDispatcher : StateDispatcher<PhotoFlowState>() {
+    override val startCommand = "passport"
+    override val stateClass = PhotoFlowState::class
+
+    override fun entry(input: Input): TransitionResult<PhotoFlowState>? =
+        if (input is Message && input.text == "/passport") {
+            transition {
+                newState = PhotoFlowState.AwaitingPhoto
+                add(TestEffect("ask-for-photo"))
+            }
+        } else {
+            null
+        }
+
+    override fun transition(
+        state: PhotoFlowState,
+        input: Input,
+    ): TransitionResult<PhotoFlowState> =
+        when {
+            state is PhotoFlowState.AwaitingPhoto && input is Photo -> {
+                transition {
+                    newState = PhotoFlowState.Received(input.file.fileId)
+                    add(TestEffect("stored-${input.file.fileId}"))
+                }
+            }
+
+            else -> {
+                noTransition(state)
+            }
+        }
+}
+
 class TelekTest {
     @Test
     fun `onInput runs the dispatcher then transitions state and executes effects`() =
@@ -190,6 +235,33 @@ class TelekTest {
             advanceUntilIdle()
 
             assertEquals(TestState.Confirming("whoever".length), store.get(group))
+        }
+
+    @Test
+    fun `a wizard step asks for a photo and receives one`() =
+        runTest {
+            val executor = FakeEffectExecutor()
+            val store = DefaultUserStateStore()
+            val telek =
+                Telek(
+                    scope = this,
+                    userStateStore = store,
+                    dispatchers = listOf(PhotoWizardDispatcher()),
+                    effectExecutor = executor,
+                )
+
+            telek.onInput(key(1), Message(1, "/passport"))
+            advanceUntilIdle()
+            assertEquals(PhotoFlowState.AwaitingPhoto, store.get(key(1)))
+
+            telek.onInput(key(1), Photo(chatId = 1, messageId = 9, file = FileRef("scan-1")))
+            advanceUntilIdle()
+
+            assertEquals(PhotoFlowState.Received("scan-1"), store.get(key(1)))
+            assertEquals(
+                listOf<List<Effect>>(listOf(TestEffect("ask-for-photo")), listOf(TestEffect("stored-scan-1"))),
+                executor.executed,
+            )
         }
 
     @Test

@@ -2,7 +2,11 @@ package io.github.youndie.telek.ktg
 
 import dev.inmo.tgbotapi.extensions.api.answers.answerCallbackQuery
 import dev.inmo.tgbotapi.extensions.behaviour_builder.BehaviourContext
+import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onContact
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onDataCallbackQuery
+import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onDocument
+import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onLocation
+import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onPhoto
 import dev.inmo.tgbotapi.extensions.behaviour_builder.triggers_handling.onText
 import io.github.youndie.telek.Keying
 import io.github.youndie.telek.Telek
@@ -10,6 +14,11 @@ import io.github.youndie.telek.Telek
 /**
  * Adapts ktgbotapi updates into telek [io.github.youndie.telek.Input]s and feeds the behaviour
  * context's [dev.inmo.tgbotapi.bot.TelegramBot] to [contextSource].
+ *
+ * Subscribes text, data callbacks, photos, documents, contacts and locations. A content type telek
+ * does not model is not subscribed and therefore never reaches the FSM — a bot that needs one wires
+ * its own trigger and calls [io.github.youndie.telek.Telek.onInput] with an `Input` of its own; the
+ * adapters here are public so that path reuses them.
  *
  * [connect] and [ktgEffectExecutor] must be given the *same* [KtgContextSource] instance.
  *
@@ -29,6 +38,38 @@ public fun BehaviourContext.connect(
     contextSource.provide(bot)
 
     onText { message ->
+        telek.onInput(
+            key = keying.key(message.telekChatId, message.telekUserId),
+            input = message.asTelekInput(),
+        )
+    }
+
+    // One subscription per input type telek models. They are separate `on*` triggers rather than
+    // one `onContentMessage` with a `when`, because ktgbotapi's own filtering is what decides which
+    // updates a handler is offered — collapsing them into one would mean re-implementing that
+    // filtering here and silently swallowing every content type telek does not model.
+    onPhoto { message ->
+        telek.onInput(
+            key = keying.key(message.telekChatId, message.telekUserId),
+            input = message.asTelekInput(),
+        )
+    }
+
+    onDocument { message ->
+        telek.onInput(
+            key = keying.key(message.telekChatId, message.telekUserId),
+            input = message.asTelekInput(),
+        )
+    }
+
+    onContact { message ->
+        telek.onInput(
+            key = keying.key(message.telekChatId, message.telekUserId),
+            input = message.asTelekInput(),
+        )
+    }
+
+    onLocation { message ->
         telek.onInput(
             key = keying.key(message.telekChatId, message.telekUserId),
             input = message.asTelekInput(),
