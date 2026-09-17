@@ -13,6 +13,29 @@ import kotlinx.atomicfu.locks.synchronized
  * and should not — serialize [update] internally with their own per-key locking: that duplicates a
  * guarantee the caller already provides, and doing it locally is easy to get subtly wrong (e.g.
  * reading state before acquiring a lock, or leaking a lock/mutex map that's never cleaned up).
+ *
+ * ## What this store owns, and what `FinalState` and [clear] mean
+ *
+ * It owns **the conversation's FSM state and nothing else**. A [FinalState] and a [clear] both say
+ * *this flow is over* — they do not say *this person is gone*, and what happens to anything else
+ * filed under the same key is the implementation's decision, not this interface's.
+ *
+ * The two stores telek ships take the simple reading and delete the entry, because they hold
+ * nothing but the state: [DefaultUserStateStore] drops the map entry, and `:persistence`'s
+ * `PersistableUserStateStoreImpl` deletes the file. That is right for a bot whose only per-user
+ * data is the wizard it is in the middle of.
+ *
+ * **A bot with data that outlives a flow — a language, a timezone, a chosen workspace, the id of
+ * the message its live menu occupies — implements this interface rather than running a second
+ * store beside it.** Keep the flow state as one field of your own row; return it from [get], write
+ * it back in [update], and on [clear] (and on a [FinalState] arriving in [update]) reset that field
+ * instead of removing the row. The rest of the row is untouched, and it is never at risk of drifting
+ * out of step with the flow, because both are written inside the same [update] call — which
+ * [Telek] has already serialized per key.
+ *
+ * That seam is the reason telek has no second concept for "state that outlives the flow". The cost
+ * is a small adapter; the thing it buys is that there is exactly one writer per conversation, which
+ * a second store cannot give you.
  */
 public interface UserStateStore {
     public suspend fun get(key: ConversationKey): State?

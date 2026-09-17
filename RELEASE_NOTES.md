@@ -1,5 +1,14 @@
 # Release notes
 
+## Unreleased
+
+**Documented: state that outlives a flow.** No API change. `UserStateStore`'s KDoc now says what the
+store owns and what a `FinalState` and a `clear` mean — *this flow is over*, not *this person is
+gone* — and `README.md` gains a compiled example of a store that keeps a language and a menu message
+id across every wizard a user finishes. The two shipped stores delete the entry, which is right when
+the state is all you keep; a bot with more implements the interface instead of running a second
+store beside it, and gets one writer per conversation rather than two.
+
 ## 0.4.0
 
 The conversation key, the input model, and the API surface a consumer actually sees. Most of what

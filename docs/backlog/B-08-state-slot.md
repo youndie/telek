@@ -1,11 +1,10 @@
 ---
 id: B-08
 title: "StateSlot: a bot with a user profile has nowhere to put it"
-status: open
+status: dropped
 priority: P2
 size: M
 stage: stage-3-debts
-blocked_by: [B-07]
 ---
 
 # B-08 — StateSlot: a bot with a user profile has nowhere to put it
@@ -40,3 +39,43 @@ with it, and today nothing distinguishes the two.
 - Anchors: `core/src/commonMain/kotlin/io/github/youndie/telek/UserStateStore.kt`,
   `core/src/commonMain/kotlin/io/github/youndie/telek/StateStorage.kt`,
   `persistence/src/commonMain/kotlin/io/github/youndie/telek/persistence/PersistableUserStateStoreImpl.kt`.
+
+## Dropped — 2026-09-17
+
+**Dropped, and by the consumer this item said to wait for.** [B-07](B-07-real-bot-in-production.md)
+was closed the same day, so the question this item deferred — what a real bot with a profile
+actually does — could be asked instead of guessed. The answer is that it does neither of the two
+things written above.
+
+**The premise is wrong.** This item says a bot with a profile "either serialises both into one class
+— coupling the profile's schema to the wizard's — or runs a second storage telek never sees". The
+real one does a third thing, which is the option this item lists and rejects as an API: its own row
+holds the flow state as **one field** beside the profile, and it implements `UserStateStore` to
+project that field in and out. Telek sees a `State`; the bot sees its row.
+
+It costs about forty lines, and the two hazards a reader would trip on are both in that adapter:
+a `FinalState` arriving in `update`, and `clear`. The shipped stores delete the entry on both —
+`DefaultUserStateStore` drops the map entry, `PersistableUserStateStoreImpl` deletes the file — and
+a bot that copies that reading loses the profile. The real one gets it right, and it got it right by
+reading the default implementation's source, because **nothing in the contract said so**. That was
+the actual defect here, and it is a docstring rather than an API.
+
+**So the fix is what shipped instead of a slot API:**
+
+- `UserStateStore`'s KDoc now says what the store owns, that a `FinalState` and a `clear` mean *this
+  flow is over* rather than *this person is gone*, and that a bot with data outliving a flow
+  implements the interface rather than running a second store.
+- `README.md` gains a short section with a working store, compiled in `:docs-samples` like every
+  other block, so the pattern is checked rather than described.
+- The persistence section's "the entry is automatically deleted" stops reading as the only
+  possibility and points at the choice.
+
+**Why an API is worse than the seam, now that there is evidence.** The thing the adapter buys is
+that both halves are written inside the same `update` call, which `Telek` has already serialized per
+conversation. A slot API would have to reproduce that, and a second store cannot give it at all —
+which is the one real argument in this item, and it is already satisfied. What is left is forty
+lines of adapter against a public interface that would grow a second concept, a second serialised
+form, and a migration for anyone who had used the first one.
+
+Reopen it if a second consumer writes the same adapter and gets it wrong in a way the docstring
+does not prevent. One consumer writing it correctly is not a case for an API.
