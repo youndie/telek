@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>Input</title>
+    <title>Location</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -90,36 +90,12 @@
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" data-page-type="classlike" id="content" pageids="core::io.github.youndie.telek/Input///PointingToDeclaration//1239919082">
-  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">io.github.youndie.telek</a><span class="delimiter">/</span><span class="current">Input</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="core::io.github.youndie.telek/Location/Location/#kotlin.Long#kotlin.Long#kotlin.Double#kotlin.Double/PointingToDeclaration//1239919082">
+  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">io.github.youndie.telek</a><span class="delimiter">/</span><a href="index.html">Location</a><span class="delimiter">/</span><span class="current">Location</span></div>
   <div class="cover ">
-    <h1 class="cover"><span><span>Input</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Input</a></div><p class="paragraph">Something a user sent.</p><p class="paragraph"><a href="chat-id.html">chatId</a> is the Telegram <strong>address</strong> — the chat a reply is sent to — and not the key the conversation's state is filed under; in a group those are different things. See <a href="../-conversation-key/index.html">ConversationKey</a>, and <a href="../-telek/on-input.html">Telek.onInput</a>, which takes the key separately.</p><p class="paragraph"><strong>Not sealed, and that is the design.</strong> A bot that needs something telek does not model declares its own <code class="lang-kotlin">Input</code> and feeds it through <a href="../-telek/on-input.html">Telek.onInput</a>; it routes by the conversation's state like any other input that is not a command or a callback (see <a href="../-default-find-dispatcher-strategy/index.html">DefaultFindDispatcherStrategy</a>), and nothing in <code class="lang-kotlin">:core</code> needs to change. The same property is what lets telek add a type here without breaking a consumer's <code class="lang-kotlin">when</code>.</p><h4 class="tableheader">Inheritors</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-message/index.html">Message</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-callback/index.html">Callback</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-photo/index.html">Photo</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-document/index.html">Document</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-contact/index.html">Contact</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-location/index.html">Location</a></div></span></div><div></div></div></div></div></div></div>
+    <h1 class="cover"><span><span>Location</span></span></h1>
   </div>
-  <div class="tabbedcontent">
-    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
-    <div class="tabs-section-body">
-      <div data-togglable="PROPERTY">
-        <h2 class="tableheader">Properties</h2>
-        <div class="table"><a data-name="-1863212201%2FProperties%2F1239919082" anchor-label="chatId" id="-1863212201%2FProperties%2F1239919082" data-filterable-set=":core/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="chat-id.html"><span>chat</span><wbr><span><span>Id</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1863212201%2FProperties%2F1239919082"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="chat-id.html">chatId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">messageId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">latitude<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a><span class="token punctuation">, </span></span><span class="parameter ">longitude<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-double/index.html">Double</a></span></span><span class="token punctuation">)</span></div></div></div>
 </div>
     <div class="footer">
         <div class="footer--container">

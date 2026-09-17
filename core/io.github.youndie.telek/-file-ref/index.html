@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>DefaultFindDispatcherStrategy</title>
+    <title>FileRef</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -90,47 +90,77 @@
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" data-page-type="classlike" id="content" pageids="core::io.github.youndie.telek/DefaultFindDispatcherStrategy///PointingToDeclaration//1239919082">
-  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">io.github.youndie.telek</a><span class="delimiter">/</span><span class="current">DefaultFindDispatcherStrategy</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageids="core::io.github.youndie.telek/FileRef///PointingToDeclaration//1239919082">
+  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">io.github.youndie.telek</a><span class="delimiter">/</span><span class="current">FileRef</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Default</span><wbr><span>Find</span><wbr><span>Dispatcher</span><wbr><span><span>Strategy</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">DefaultFindDispatcherStrategy</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dispatchers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-state-dispatcher/index.html">StateDispatcher</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../-state/index.html">State</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="../-find-dispatcher-strategy/index.html">FindDispatcherStrategy</a></div><p class="paragraph">Routes on the two things that can <i>start</i> a flow — a command and a callback — and on the conversation's current state for everything else.</p><p class="paragraph">That "everything else" is the load-bearing part, and it is why adding an <a href="../-input/index.html">Input</a> type is not a change here. A photo, a document, a contact, a location or a type a bot declared itself all reach the dispatcher that owns the current state, which is what a wizard step wants: the step asked for something, and whatever arrived is the answer to it. Only a command and a callback carry routing information of their own, because only they can arrive with no state to belong to.</p></div></div>
+    <h1 class="cover"><span>File</span><wbr><span><span>Ref</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">FileRef</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>fileId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>uniqueId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>sizeBytes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><p class="paragraph">A file Telegram holds, named the way Telegram names one.</p><p class="paragraph">telek does not download it — that is an effect, and effects are where a transport belongs. What a dispatcher gets is the identifier it needs to ask for the bytes later, without naming a transport type to do it.</p><p class="paragraph"><a href="../../../core/io.github.youndie.telek/-file-ref/--root--.html">fileId</a> is only valid for the bot that received it and can change between messages; <a href="../../../core/io.github.youndie.telek/-file-ref/--root--.html">uniqueId</a> is stable across both and is what to compare or store when the question is "is this the same file". Telegram documents that distinction and bots get it wrong in that direction, so both are carried rather than only the one a caller reaches for first.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
         <h2 class="tableheader">Constructors</h2>
-        <div class="table"><a data-name="-246326253%2FConstructors%2F1239919082" anchor-label="DefaultFindDispatcherStrategy" id="-246326253%2FConstructors%2F1239919082" data-filterable-set=":core/commonMain"></a>
+        <div class="table"><a data-name="900271075%2FConstructors%2F1239919082" anchor-label="FileRef" id="900271075%2FConstructors%2F1239919082" data-filterable-set=":core/commonMain"></a>
           <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="-default-find-dispatcher-strategy.html"><span>Default</span><wbr><span>Find</span><wbr><span>Dispatcher</span><wbr><span><span>Strategy</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-246326253%2FConstructors%2F1239919082"></span>
+                  <div><a href="-file-ref.html"><span>File</span><wbr><span><span>Ref</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="900271075%2FConstructors%2F1239919082"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">dispatchers<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-state-dispatcher/index.html">StateDispatcher</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../-state/index.html">State</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fileId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">uniqueId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">sizeBytes<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div data-togglable="FUNCTION">
-        <h2 class="tableheader">Functions</h2>
-        <div class="table"><a data-name="521800036%2FFunctions%2F1239919082" anchor-label="findDispatcher" id="521800036%2FFunctions%2F1239919082" data-filterable-set=":core/commonMain"></a>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-909095968%2FProperties%2F1239919082" anchor-label="fileId" id="-909095968%2FProperties%2F1239919082" data-filterable-set=":core/commonMain"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="find-dispatcher.html"><span>find</span><wbr><span><span>Dispatcher</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="521800036%2FFunctions%2F1239919082"></span>
+                  <div><a href="file-id.html"><span>file</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-909095968%2FProperties%2F1239919082"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="find-dispatcher.html"><span class="token function">findDispatcher</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">state<span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">input<span class="token operator">: </span><a href="../-input/index.html">Input</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-state-dispatcher/index.html">StateDispatcher</a><span class="token operator">&lt;</span><span class="token keyword">out </span><a href="../-state/index.html">State</a><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="file-id.html">fileId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="532066265%2FProperties%2F1239919082" anchor-label="sizeBytes" id="532066265%2FProperties%2F1239919082" data-filterable-set=":core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="size-bytes.html"><span>size</span><wbr><span><span>Bytes</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="532066265%2FProperties%2F1239919082"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="size-bytes.html">sizeBytes</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1681370645%2FProperties%2F1239919082" anchor-label="uniqueId" id="-1681370645%2FProperties%2F1239919082" data-filterable-set=":core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="unique-id.html"><span>unique</span><wbr><span><span>Id</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1681370645%2FProperties%2F1239919082"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="unique-id.html">uniqueId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
