@@ -50,9 +50,12 @@ its branch in step — rename one and the other stops compiling.
   it has one now, so `./gradlew build` executes the README's test rather than only type-checking it.
   That is a stronger promise than the acceptance criterion asked for, and it is the cheaper one to
   keep honest — a sample that compiles can still assert nothing.
-- The test is deliberately four lines and touches no bot, no network and no coroutine, because that
-  is the claim the example exists to make and the one neither ktgbotapi's FSM nor a KSP wizard
-  generator makes for you.
+- The test touches no bot, no network and no coroutine, because that is the claim the example
+  exists to make and the one neither ktgbotapi's FSM nor a KSP wizard generator makes for you.
+- **The first draft of that test was weak and it was caught by asking what a mutation would do to
+  it.** It asserted only `newState == Done` — and `Done` is the state for *both* buttons, so it
+  would have passed with the two routes swapped, which is precisely the defect this item is about.
+  It now asserts the reply as well, and swapping the routes in the dispatcher fails both cases.
 - **Found, not fixed here:** the example is still written against `:telegram`, which
   [B-12](B-12-one-transport.md) put into maintenance two screens earlier in the same file. A reader
   is told to depend on `:ktg` and then shown a page of `:telegram` code. That is a defect B-12
