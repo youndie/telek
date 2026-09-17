@@ -37,13 +37,6 @@ kotlin {
             implementation("io.github.youndie.telek:router-ktg:$telekVersion")
             implementation("io.github.youndie.telek:persistence:$telekVersion")
             implementation("io.github.youndie.telek:testing:$telekVersion")
-
-            // WORKING AROUND B-18, DELIBERATELY NOT FIXED HERE. :router and :persistence require a
-            // consumer to annotate its routes and states with @Serializable, and neither exposes
-            // kotlinx-serialization-core as `api` -- so the annotation they demand is not on the
-            // classpath they hand over. A stranger has to write this line and has no way to know
-            // which version telek expects. When B-18 lands, deleting this line is the acceptance.
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0")
         }
         jvmMain.dependencies {
             // JVM-only, because kotlin-telegram-bot is. In maintenance, and still published --

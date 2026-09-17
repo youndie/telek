@@ -35,7 +35,9 @@ kotlin {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kotlinxCoroutines)
+            // `api`, because `Telek`'s own constructor takes a `CoroutineScope`: a consumer
+            // cannot name the type this module requires of them unless they can see it.
+            api(libs.kotlinxCoroutines)
             implementation(libs.atomicfu)
         }
         commonTest.dependencies {

@@ -31,7 +31,11 @@ kotlin {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core)
+            // `api`: `StateStorage<S : State>` and `UserStateStore` are `:core` types, and every
+            // `State` a consumer stores must be `@Serializable`. The json FORMAT stays
+            // `implementation`.
+            api(projects.core)
+            api(libs.kotlinxSerializationCore)
             implementation(libs.kotlinxSerializationJson)
             implementation(libs.kotlinxCoroutines)
             implementation(libs.atomicfu)
