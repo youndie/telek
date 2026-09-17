@@ -1,6 +1,6 @@
 public final class io/github/youndie/telek/ktg/ConnectKt {
-	public static final fun connect (Ldev/inmo/tgbotapi/extensions/behaviour_builder/BehaviourContext;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/ktg/KtgContextSource;Z)V
-	public static synthetic fun connect$default (Ldev/inmo/tgbotapi/extensions/behaviour_builder/BehaviourContext;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/ktg/KtgContextSource;ZILjava/lang/Object;)V
+	public static final fun connect (Ldev/inmo/tgbotapi/extensions/behaviour_builder/BehaviourContext;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/ktg/KtgContextSource;ZLio/github/youndie/telek/Keying;)V
+	public static synthetic fun connect$default (Ldev/inmo/tgbotapi/extensions/behaviour_builder/BehaviourContext;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/ktg/KtgContextSource;ZLio/github/youndie/telek/Keying;ILjava/lang/Object;)V
 }
 
 public final class io/github/youndie/telek/ktg/InlineKeyboardBuilder {
@@ -33,6 +33,7 @@ public final class io/github/youndie/telek/ktg/KtgInputsKt {
 	public static final fun asTelekInput (Ldev/inmo/tgbotapi/types/message/abstracts/ContentMessage;)Lio/github/youndie/telek/Message;
 	public static final fun asTelekInput (Ldev/inmo/tgbotapi/types/queries/callback/DataCallbackQuery;)Lio/github/youndie/telek/Callback;
 	public static final fun getTelekChatId (Ldev/inmo/tgbotapi/types/message/abstracts/Message;)J
+	public static final fun getTelekUserId (Ldev/inmo/tgbotapi/types/message/abstracts/Message;)Ljava/lang/Long;
 }
 
 public final class io/github/youndie/telek/ktg/KtgTransitionsKt {

@@ -1,5 +1,12 @@
 package io.github.youndie.telek
 
+/**
+ * Something a user sent.
+ *
+ * [chatId] is the Telegram **address** — the chat a reply is sent to — and not the key the
+ * conversation's state is filed under; in a group those are different things. See
+ * [ConversationKey], and [Telek.onInput], which takes the key separately.
+ */
 public interface Input {
     public val chatId: Long
 }

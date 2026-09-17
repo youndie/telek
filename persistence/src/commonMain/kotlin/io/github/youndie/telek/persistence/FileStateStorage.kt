@@ -1,5 +1,6 @@
 package io.github.youndie.telek.persistence
 
+import io.github.youndie.telek.ConversationKey
 import io.github.youndie.telek.State
 import io.github.youndie.telek.StateStorage
 import io.github.youndie.telek.TelekLogger
@@ -19,9 +20,11 @@ public inline fun <reified T : State> stateStorageOf(
 ): FileStateStorage<T> = FileStateStorage(dir, serializer(), logger, fileSystem)
 
 /**
- * Saves/loads one JSON file per `chatId`. Writes are atomic — [save] writes to a `.tmp` file and
- * renames it into place, so a crash mid-write can never leave a truncated, unreadable
- * `$chatId.json` behind; the previous (or no) file is what a concurrent [load] would see instead.
+ * Saves/loads one JSON file per [ConversationKey], named by its
+ * [storageId][ConversationKey.storageId] — `<chatId>.json` for a key that is a whole chat,
+ * `<chatId>.<userId>.json` for one person within a chat. Writes are atomic — [save] writes to a
+ * `.tmp` file and renames it into place, so a crash mid-write can never leave a truncated,
+ * unreadable file behind; the previous (or no) file is what a concurrent [load] would see instead.
  *
  * File access goes through okio rather than `java.io`/`java.nio` so this works on every telek
  * target. [fileSystem] defaults to the real one; pass okio's `FakeFileSystem` in tests.
@@ -38,7 +41,7 @@ public open class FileStateStorage<T : State>(
 
     /** Throws if the write fails — a state store must not silently pretend a save succeeded. */
     override suspend fun save(
-        chatId: Long,
+        key: ConversationKey,
         state: T,
     ): Unit =
         withContext(telekIoDispatcher) {
@@ -47,33 +50,33 @@ public open class FileStateStorage<T : State>(
                 "file IO with no suspension point inside, so no cancellation can arrive here",
             )
             runCatching {
-                val tmp = dir / "$chatId.json.tmp"
-                val target = dir / "$chatId.json"
+                val tmp = dir / "${key.storageId}.json.tmp"
+                val target = dir / "${key.storageId}.json"
                 fileSystem.write(tmp) { writeUtf8(json.encodeToString(serializer, state)) }
                 fileSystem.atomicMove(tmp, target)
             }.onFailure {
-                logger.error("Failed to save $chatId: ${it.message}", it)
+                logger.error("Failed to save $key: ${it.message}", it)
             }.getOrThrow()
         }
 
-    override suspend fun load(chatId: Long): T? =
+    override suspend fun load(key: ConversationKey): T? =
         withContext(telekIoDispatcher) {
             @Suppress(
                 "ktlint:kapkan:cancellation-swallowed",
                 "file IO with no suspension point inside, so getOrNull has no cancellation to hide",
             )
             runCatching {
-                val file = dir / "$chatId.json"
+                val file = dir / "${key.storageId}.json"
                 if (!fileSystem.exists(file)) return@withContext null
                 json.decodeFromString(serializer, fileSystem.read(file) { readUtf8() })
             }.onFailure {
-                logger.error("Failed to load $chatId: ${it.message}", it)
+                logger.error("Failed to load $key: ${it.message}", it)
             }.getOrNull()
         }
 
-    override suspend fun delete(chatId: Long) {
+    override suspend fun delete(key: ConversationKey) {
         withContext(telekIoDispatcher) {
-            fileSystem.delete(dir / "$chatId.json", mustExist = false)
+            fileSystem.delete(dir / "${key.storageId}.json", mustExist = false)
         }
     }
 

@@ -1,5 +1,43 @@
 # Release notes
 
+## Unreleased
+
+**A conversation is no longer keyed by its `chatId`.** State, the per-conversation actor, the
+inbox and the stored file are all filed under a new `ConversationKey` — a chat, or a person within
+a chat. The reason is a defect that could not be fixed any other way: in a group, keying by the
+chat gave every member one shared state, so two people running the same wizard answered each
+other's questions.
+
+```kotlin
+-telek.onInput(chatId = message.chat.id, input = input)
++telek.onInput(key = ConversationKey.chatAndUser(message.chat.id, userId), input = input)
+```
+
+**A bot that calls `connect()` changes nothing.** Both transports derive the key themselves and
+default to `Keying.PerUserInChat`, which is correct in a group and indistinguishable from the old
+behaviour in a private chat. Pass `keying = Keying.PerChat` to keep one state for the whole chat —
+a poll, a group game.
+
+**`chatId` on `Input`, on `Event` and on every effect is unchanged, and it never was the key.** It
+is the *address* a reply is sent to. Dispatchers go on writing `sendMessage(input.chatId, ...)`
+untouched; only wiring deals in keys. `Telek.onInput` already took the key as its own parameter,
+and nothing in `:core` ever read `input.chatId` — this release makes that separation explicit in
+the types.
+
+**What breaks, and it is only the seams:** `UserStateStore`, `StateStorage`,
+`InitialStateProvider`, `TelekInterceptor` and `TransitionGate.post` take a `ConversationKey` where
+they took a `Long`. A bot that implements one of those changes a signature. A bot that only writes
+dispatchers changes nothing.
+
+**Stored state.** `FileStateStorage` names each file after the key's `storageId`:
+`<chatId>.json` for a chat key — byte-identical to what every earlier version wrote — and
+`<chatId>.<userId>.json` for a per-person key. So state stored by an earlier version is still found
+under `Keying.PerChat`, and is **not** found under the new default: those conversations start
+empty. For a bot mid-flow that means the flow restarts; drain before upgrading, or pass
+`Keying.PerChat` and move deliberately.
+
+---
+
 ## 0.3.0
 
 **The packages moved, and stored state written by an earlier version will not read back.** Every

@@ -7,6 +7,7 @@ import io.github.youndie.telek.support.RecordingInterceptor
 import io.github.youndie.telek.support.TestEffect
 import io.github.youndie.telek.support.TestEvent
 import io.github.youndie.telek.support.TestState
+import io.github.youndie.telek.support.key
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -59,9 +60,9 @@ private class WizardDispatcher : StateDispatcher<TestState>() {
         }
 
     fun postDirect(
-        chatId: Long,
+        key: ConversationKey,
         reducer: (TestState) -> TransitionResult<TestState>,
-    ) = transitionGate.post(chatId, reducer)
+    ) = transitionGate.post(key, reducer)
 }
 
 private class AsyncDispatcher : StateDispatcher<TestState>() {
@@ -100,7 +101,7 @@ class TelekTest {
         runTest {
             val executor = FakeEffectExecutor()
             val telek = Telek(scope = this, dispatchers = listOf(WizardDispatcher()), effectExecutor = executor)
-            telek.onInput(chatId = 1, input = Message(1, "/test"))
+            telek.onInput(key = key(1), input = Message(1, "/test"))
             advanceUntilIdle()
 
             assertEquals(listOf(TestEffect("started")), executor.executed.single())
@@ -111,11 +112,11 @@ class TelekTest {
         runTest {
             val executor = FakeEffectExecutor()
             val telek = Telek(scope = this, dispatchers = listOf(WizardDispatcher()), effectExecutor = executor)
-            telek.onInput(1, Message(1, "/test"))
+            telek.onInput(key(1), Message(1, "/test"))
             advanceUntilIdle()
-            telek.onInput(1, Message(1, "hello"))
+            telek.onInput(key(1), Message(1, "hello"))
             advanceUntilIdle()
-            telek.onInput(1, Callback(1, messageId = 1, data = "confirm"))
+            telek.onInput(key(1), Callback(1, messageId = 1, data = "confirm"))
             advanceUntilIdle()
 
             val allEffects = executor.executed
@@ -130,6 +131,68 @@ class TelekTest {
         }
 
     @Test
+    fun `two members of one group run the same wizard without seeing each other's answers`() =
+        runTest {
+            // The group's address is one number; the two members are two keys under it. Before
+            // B-01 this test could not be written: both inputs were filed under the chat, so the
+            // second member's message advanced the first member's flow.
+            val group = -100L
+            val alice = ConversationKey.chatAndUser(chatId = group, userId = 11)
+            val bob = ConversationKey.chatAndUser(chatId = group, userId = 22)
+            val store = DefaultUserStateStore()
+            val telek =
+                Telek(
+                    scope = this,
+                    userStateStore = store,
+                    dispatchers = listOf(WizardDispatcher()),
+                    effectExecutor = FakeEffectExecutor(),
+                )
+
+            telek.onInput(alice, Message(group, "/test"))
+            telek.onInput(bob, Message(group, "/test"))
+            advanceUntilIdle()
+
+            // Interleaved, and of different lengths, so a shared state would show up as one of
+            // them holding the other's value.
+            telek.onInput(alice, Message(group, "alice"))
+            telek.onInput(bob, Message(group, "bob's longer answer"))
+            advanceUntilIdle()
+
+            assertEquals(TestState.Confirming("alice".length), store.get(alice))
+            assertEquals(TestState.Confirming("bob's longer answer".length), store.get(bob))
+
+            // And finishing one leaves the other exactly where it was.
+            telek.onInput(alice, Callback(group, messageId = 1, data = "confirm"))
+            advanceUntilIdle()
+
+            assertNull(store.get(alice))
+            assertEquals(TestState.Confirming("bob's longer answer".length), store.get(bob))
+        }
+
+    @Test
+    fun `a chat-only key keeps one state for the whole chat`() =
+        runTest {
+            // The opposite arrangement, and the reason ConversationKey.userId is nullable: a bot
+            // that wants shared state in a group asks for it and gets exactly the old behaviour.
+            val group = ConversationKey.chat(-100)
+            val store = DefaultUserStateStore()
+            val telek =
+                Telek(
+                    scope = this,
+                    userStateStore = store,
+                    dispatchers = listOf(WizardDispatcher()),
+                    effectExecutor = FakeEffectExecutor(),
+                )
+
+            telek.onInput(group, Message(-100, "/test"))
+            advanceUntilIdle()
+            telek.onInput(group, Message(-100, "whoever"))
+            advanceUntilIdle()
+
+            assertEquals(TestState.Confirming("whoever".length), store.get(group))
+        }
+
+    @Test
     fun `reaching a FinalState clears the stored state`() =
         runTest {
             val executor = FakeEffectExecutor()
@@ -141,14 +204,14 @@ class TelekTest {
                     dispatchers = listOf(WizardDispatcher()),
                     effectExecutor = executor,
                 )
-            telek.onInput(1, Message(1, "/test"))
+            telek.onInput(key(1), Message(1, "/test"))
             advanceUntilIdle()
-            telek.onInput(1, Message(1, "hello"))
+            telek.onInput(key(1), Message(1, "hello"))
             advanceUntilIdle()
-            telek.onInput(1, Callback(1, messageId = 1, data = "confirm"))
+            telek.onInput(key(1), Callback(1, messageId = 1, data = "confirm"))
             advanceUntilIdle()
 
-            assertNull(store.get(1))
+            assertNull(store.get(key(1)))
         }
 
     @Test
@@ -164,7 +227,7 @@ class TelekTest {
                     interceptors = listOf(interceptor),
                 )
             val input = Message(1, "/test")
-            telek.onInput(1, input)
+            telek.onInput(key(1), input)
             advanceUntilIdle()
 
             assertEquals(1, interceptor.beforeInput.size)
@@ -190,18 +253,18 @@ class TelekTest {
                     effectExecutor = executor,
                     interceptors = listOf(interceptor),
                 )
-            telek.onInput(1, Message(1, "/test"))
+            telek.onInput(key(1), Message(1, "/test"))
             advanceUntilIdle()
 
-            telek.onInput(1, Message(1, "boom"))
+            telek.onInput(key(1), Message(1, "boom"))
             advanceUntilIdle()
 
             assertEquals(1, interceptor.errors.size)
             val error = interceptor.errors.single()
-            assertEquals(1, error.chatId)
+            assertEquals(key(1), error.key)
             assertIs<RuntimeException>(error.error)
             assertEquals("boom", error.error.message)
-            assertEquals(TestState.Waiting(0), store.get(1))
+            assertEquals(TestState.Waiting(0), store.get(key(1)))
         }
 
     @Test
@@ -218,7 +281,7 @@ class TelekTest {
                     interceptors = listOf(interceptor),
                 )
             // current state is EmptyState, but the gate expects TestState -> mismatch
-            dispatcher.postDirect(1) { state -> noTransition(state) }
+            dispatcher.postDirect(key(1)) { state -> noTransition(state) }
             advanceUntilIdle()
 
             assertEquals(1, interceptor.errors.size)
@@ -238,15 +301,15 @@ class TelekTest {
                     dispatchers = listOf(dispatcher),
                     effectExecutor = executor,
                 )
-            telek.onInput(1, Message(1, "/test"))
+            telek.onInput(key(1), Message(1, "/test"))
             advanceUntilIdle()
 
-            dispatcher.postDirect(1) { state ->
+            dispatcher.postDirect(key(1)) { state ->
                 transition { newState = TestState.Confirming(value = 42) }
             }
             advanceUntilIdle()
 
-            assertEquals(TestState.Confirming(42), store.get(1))
+            assertEquals(TestState.Confirming(42), store.get(key(1)))
         }
 
     @Test
@@ -282,7 +345,7 @@ class TelekTest {
                 }
             val executor = FakeEffectExecutor { EffectSuccess }
             val telek = Telek(scope = this, dispatchers = listOf(dispatcher), effectExecutor = executor)
-            telek.onInput(1, Message(1, "/test"))
+            telek.onInput(key(1), Message(1, "/test"))
             advanceUntilIdle()
 
             assertEquals(1, results.size)
@@ -305,12 +368,12 @@ class TelekTest {
                 )
 
             val input = Message(1, "/test")
-            telek.onInput(1, input)
+            telek.onInput(key(1), input)
             advanceUntilIdle()
 
             assertEquals(1, interceptor.errors.size)
             val error = interceptor.errors.single()
-            assertEquals(1, error.chatId)
+            assertEquals(key(1), error.key)
             assertEquals(input, error.input)
             assertSame(boom, error.error)
             // The transition itself is unaffected — a failed effect doesn't undo the state change.
@@ -339,10 +402,10 @@ class TelekTest {
                     effectExecutor = executor,
                 )
 
-            telek.onInput(1, Message(1, "/async"))
+            telek.onInput(key(1), Message(1, "/async"))
             advanceUntilIdle()
 
-            assertEquals(TestState.Confirming(99), store.get(1))
+            assertEquals(TestState.Confirming(99), store.get(key(1)))
         }
 
     @Test
@@ -367,10 +430,10 @@ class TelekTest {
                     effectExecutor = executor,
                 )
 
-            telek.onInput(1, Message(1, "/async"))
+            telek.onInput(key(1), Message(1, "/async"))
             advanceUntilIdle()
 
-            assertEquals(TestState.Waiting(0), store.get(1))
+            assertEquals(TestState.Waiting(0), store.get(key(1)))
         }
 
     @Test
@@ -388,10 +451,10 @@ class TelekTest {
                     interceptors = listOf(interceptor),
                 )
 
-            telek.onInput(1, Message(1, "/async"))
+            telek.onInput(key(1), Message(1, "/async"))
             advanceUntilIdle()
 
-            assertEquals(TestState.Waiting(0), store.get(1))
+            assertEquals(TestState.Waiting(0), store.get(key(1)))
             // Only the entry transition — no second, event-triggered one.
             assertEquals(1, interceptor.afterStateChanged.size)
         }

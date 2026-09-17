@@ -12,17 +12,17 @@ final class <#A: io.github.youndie.telek/State> io.github.youndie.telek.persiste
     final val stateStorage // io.github.youndie.telek.persistence/PersistableUserStateStoreImpl.stateStorage|{}stateStorage[0]
         final fun <get-stateStorage>(): io.github.youndie.telek/StateStorage<#A> // io.github.youndie.telek.persistence/PersistableUserStateStoreImpl.stateStorage.<get-stateStorage>|<get-stateStorage>(){}[0]
 
-    final suspend fun clear(kotlin/Long) // io.github.youndie.telek.persistence/PersistableUserStateStoreImpl.clear|clear(kotlin.Long){}[0]
-    final suspend fun get(kotlin/Long): io.github.youndie.telek/State? // io.github.youndie.telek.persistence/PersistableUserStateStoreImpl.get|get(kotlin.Long){}[0]
-    final suspend fun update(kotlin/Long, kotlin.coroutines/SuspendFunction1<io.github.youndie.telek/State?, io.github.youndie.telek/UpdateResult>): io.github.youndie.telek/UpdateResult // io.github.youndie.telek.persistence/PersistableUserStateStoreImpl.update|update(kotlin.Long;kotlin.coroutines.SuspendFunction1<io.github.youndie.telek.State?,io.github.youndie.telek.UpdateResult>){}[0]
+    final suspend fun clear(io.github.youndie.telek/ConversationKey) // io.github.youndie.telek.persistence/PersistableUserStateStoreImpl.clear|clear(io.github.youndie.telek.ConversationKey){}[0]
+    final suspend fun get(io.github.youndie.telek/ConversationKey): io.github.youndie.telek/State? // io.github.youndie.telek.persistence/PersistableUserStateStoreImpl.get|get(io.github.youndie.telek.ConversationKey){}[0]
+    final suspend fun update(io.github.youndie.telek/ConversationKey, kotlin.coroutines/SuspendFunction1<io.github.youndie.telek/State?, io.github.youndie.telek/UpdateResult>): io.github.youndie.telek/UpdateResult // io.github.youndie.telek.persistence/PersistableUserStateStoreImpl.update|update(io.github.youndie.telek.ConversationKey;kotlin.coroutines.SuspendFunction1<io.github.youndie.telek.State?,io.github.youndie.telek.UpdateResult>){}[0]
 }
 
 open class <#A: io.github.youndie.telek/State> io.github.youndie.telek.persistence/FileStateStorage : io.github.youndie.telek/StateStorage<#A> { // io.github.youndie.telek.persistence/FileStateStorage|null[0]
     constructor <init>(okio/Path, kotlinx.serialization/KSerializer<#A>, io.github.youndie.telek/TelekLogger = ..., okio/FileSystem = ...) // io.github.youndie.telek.persistence/FileStateStorage.<init>|<init>(okio.Path;kotlinx.serialization.KSerializer<1:0>;io.github.youndie.telek.TelekLogger;okio.FileSystem){}[0]
 
-    open suspend fun delete(kotlin/Long) // io.github.youndie.telek.persistence/FileStateStorage.delete|delete(kotlin.Long){}[0]
-    open suspend fun load(kotlin/Long): #A? // io.github.youndie.telek.persistence/FileStateStorage.load|load(kotlin.Long){}[0]
-    open suspend fun save(kotlin/Long, #A) // io.github.youndie.telek.persistence/FileStateStorage.save|save(kotlin.Long;1:0){}[0]
+    open suspend fun delete(io.github.youndie.telek/ConversationKey) // io.github.youndie.telek.persistence/FileStateStorage.delete|delete(io.github.youndie.telek.ConversationKey){}[0]
+    open suspend fun load(io.github.youndie.telek/ConversationKey): #A? // io.github.youndie.telek.persistence/FileStateStorage.load|load(io.github.youndie.telek.ConversationKey){}[0]
+    open suspend fun save(io.github.youndie.telek/ConversationKey, #A) // io.github.youndie.telek.persistence/FileStateStorage.save|save(io.github.youndie.telek.ConversationKey;1:0){}[0]
 
     final object Companion { // io.github.youndie.telek.persistence/FileStateStorage.Companion|null[0]
         final val json // io.github.youndie.telek.persistence/FileStateStorage.Companion.json|{}json[0]
