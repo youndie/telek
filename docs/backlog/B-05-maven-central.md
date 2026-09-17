@@ -1,7 +1,7 @@
 ---
 id: B-05
 title: "Publish to Maven Central — after the breaking changes, not before"
-status: wip
+status: question
 priority: P0
 size: S
 stage: stage-1-release
@@ -72,3 +72,27 @@ Carried, and blocked on the release actually happening:
 
 Next iteration resumes here and will find those two criteria open; it should not close the item on
 the strength of the flag alone.
+
+## The question — 2026-09-17
+
+**What was found.** The build-side half is done and merged; everything that remains needs somebody
+to act against a public registry, and a version on Maven Central can never be rewritten or taken
+back. `wip` was the wrong status for that: in this backlog `wip` means an iteration is mid-flight,
+and the loop reads `wip` with no branch as work that was abandoned. This is not abandoned — it is
+waiting, and the thing it waits for is a person.
+
+**The choices.**
+
+1. **Dispatch and release by hand.** Run `youndie/sborka`'s `central.yaml` against `youndie/telek`
+   at a chosen ref and version, look at the staged bundle, release it. Then this item's two
+   remaining criteria become runnable and the loop can finish it.
+2. **Let the loop dispatch, and keep the release.** The dispatch only stages, so it is recoverable
+   — an unreleased bundle can be dropped. This needs saying explicitly, because it is an action
+   against a registry with credentials that are not this repository's.
+3. **Not yet.** Nothing here expires. The library goes on publishing snapshots to Reposilite, and
+   the README goes on telling the truth about where the artifacts are.
+
+**Who decides.** The repository owner. What the loop must not do either way is close this item on
+the strength of `sborka.central=true`: configuration is not publication, and the criterion that
+would prove publication — a cold-cache scratch project resolving from `mavenCentral()` — is exactly
+the one that cannot run until the release is real.
