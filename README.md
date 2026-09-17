@@ -600,3 +600,33 @@ How it works:
 - `@RouteContext` is a `@SerialInfo` annotation, so the serialization compiler plugin bakes it into the route's generated `SerialDescriptor` and telek reads it from there. That's what lets `:router` work on every target: `KClass.annotations` needs JVM-only reflection, and `:router` no longer depends on `kotlin-reflect` at all.
 - The encoder produces strings like `scope:action:key1_val1_key2_val2` using `kotlinx.serialization` properties format.
 - `routes { register<T>() }` adds decoders per route type, enabling `isRouteOf<T>()` and `tryDecode<T>()` on `Callback`.
+
+### 🚫 What telek is not
+
+Written down because an unwritten non-goal gets re-proposed roughly once per contributor, including
+by the author six months later, and each time it is argued from scratch. Each of these is a
+decision, so each comes with its reason rather than its verdict.
+
+**Its own Telegram client.** telek is a state machine with transports attached, not an API binding.
+Everything it knows how to send is an `Effect` handled by `:ktg` or `:telegram`; when Telegram adds
+a method, the way to reach it is a handler in your own bot, not a pull request here.
+
+**JS and Apple targets.** The target set is capped by ktgbotapi, which publishes jvm, js, linuxX64,
+linuxArm64 and mingwX64 and no Apple targets — so Apple is not telek's to add. JS is left out for a
+reason of its own: it would force an `expect`/`actual` for `Dispatchers.IO`, which lives in
+coroutines' `concurrent` source set rather than in `common`, and nothing has asked for it.
+
+**A third transport.** Two already cost one adaptation, one test and one documentation section per
+input type. `:ktg` is the transport and `:telegram` is in maintenance — still built, still tested,
+still published, not deprecated, and not receiving new input types unless somebody asks.
+
+**Generalising the product beyond Telegram.** The core genuinely is transport-agnostic: nothing in
+`:core` imports a Telegram type, and `Input` is an ordinary interface a bot can implement itself.
+That is a property of the design, and shipping it as a product — adapters for other chat systems, a
+general "interactive systems" runtime — is a different undertaking that nobody has asked for.
+Depend on the property if it suits you; do not expect the product.
+
+**Implicitly cancelling an async effect when new input arrives.** Guarding on state inside the
+transition is the right answer, because only the dispatcher knows whether a late result is worthless
+or still worth applying — an engine that discarded it would be guessing, invisibly. Where
+cancellation *is* right, `Debounced` is the opt-in.
