@@ -87,11 +87,17 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                             string = state.string,
                         )
 
+                    // `state.string` is whatever the person typed. Built as a document, an
+                    // underscore or an asterisk in it is a character rather than markup; sent as a
+                    // string for Telegram to parse, one of them could fail the whole message.
                     editMessage(
                         input.chatId,
                         input.messageId,
-                        "Selected number: $numberValue, string: ${state.string}",
-                        markup = null,
+                        message = {
+                            text("Selected number: $numberValue, string: ")
+                            text(state.string)
+                        },
+                        keyboard = null,
                     )
 
                     sendMessage(
@@ -116,7 +122,7 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                         transition {
                             newState = ExampleState.Done
                             editMarkup(input.chatId, input.messageId, markup = null)
-                            sendMessage(input.chatId, "Confirmed")
+                            sendMessage(input.chatId, message = { text("Confirmed") })
                         }
                     }
 
@@ -124,7 +130,7 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                         transition {
                             newState = ExampleState.Done
                             editMarkup(input.chatId, input.messageId, markup = null)
-                            sendMessage(input.chatId, "Canceled")
+                            sendMessage(input.chatId, message = { text("Canceled") })
                         }
                     }
 
@@ -153,16 +159,17 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                             catFact = event.fact,
                         )
 
+                    // A cat fact, from somebody else's API: text this bot did not write and
+                    // cannot vet. It goes in as text, not as markup.
                     sendMessage(
                         event.chatId,
-                        event.fact,
-                        markup =
-                            inlineKeyboard {
-                                row {
-                                    callback("Confirm", ExampleRouteConfirm())
-                                    callback("Cancel", ExampleRouteCancel())
-                                }
-                            },
+                        message = { text(event.fact) },
+                        keyboard = {
+                            row {
+                                callback("Confirm", ExampleRouteConfirm())
+                                callback("Cancel", ExampleRouteCancel())
+                            }
+                        },
                     )
                 }
             }

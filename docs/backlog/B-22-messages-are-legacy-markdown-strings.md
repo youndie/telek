@@ -1,7 +1,7 @@
 ---
 id: B-22
 title: "Every message goes out as legacy Markdown, and the mode belongs to the handler rather than the message"
-status: open
+status: done
 priority: P2
 size: L
 stage: stage-3-debts
@@ -71,3 +71,72 @@ make.
   `ktg/src/commonMain/kotlin/io/github/youndie/telek/ktg/effect/handler/EditMessageEffectHandler.kt`,
   `telegram/src/main/kotlin/io/github/youndie/telek/telegram/TelegramMessageDsl.kt`,
   `telegram/src/main/kotlin/io/github/youndie/telek/telegram/effect/handler/`.
+
+## Iteration 1 — 2026-09-18
+
+Done. Entities instead of `parse_mode`, a document instead of a string, and the shape question
+answered against evidence rather than by preference.
+
+### The shape: a sealed set in `:core`, and the question above was framed wrong
+
+This item offered two shapes and priced the second as "`:core`'s API names a client library". That
+premise does not hold: **`:core` has no message effect at all.** `SendMessageEffect` is declared in
+`:ktg` and again in `:telegram`, and each already names its own client's `InlineKeyboardMarkup`. So
+the choice was never "does `:core` name ktgbotapi"; it was whether the two transports share a
+document type or each uses its client's own.
+
+Sharing, for three reasons that survived checking:
+
+- **`:core` already models Telegram's domain.** `Input` carries `Message`, `Photo`, `Document`,
+  `Contact`, `Location`, `FileRef`. A message body is the outgoing mirror of that, not a new kind of
+  dependency, and `MessageText` names Telegram rather than a library exactly as `Input` does.
+- **The alternative does not avoid the mapping, it duplicates it.** kotlin-telegram-bot takes
+  `(text, entities)` with UTF-16 offsets, so `:telegram` needs a flattener whichever shape wins.
+  Per-transport types would have bought one saved mapping in `:ktg` and cost a second builder, a
+  second flattener, and a second set of names.
+- **It removes a duplication that was already a known wart.** `TelegramTextBuilder` existed twice,
+  verbatim, and its own comment asked the next person to keep the copies in sync — a job nothing
+  checked. There is now one `MessageTextBuilder` in `:core`; both copies are deleted, and the tests
+  that guarded their layout behaviour were ported into `:core` rather than dropped.
+
+The loser's cost, since the diff only shows the winner: `List<TextSource>` in `:ktg`'s signatures
+would have made `:ktg` slightly thinner — thirty lines of mapping gone — and stranded `:telegram` at
+the old ceiling or given it a parallel, differently-named API. The ceiling was the whole complaint.
+
+### What shipped
+
+- `:core` — `MessageText`, `TextPiece` (`Plain`, `Styled`, `Link`, `Code`, `CodeBlock`), `TextStyle`,
+  `MessageTextBuilder` with `message { }`, `plain`, and `entities()`.
+- `:ktg` — `MessageText.asTextSources()`; both handlers send `entities` and name no parse mode.
+- `:telegram` — `MessageText.asMessageEntities()`; both handlers send `(text, entities)`.
+- The deprecated path is a **type**, not a flag: `SendMarkdownMessageEffect` /
+  `EditMarkdownMessageEffect` in each transport, registered by default, with the string overloads of
+  `sendMessage` / `editMessage` deprecated and pointing at the replacement. It goes by deleting two
+  effects, two handlers and two registry lines — not by finding a branch.
+- Kept as legacy Markdown rather than reinterpreted as literal text, deliberately: had the string
+  overload started sending its argument literally, every asterisk in an upgrading bot's messages
+  would have become a character on upgrade and nothing would have failed.
+
+### The criteria
+
+- **Expandable blockquote and monospace without naming a `TextSource` or a parse mode** — the README
+  sample does exactly that, compiled in `:docs-samples`.
+- **A name with `_`, `*`, `[` and a backtick, no escaping, asserted on pieces** — three times, at
+  three levels: `:core`'s `MessageTextTest`, each transport's mapping test, and `ci/consumer`, which
+  resolves telek from a published coordinate and knows nothing else about it.
+- **A plain-text projection** — `MessageText.plain`. The consumer tests that compared rendered
+  strings were migrated to it in one substitution, which is the point of having it.
+- **The `String` path stays one release, deprecated, and the ABI dump carries the new API** — both
+  done; `-Werror` in `:example` and `:docs-samples` turned the deprecation into a build failure, so
+  telek's own samples migrated in this change rather than later.
+- **The decision written here** — above.
+
+### Two things worth carrying
+
+- **UTF-16, not characters.** Telegram counts entity offsets in UTF-16 code units. Kotlin's `String`
+  already indexes that way, so the arithmetic is right by default — and wrong the moment somebody
+  "fixes" it to count characters. There is a test with an astral emoji whose only job is to fail
+  then, because every message without one passes either way.
+- **The example was already carrying the defect.** It edited a message containing text the user had
+  typed and sent a cat fact from somebody else's API, both as Markdown strings. Neither was a
+  hypothetical; both are now documents, with the reason written beside them.

@@ -2,6 +2,45 @@
 
 ## Unreleased
 
+**A message body is a document, not a string Telegram parses.** `SendMessageEffect` and
+`EditMessageEffect` carry a `MessageText` where they carried a `String`, and both transports send
+**entities** — offsets over plain text — instead of `parse_mode`.
+
+```kotlin
+-sendMessage(input.chatId, "Hi, *${'$'}{user.name}*")
++sendMessage(input.chatId, message = { text("Hi, "); bold(user.name) })
+```
+
+Two things come out of it. **Nothing needs escaping, ever**, because nothing in the text is parsed:
+a name with `_`, `*`, `[` or a backtick in it used to be able to open markup that never closed, and
+Telegram then rejected the *whole* message — which from the outside is a button that does nothing.
+And **every format Telegram has is now expressible**: `underline`, `strikethrough`, `spoiler`,
+`blockquote` and `expandableBlockquote` were unreachable through telek, not because Telegram lacked
+them but because of a constant in four files.
+
+The builder moved to `:core` and is now one class instead of a verbatim copy in each transport:
+`text`, `bold`, `italic`, `underline`, `strikethrough`, `spoiler`, `code`, `codeBlock`, `link`,
+`blockquote`, `expandableBlockquote`, plus `br`, `br2`, `row` and `list`. Styles nest.
+
+**The DSL call site is unchanged.** `sendMessage(chatId, message = { ... }, keyboard = { ... })`
+reads exactly as before and now builds a document.
+
+**What breaks:** the `String` overloads of `sendMessage` and `editMessage` are **deprecated, not
+removed** — they still go out as legacy Markdown, so an upgrading bot's hand-written markup keeps
+rendering while it migrates. Reinterpreting those strings as literal text would have turned every
+asterisk into a character on upgrade with nothing failing, which is the kind of silent change this
+release has spent its time removing. They now produce `SendMarkdownMessageEffect` /
+`EditMarkdownMessageEffect`, so a test that asserted on `SendMessageEffect` from a string call sees
+a different type rather than a wrong value.
+
+A dispatcher that reads an effect's body reads `effect.message.plain` where it read `effect.text`;
+`MessageText.plain(s)` is the one-line way to send a string literally, and it is the right reading
+for anything a person typed.
+
+**`:telegram` gets all of it too.** kotlin-telegram-bot takes entities as well, so the module in
+maintenance is not stranded at the old ceiling.
+
+
 **Documented: state that outlives a flow.** No API change. `UserStateStore`'s KDoc now says what the
 store owns and what a `FinalState` and a `clear` mean — *this flow is over*, not *this person is
 gone* — and `README.md` gains a compiled example of a store that keeps a language and a menu message

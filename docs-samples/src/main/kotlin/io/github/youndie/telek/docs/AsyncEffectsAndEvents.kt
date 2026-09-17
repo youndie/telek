@@ -75,7 +75,7 @@ fun asyncEffectRegistrationSample(useCase: FetchCatFactUseCase) {
 fun asyncEffectUsageSample(input: Input): TransitionResult<MyState> =
     transition {
         newState = MyState.Loading
-        sendMessage(input.chatId, "Loading...")
+        sendMessage(input.chatId, message = { text("Loading...") })
         add(FetchCatFactEffect(chatId = input.chatId)) // fire-and-forget from here on
     }
 

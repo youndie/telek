@@ -6,6 +6,10 @@
 // - Show declarations: true
 
 // Library unique name: <io.github.youndie.telek:core>
+open annotation class io.github.youndie.telek/MessageTextDsl : kotlin/Annotation { // io.github.youndie.telek/MessageTextDsl|null[0]
+    constructor <init>() // io.github.youndie.telek/MessageTextDsl.<init>|<init>(){}[0]
+}
+
 open annotation class io.github.youndie.telek/WizardDsl : kotlin/Annotation { // io.github.youndie.telek/WizardDsl|null[0]
     constructor <init>() // io.github.youndie.telek/WizardDsl.<init>|<init>(){}[0]
 }
@@ -43,6 +47,41 @@ final enum class io.github.youndie.telek/TelekLogLevel : kotlin/Enum<io.github.y
 
     final fun valueOf(kotlin/String): io.github.youndie.telek/TelekLogLevel // io.github.youndie.telek/TelekLogLevel.valueOf|valueOf#static(kotlin.String){}[0]
     final fun values(): kotlin/Array<io.github.youndie.telek/TelekLogLevel> // io.github.youndie.telek/TelekLogLevel.values|values#static(){}[0]
+}
+
+final enum class io.github.youndie.telek/TextEntityType : kotlin/Enum<io.github.youndie.telek/TextEntityType> { // io.github.youndie.telek/TextEntityType|null[0]
+    enum entry Blockquote // io.github.youndie.telek/TextEntityType.Blockquote|null[0]
+    enum entry Bold // io.github.youndie.telek/TextEntityType.Bold|null[0]
+    enum entry Code // io.github.youndie.telek/TextEntityType.Code|null[0]
+    enum entry ExpandableBlockquote // io.github.youndie.telek/TextEntityType.ExpandableBlockquote|null[0]
+    enum entry Italic // io.github.youndie.telek/TextEntityType.Italic|null[0]
+    enum entry Pre // io.github.youndie.telek/TextEntityType.Pre|null[0]
+    enum entry Spoiler // io.github.youndie.telek/TextEntityType.Spoiler|null[0]
+    enum entry Strikethrough // io.github.youndie.telek/TextEntityType.Strikethrough|null[0]
+    enum entry TextLink // io.github.youndie.telek/TextEntityType.TextLink|null[0]
+    enum entry Underline // io.github.youndie.telek/TextEntityType.Underline|null[0]
+
+    final val entries // io.github.youndie.telek/TextEntityType.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.telek/TextEntityType> // io.github.youndie.telek/TextEntityType.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.telek/TextEntityType // io.github.youndie.telek/TextEntityType.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.telek/TextEntityType> // io.github.youndie.telek/TextEntityType.values|values#static(){}[0]
+}
+
+final enum class io.github.youndie.telek/TextStyle : kotlin/Enum<io.github.youndie.telek/TextStyle> { // io.github.youndie.telek/TextStyle|null[0]
+    enum entry Blockquote // io.github.youndie.telek/TextStyle.Blockquote|null[0]
+    enum entry Bold // io.github.youndie.telek/TextStyle.Bold|null[0]
+    enum entry ExpandableBlockquote // io.github.youndie.telek/TextStyle.ExpandableBlockquote|null[0]
+    enum entry Italic // io.github.youndie.telek/TextStyle.Italic|null[0]
+    enum entry Spoiler // io.github.youndie.telek/TextStyle.Spoiler|null[0]
+    enum entry Strikethrough // io.github.youndie.telek/TextStyle.Strikethrough|null[0]
+    enum entry Underline // io.github.youndie.telek/TextStyle.Underline|null[0]
+
+    final val entries // io.github.youndie.telek/TextStyle.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<io.github.youndie.telek/TextStyle> // io.github.youndie.telek/TextStyle.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): io.github.youndie.telek/TextStyle // io.github.youndie.telek/TextStyle.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<io.github.youndie.telek/TextStyle> // io.github.youndie.telek/TextStyle.values|values#static(){}[0]
 }
 
 abstract fun interface io.github.youndie.telek/InitialStateProvider { // io.github.youndie.telek/InitialStateProvider|null[0]
@@ -131,6 +170,82 @@ abstract interface io.github.youndie.telek/UserStateStore { // io.github.youndie
     abstract suspend fun clear(io.github.youndie.telek/ConversationKey) // io.github.youndie.telek/UserStateStore.clear|clear(io.github.youndie.telek.ConversationKey){}[0]
     abstract suspend fun get(io.github.youndie.telek/ConversationKey): io.github.youndie.telek/State? // io.github.youndie.telek/UserStateStore.get|get(io.github.youndie.telek.ConversationKey){}[0]
     abstract suspend fun update(io.github.youndie.telek/ConversationKey, kotlin.coroutines/SuspendFunction1<io.github.youndie.telek/State?, io.github.youndie.telek/UpdateResult>): io.github.youndie.telek/UpdateResult // io.github.youndie.telek/UserStateStore.update|update(io.github.youndie.telek.ConversationKey;kotlin.coroutines.SuspendFunction1<io.github.youndie.telek.State?,io.github.youndie.telek.UpdateResult>){}[0]
+}
+
+sealed interface io.github.youndie.telek/TextPiece { // io.github.youndie.telek/TextPiece|null[0]
+    final class Code : io.github.youndie.telek/TextPiece { // io.github.youndie.telek/TextPiece.Code|null[0]
+        constructor <init>(kotlin/String) // io.github.youndie.telek/TextPiece.Code.<init>|<init>(kotlin.String){}[0]
+
+        final val text // io.github.youndie.telek/TextPiece.Code.text|{}text[0]
+            final fun <get-text>(): kotlin/String // io.github.youndie.telek/TextPiece.Code.text.<get-text>|<get-text>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.telek/TextPiece.Code.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.youndie.telek/TextPiece.Code // io.github.youndie.telek/TextPiece.Code.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/TextPiece.Code.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.telek/TextPiece.Code.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.telek/TextPiece.Code.toString|toString(){}[0]
+    }
+
+    final class CodeBlock : io.github.youndie.telek/TextPiece { // io.github.youndie.telek/TextPiece.CodeBlock|null[0]
+        constructor <init>(kotlin/String, kotlin/String? = ...) // io.github.youndie.telek/TextPiece.CodeBlock.<init>|<init>(kotlin.String;kotlin.String?){}[0]
+
+        final val language // io.github.youndie.telek/TextPiece.CodeBlock.language|{}language[0]
+            final fun <get-language>(): kotlin/String? // io.github.youndie.telek/TextPiece.CodeBlock.language.<get-language>|<get-language>(){}[0]
+        final val text // io.github.youndie.telek/TextPiece.CodeBlock.text|{}text[0]
+            final fun <get-text>(): kotlin/String // io.github.youndie.telek/TextPiece.CodeBlock.text.<get-text>|<get-text>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.telek/TextPiece.CodeBlock.component1|component1(){}[0]
+        final fun component2(): kotlin/String? // io.github.youndie.telek/TextPiece.CodeBlock.component2|component2(){}[0]
+        final fun copy(kotlin/String = ..., kotlin/String? = ...): io.github.youndie.telek/TextPiece.CodeBlock // io.github.youndie.telek/TextPiece.CodeBlock.copy|copy(kotlin.String;kotlin.String?){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/TextPiece.CodeBlock.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.telek/TextPiece.CodeBlock.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.telek/TextPiece.CodeBlock.toString|toString(){}[0]
+    }
+
+    final class Link : io.github.youndie.telek/TextPiece { // io.github.youndie.telek/TextPiece.Link|null[0]
+        constructor <init>(kotlin/String, kotlin.collections/List<io.github.youndie.telek/TextPiece>) // io.github.youndie.telek/TextPiece.Link.<init>|<init>(kotlin.String;kotlin.collections.List<io.github.youndie.telek.TextPiece>){}[0]
+
+        final val text // io.github.youndie.telek/TextPiece.Link.text|{}text[0]
+            final fun <get-text>(): kotlin.collections/List<io.github.youndie.telek/TextPiece> // io.github.youndie.telek/TextPiece.Link.text.<get-text>|<get-text>(){}[0]
+        final val url // io.github.youndie.telek/TextPiece.Link.url|{}url[0]
+            final fun <get-url>(): kotlin/String // io.github.youndie.telek/TextPiece.Link.url.<get-url>|<get-url>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.telek/TextPiece.Link.component1|component1(){}[0]
+        final fun component2(): kotlin.collections/List<io.github.youndie.telek/TextPiece> // io.github.youndie.telek/TextPiece.Link.component2|component2(){}[0]
+        final fun copy(kotlin/String = ..., kotlin.collections/List<io.github.youndie.telek/TextPiece> = ...): io.github.youndie.telek/TextPiece.Link // io.github.youndie.telek/TextPiece.Link.copy|copy(kotlin.String;kotlin.collections.List<io.github.youndie.telek.TextPiece>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/TextPiece.Link.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.telek/TextPiece.Link.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.telek/TextPiece.Link.toString|toString(){}[0]
+    }
+
+    final class Plain : io.github.youndie.telek/TextPiece { // io.github.youndie.telek/TextPiece.Plain|null[0]
+        constructor <init>(kotlin/String) // io.github.youndie.telek/TextPiece.Plain.<init>|<init>(kotlin.String){}[0]
+
+        final val text // io.github.youndie.telek/TextPiece.Plain.text|{}text[0]
+            final fun <get-text>(): kotlin/String // io.github.youndie.telek/TextPiece.Plain.text.<get-text>|<get-text>(){}[0]
+
+        final fun component1(): kotlin/String // io.github.youndie.telek/TextPiece.Plain.component1|component1(){}[0]
+        final fun copy(kotlin/String = ...): io.github.youndie.telek/TextPiece.Plain // io.github.youndie.telek/TextPiece.Plain.copy|copy(kotlin.String){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/TextPiece.Plain.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.telek/TextPiece.Plain.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.telek/TextPiece.Plain.toString|toString(){}[0]
+    }
+
+    final class Styled : io.github.youndie.telek/TextPiece { // io.github.youndie.telek/TextPiece.Styled|null[0]
+        constructor <init>(io.github.youndie.telek/TextStyle, kotlin.collections/List<io.github.youndie.telek/TextPiece>) // io.github.youndie.telek/TextPiece.Styled.<init>|<init>(io.github.youndie.telek.TextStyle;kotlin.collections.List<io.github.youndie.telek.TextPiece>){}[0]
+
+        final val style // io.github.youndie.telek/TextPiece.Styled.style|{}style[0]
+            final fun <get-style>(): io.github.youndie.telek/TextStyle // io.github.youndie.telek/TextPiece.Styled.style.<get-style>|<get-style>(){}[0]
+        final val text // io.github.youndie.telek/TextPiece.Styled.text|{}text[0]
+            final fun <get-text>(): kotlin.collections/List<io.github.youndie.telek/TextPiece> // io.github.youndie.telek/TextPiece.Styled.text.<get-text>|<get-text>(){}[0]
+
+        final fun component1(): io.github.youndie.telek/TextStyle // io.github.youndie.telek/TextPiece.Styled.component1|component1(){}[0]
+        final fun component2(): kotlin.collections/List<io.github.youndie.telek/TextPiece> // io.github.youndie.telek/TextPiece.Styled.component2|component2(){}[0]
+        final fun copy(io.github.youndie.telek/TextStyle = ..., kotlin.collections/List<io.github.youndie.telek/TextPiece> = ...): io.github.youndie.telek/TextPiece.Styled // io.github.youndie.telek/TextPiece.Styled.copy|copy(io.github.youndie.telek.TextStyle;kotlin.collections.List<io.github.youndie.telek.TextPiece>){}[0]
+        final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/TextPiece.Styled.equals|equals(kotlin.Any?){}[0]
+        final fun hashCode(): kotlin/Int // io.github.youndie.telek/TextPiece.Styled.hashCode|hashCode(){}[0]
+        final fun toString(): kotlin/String // io.github.youndie.telek/TextPiece.Styled.toString|toString(){}[0]
+    }
 }
 
 abstract class <#A: io.github.youndie.telek/State> io.github.youndie.telek/StateDispatcher : io.github.youndie.telek/Dispatcher, io.github.youndie.telek/StateMachine<#A, io.github.youndie.telek/Input> { // io.github.youndie.telek/StateDispatcher|null[0]
@@ -398,6 +513,55 @@ final class io.github.youndie.telek/Message : io.github.youndie.telek/Input { //
     final fun toString(): kotlin/String // io.github.youndie.telek/Message.toString|toString(){}[0]
 }
 
+final class io.github.youndie.telek/MessageText { // io.github.youndie.telek/MessageText|null[0]
+    constructor <init>(kotlin.collections/List<io.github.youndie.telek/TextPiece>) // io.github.youndie.telek/MessageText.<init>|<init>(kotlin.collections.List<io.github.youndie.telek.TextPiece>){}[0]
+
+    final val pieces // io.github.youndie.telek/MessageText.pieces|{}pieces[0]
+        final fun <get-pieces>(): kotlin.collections/List<io.github.youndie.telek/TextPiece> // io.github.youndie.telek/MessageText.pieces.<get-pieces>|<get-pieces>(){}[0]
+    final val plain // io.github.youndie.telek/MessageText.plain|{}plain[0]
+        final fun <get-plain>(): kotlin/String // io.github.youndie.telek/MessageText.plain.<get-plain>|<get-plain>(){}[0]
+
+    final fun component1(): kotlin.collections/List<io.github.youndie.telek/TextPiece> // io.github.youndie.telek/MessageText.component1|component1(){}[0]
+    final fun copy(kotlin.collections/List<io.github.youndie.telek/TextPiece> = ...): io.github.youndie.telek/MessageText // io.github.youndie.telek/MessageText.copy|copy(kotlin.collections.List<io.github.youndie.telek.TextPiece>){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/MessageText.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/MessageText.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/MessageText.toString|toString(){}[0]
+
+    final object Companion { // io.github.youndie.telek/MessageText.Companion|null[0]
+        final val Empty // io.github.youndie.telek/MessageText.Companion.Empty|{}Empty[0]
+            final fun <get-Empty>(): io.github.youndie.telek/MessageText // io.github.youndie.telek/MessageText.Companion.Empty.<get-Empty>|<get-Empty>(){}[0]
+
+        final fun plain(kotlin/String): io.github.youndie.telek/MessageText // io.github.youndie.telek/MessageText.Companion.plain|plain(kotlin.String){}[0]
+    }
+}
+
+final class io.github.youndie.telek/MessageTextBuilder { // io.github.youndie.telek/MessageTextBuilder|null[0]
+    constructor <init>() // io.github.youndie.telek/MessageTextBuilder.<init>|<init>(){}[0]
+
+    final fun <#A1: kotlin/Any?> list(kotlin.collections/List<#A1>, kotlin/Function2<io.github.youndie.telek/MessageTextBuilder, #A1, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.list|list(kotlin.collections.List<0:0>;kotlin.Function2<io.github.youndie.telek.MessageTextBuilder,0:0,kotlin.Unit>){0§<kotlin.Any?>}[0]
+    final fun blockquote(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.blockquote|blockquote(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun bold(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.bold|bold(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun bold(kotlin/String) // io.github.youndie.telek/MessageTextBuilder.bold|bold(kotlin.String){}[0]
+    final fun br() // io.github.youndie.telek/MessageTextBuilder.br|br(){}[0]
+    final fun br2() // io.github.youndie.telek/MessageTextBuilder.br2|br2(){}[0]
+    final fun build(): io.github.youndie.telek/MessageText // io.github.youndie.telek/MessageTextBuilder.build|build(){}[0]
+    final fun code(kotlin/String) // io.github.youndie.telek/MessageTextBuilder.code|code(kotlin.String){}[0]
+    final fun codeBlock(kotlin/String, kotlin/String? = ...) // io.github.youndie.telek/MessageTextBuilder.codeBlock|codeBlock(kotlin.String;kotlin.String?){}[0]
+    final fun expandableBlockquote(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.expandableBlockquote|expandableBlockquote(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun italic(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.italic|italic(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun italic(kotlin/String) // io.github.youndie.telek/MessageTextBuilder.italic|italic(kotlin.String){}[0]
+    final fun link(kotlin/String, kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.link|link(kotlin.String;kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun link(kotlin/String, kotlin/String) // io.github.youndie.telek/MessageTextBuilder.link|link(kotlin.String;kotlin.String){}[0]
+    final fun row(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.row|row(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun spoiler(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.spoiler|spoiler(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun spoiler(kotlin/String) // io.github.youndie.telek/MessageTextBuilder.spoiler|spoiler(kotlin.String){}[0]
+    final fun strikethrough(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.strikethrough|strikethrough(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun strikethrough(kotlin/String) // io.github.youndie.telek/MessageTextBuilder.strikethrough|strikethrough(kotlin.String){}[0]
+    final fun text(kotlin/String) // io.github.youndie.telek/MessageTextBuilder.text|text(kotlin.String){}[0]
+    final fun underline(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>) // io.github.youndie.telek/MessageTextBuilder.underline|underline(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
+    final fun underline(kotlin/String) // io.github.youndie.telek/MessageTextBuilder.underline|underline(kotlin.String){}[0]
+}
+
 final class io.github.youndie.telek/Photo : io.github.youndie.telek/Input { // io.github.youndie.telek/Photo|null[0]
     constructor <init>(kotlin/Long, kotlin/Long, io.github.youndie.telek/FileRef, kotlin/String? = ...) // io.github.youndie.telek/Photo.<init>|<init>(kotlin.Long;kotlin.Long;io.github.youndie.telek.FileRef;kotlin.String?){}[0]
 
@@ -424,6 +588,31 @@ final class io.github.youndie.telek/Telek { // io.github.youndie.telek/Telek|nul
     constructor <init>(kotlinx.coroutines/CoroutineScope = ..., io.github.youndie.telek/UserStateStore = ..., kotlin.collections/List<io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>>, io.github.youndie.telek/InitialStateProvider = ..., kotlin.collections/List<io.github.youndie.telek/TelekInterceptor> = ..., io.github.youndie.telek/EffectExecutor, io.github.youndie.telek/FindDispatcherStrategy = ..., kotlin.time/Duration = ..., kotlin/Int = ..., io.github.youndie.telek/TelekLogger = ...) // io.github.youndie.telek/Telek.<init>|<init>(kotlinx.coroutines.CoroutineScope;io.github.youndie.telek.UserStateStore;kotlin.collections.List<io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>>;io.github.youndie.telek.InitialStateProvider;kotlin.collections.List<io.github.youndie.telek.TelekInterceptor>;io.github.youndie.telek.EffectExecutor;io.github.youndie.telek.FindDispatcherStrategy;kotlin.time.Duration;kotlin.Int;io.github.youndie.telek.TelekLogger){}[0]
 
     final fun onInput(io.github.youndie.telek/ConversationKey, io.github.youndie.telek/Input) // io.github.youndie.telek/Telek.onInput|onInput(io.github.youndie.telek.ConversationKey;io.github.youndie.telek.Input){}[0]
+}
+
+final class io.github.youndie.telek/TextEntity { // io.github.youndie.telek/TextEntity|null[0]
+    constructor <init>(io.github.youndie.telek/TextEntityType, kotlin/Int, kotlin/Int, kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.telek/TextEntity.<init>|<init>(io.github.youndie.telek.TextEntityType;kotlin.Int;kotlin.Int;kotlin.String?;kotlin.String?){}[0]
+
+    final val language // io.github.youndie.telek/TextEntity.language|{}language[0]
+        final fun <get-language>(): kotlin/String? // io.github.youndie.telek/TextEntity.language.<get-language>|<get-language>(){}[0]
+    final val length // io.github.youndie.telek/TextEntity.length|{}length[0]
+        final fun <get-length>(): kotlin/Int // io.github.youndie.telek/TextEntity.length.<get-length>|<get-length>(){}[0]
+    final val offset // io.github.youndie.telek/TextEntity.offset|{}offset[0]
+        final fun <get-offset>(): kotlin/Int // io.github.youndie.telek/TextEntity.offset.<get-offset>|<get-offset>(){}[0]
+    final val type // io.github.youndie.telek/TextEntity.type|{}type[0]
+        final fun <get-type>(): io.github.youndie.telek/TextEntityType // io.github.youndie.telek/TextEntity.type.<get-type>|<get-type>(){}[0]
+    final val url // io.github.youndie.telek/TextEntity.url|{}url[0]
+        final fun <get-url>(): kotlin/String? // io.github.youndie.telek/TextEntity.url.<get-url>|<get-url>(){}[0]
+
+    final fun component1(): io.github.youndie.telek/TextEntityType // io.github.youndie.telek/TextEntity.component1|component1(){}[0]
+    final fun component2(): kotlin/Int // io.github.youndie.telek/TextEntity.component2|component2(){}[0]
+    final fun component3(): kotlin/Int // io.github.youndie.telek/TextEntity.component3|component3(){}[0]
+    final fun component4(): kotlin/String? // io.github.youndie.telek/TextEntity.component4|component4(){}[0]
+    final fun component5(): kotlin/String? // io.github.youndie.telek/TextEntity.component5|component5(){}[0]
+    final fun copy(io.github.youndie.telek/TextEntityType = ..., kotlin/Int = ..., kotlin/Int = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.telek/TextEntity // io.github.youndie.telek/TextEntity.copy|copy(io.github.youndie.telek.TextEntityType;kotlin.Int;kotlin.Int;kotlin.String?;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/TextEntity.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/TextEntity.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/TextEntity.toString|toString(){}[0]
 }
 
 final class io.github.youndie.telek/UpdateResult { // io.github.youndie.telek/UpdateResult|null[0]
@@ -460,5 +649,7 @@ final val io.github.youndie.telek/telekIoDispatcher // io.github.youndie.telek/t
     final fun <get-telekIoDispatcher>(): kotlinx.coroutines/CoroutineDispatcher // io.github.youndie.telek/telekIoDispatcher.<get-telekIoDispatcher>|<get-telekIoDispatcher>(){}[0]
 
 final fun (io.github.youndie.telek/Message).io.github.youndie.telek/asCommand(): io.github.youndie.telek/Command? // io.github.youndie.telek/asCommand|asCommand@io.github.youndie.telek.Message(){}[0]
+final fun (io.github.youndie.telek/MessageText).io.github.youndie.telek/entities(): kotlin.collections/List<io.github.youndie.telek/TextEntity> // io.github.youndie.telek/entities|entities@io.github.youndie.telek.MessageText(){}[0]
 final fun <#A: io.github.youndie.telek/State> io.github.youndie.telek/noTransition(#A): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/noTransition|noTransition(0:0){0§<io.github.youndie.telek.State>}[0]
+final fun io.github.youndie.telek/message(kotlin/Function1<io.github.youndie.telek/MessageTextBuilder, kotlin/Unit>): io.github.youndie.telek/MessageText // io.github.youndie.telek/message|message(kotlin.Function1<io.github.youndie.telek.MessageTextBuilder,kotlin.Unit>){}[0]
 final inline fun <#A: io.github.youndie.telek/State> io.github.youndie.telek/transition(kotlin/Function1<io.github.youndie.telek/TransitionBuilder<#A>, kotlin/Unit>): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/transition|transition(kotlin.Function1<io.github.youndie.telek.TransitionBuilder<0:0>,kotlin.Unit>){0§<io.github.youndie.telek.State>}[0]

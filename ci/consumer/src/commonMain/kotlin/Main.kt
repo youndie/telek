@@ -34,6 +34,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.Serializable
 import okio.Path.Companion.toPath
+import io.github.youndie.telek.TextEntityType
+import io.github.youndie.telek.entities
+import io.github.youndie.telek.message
 
 @RouteContext(scope = "consumer", action = "confirm")
 @Serializable
@@ -141,6 +144,21 @@ fun main() {
     // B-09: an outcome names its effect.
     dispatcher.onEffectResults(scanned.newState, scanned.effects.map { EffectOutcome(it, io.github.youndie.telek.EffectSuccess) })
     check(dispatcher.lastEffect != null) { "an outcome did not carry its effect" }
+
+    // B-22: the body is a document, and a name full of markup characters stays a name.
+    val hostile = "a_b*c[d`e"
+    val body =
+        message {
+            bold("Passport")
+            br()
+            text(hostile)
+            expandableBlockquote { code("ORD-4711") }
+        }
+    check(body.plain == "Passport\n" + hostile + "ORD-4711") { "plain projection: ${body.plain}" }
+    check(body.entities().map { it.type } == listOf(TextEntityType.Bold, TextEntityType.ExpandableBlockquote, TextEntityType.Code)) {
+        "entities: ${body.entities()}"
+    }
+    check(body.entities().first { it.type == TextEntityType.Bold }.length == 8) { "bold range is wrong" }
 
     // :persistence resolves and constructs on every target.
     stateStorageOf<PassportState>(dir = "./state".toPath())

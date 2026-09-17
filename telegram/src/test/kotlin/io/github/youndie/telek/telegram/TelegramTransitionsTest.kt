@@ -1,5 +1,6 @@
 package io.github.youndie.telek.telegram
 
+import io.github.youndie.telek.MessageText
 import io.github.youndie.telek.State
 import io.github.youndie.telek.telegram.effect.EditMarkupEffect
 import io.github.youndie.telek.telegram.effect.EditMessageEffect
@@ -20,12 +21,12 @@ class TelegramTransitionsTest {
         val result =
             transition<DummyState> {
                 newState = DummyState()
-                sendMessage(chatId = 1, text = "hi")
+                sendMessage(chatId = 1, MessageText.plain("hi"))
             }
 
         val effect = assertIs<SendMessageEffect>(result.effects.single())
         assertEquals(1, effect.chatId)
-        assertEquals("hi", effect.text)
+        assertEquals("hi", effect.message.plain)
         assertNull(effect.markup)
     }
 
@@ -42,7 +43,7 @@ class TelegramTransitionsTest {
             }
 
         val effect = assertIs<SendMessageEffect>(result.effects.single())
-        assertEquals("Confirm?", effect.text)
+        assertEquals("Confirm?", effect.message.plain)
         assertEquals(1, effect.markup?.inlineKeyboard?.size)
     }
 
@@ -63,13 +64,13 @@ class TelegramTransitionsTest {
         val result =
             transition<DummyState> {
                 newState = DummyState()
-                editMessage(chatId = 1, messageId = 2, text = "edited")
+                editMessage(chatId = 1, messageId = 2, MessageText.plain("edited"))
             }
 
         val effect = assertIs<EditMessageEffect>(result.effects.single())
         assertEquals(1, effect.chatId)
         assertEquals(2, effect.messageId)
-        assertEquals("edited", effect.text)
+        assertEquals("edited", effect.message.plain)
     }
 
     @Test
@@ -86,7 +87,7 @@ class TelegramTransitionsTest {
             }
 
         val effect = assertIs<EditMessageEffect>(result.effects.single())
-        assertEquals("edited", effect.text)
+        assertEquals("edited", effect.message.plain)
         assertEquals(1, effect.markup?.inlineKeyboard?.size)
     }
 

@@ -44,12 +44,16 @@ public final class io/github/youndie/telek/ktg/KtgInputsKt {
 public final class io/github/youndie/telek/ktg/KtgTransitionsKt {
 	public static final fun editMarkup (Lio/github/youndie/telek/TransitionBuilder;JJLdev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
 	public static synthetic fun editMarkup$default (Lio/github/youndie/telek/TransitionBuilder;JJLdev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)V
+	public static final fun editMessage (Lio/github/youndie/telek/TransitionBuilder;JJLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
 	public static final fun editMessage (Lio/github/youndie/telek/TransitionBuilder;JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
 	public static final fun editMessage (Lio/github/youndie/telek/TransitionBuilder;JJLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun editMessage$default (Lio/github/youndie/telek/TransitionBuilder;JJLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)V
 	public static synthetic fun editMessage$default (Lio/github/youndie/telek/TransitionBuilder;JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)V
 	public static synthetic fun editMessage$default (Lio/github/youndie/telek/TransitionBuilder;JJLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+	public static final fun sendMessage (Lio/github/youndie/telek/TransitionBuilder;JLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
 	public static final fun sendMessage (Lio/github/youndie/telek/TransitionBuilder;JLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
 	public static final fun sendMessage (Lio/github/youndie/telek/TransitionBuilder;JLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun sendMessage$default (Lio/github/youndie/telek/TransitionBuilder;JLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)V
 	public static synthetic fun sendMessage$default (Lio/github/youndie/telek/TransitionBuilder;JLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)V
 	public static synthetic fun sendMessage$default (Lio/github/youndie/telek/TransitionBuilder;JLkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
 }
@@ -61,27 +65,30 @@ public final class io/github/youndie/telek/ktg/RowBuilder {
 	public final fun url (Ljava/lang/String;Ljava/lang/String;)V
 }
 
-public abstract interface annotation class io/github/youndie/telek/ktg/TelegramMessageDsl : java/lang/annotation/Annotation {
-}
-
-public final class io/github/youndie/telek/ktg/TelegramMessageDslKt {
-	public static final fun telegramMessage (Lkotlin/jvm/functions/Function1;)Ljava/lang/String;
-}
-
-public final class io/github/youndie/telek/ktg/TelegramTextBuilder {
-	public fun <init> ()V
-	public final fun bold (Ljava/lang/String;)V
-	public final fun br ()V
-	public final fun br2 ()V
-	public final fun build ()Ljava/lang/String;
-	public final fun list (Ljava/util/List;Lkotlin/jvm/functions/Function2;)V
-	public final fun row (Lkotlin/jvm/functions/Function1;)V
-	public final fun text (Ljava/lang/String;)V
-	public fun toString ()Ljava/lang/String;
+public final class io/github/youndie/telek/ktg/TextSourcesKt {
+	public static final fun asTextSources (Lio/github/youndie/telek/MessageText;)Ljava/util/List;
 }
 
 public final class io/github/youndie/telek/ktg/effect/DefaultEffectRegistryKt {
 	public static final fun defaultEffectRegistry ()Lio/github/youndie/telek/EffectRegistry;
+}
+
+public final class io/github/youndie/telek/ktg/effect/EditMarkdownMessageEffect : io/github/youndie/telek/ktg/effect/KtgEffect {
+	public fun <init> (JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
+	public synthetic fun <init> (JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;
+	public final fun copy (JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)Lio/github/youndie/telek/ktg/effect/EditMarkdownMessageEffect;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/ktg/effect/EditMarkdownMessageEffect;JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/ktg/effect/EditMarkdownMessageEffect;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChatId ()J
+	public final fun getMarkup ()Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;
+	public final fun getMessageId ()J
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/github/youndie/telek/ktg/effect/EditMarkupEffect : io/github/youndie/telek/ktg/effect/KtgEffect {
@@ -101,19 +108,19 @@ public final class io/github/youndie/telek/ktg/effect/EditMarkupEffect : io/gith
 }
 
 public final class io/github/youndie/telek/ktg/effect/EditMessageEffect : io/github/youndie/telek/ktg/effect/KtgEffect {
-	public fun <init> (JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
-	public synthetic fun <init> (JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (JJLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
+	public synthetic fun <init> (JJLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()J
 	public final fun component2 ()J
-	public final fun component3 ()Ljava/lang/String;
+	public final fun component3 ()Lio/github/youndie/telek/MessageText;
 	public final fun component4 ()Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;
-	public final fun copy (JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)Lio/github/youndie/telek/ktg/effect/EditMessageEffect;
-	public static synthetic fun copy$default (Lio/github/youndie/telek/ktg/effect/EditMessageEffect;JJLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/ktg/effect/EditMessageEffect;
+	public final fun copy (JJLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)Lio/github/youndie/telek/ktg/effect/EditMessageEffect;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/ktg/effect/EditMessageEffect;JJLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/ktg/effect/EditMessageEffect;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getChatId ()J
 	public final fun getMarkup ()Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;
+	public final fun getMessage ()Lio/github/youndie/telek/MessageText;
 	public final fun getMessageId ()J
-	public final fun getText ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -126,20 +133,45 @@ public final class io/github/youndie/telek/ktg/effect/KtgEffectExecutorKt {
 	public static synthetic fun ktgEffectExecutor$default (Lio/github/youndie/telek/ktg/KtgContextSource;Lio/github/youndie/telek/EffectRegistry;Lio/github/youndie/telek/EffectFailurePolicy;Lio/github/youndie/telek/TelekLogger;ILjava/lang/Object;)Lio/github/youndie/telek/EffectExecutor;
 }
 
-public final class io/github/youndie/telek/ktg/effect/SendMessageEffect : io/github/youndie/telek/ktg/effect/KtgEffect {
+public final class io/github/youndie/telek/ktg/effect/SendMarkdownMessageEffect : io/github/youndie/telek/ktg/effect/KtgEffect {
 	public fun <init> (JLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
 	public synthetic fun <init> (JLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()J
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;
-	public final fun copy (JLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)Lio/github/youndie/telek/ktg/effect/SendMessageEffect;
-	public static synthetic fun copy$default (Lio/github/youndie/telek/ktg/effect/SendMessageEffect;JLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/ktg/effect/SendMessageEffect;
+	public final fun copy (JLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)Lio/github/youndie/telek/ktg/effect/SendMarkdownMessageEffect;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/ktg/effect/SendMarkdownMessageEffect;JLjava/lang/String;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/ktg/effect/SendMarkdownMessageEffect;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getChatId ()J
 	public final fun getMarkup ()Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;
 	public final fun getText ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/ktg/effect/SendMessageEffect : io/github/youndie/telek/ktg/effect/KtgEffect {
+	public fun <init> (JLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)V
+	public synthetic fun <init> (JLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()Lio/github/youndie/telek/MessageText;
+	public final fun component3 ()Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;
+	public final fun copy (JLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;)Lio/github/youndie/telek/ktg/effect/SendMessageEffect;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/ktg/effect/SendMessageEffect;JLio/github/youndie/telek/MessageText;Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;ILjava/lang/Object;)Lio/github/youndie/telek/ktg/effect/SendMessageEffect;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChatId ()J
+	public final fun getMarkup ()Ldev/inmo/tgbotapi/types/buttons/InlineKeyboardMarkup;
+	public final fun getMessage ()Lio/github/youndie/telek/MessageText;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/ktg/effect/handler/EditMarkdownMessageEffectHandler : io/github/youndie/telek/ktg/effect/handler/KtgEffectHandler {
+	public fun <init> ()V
+	public fun handle (Ldev/inmo/tgbotapi/bot/RequestsExecutor;Lio/github/youndie/telek/ktg/effect/EditMarkdownMessageEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Ldev/inmo/tgbotapi/bot/RequestsExecutor;Lio/github/youndie/telek/ktg/effect/KtgEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/ktg/effect/EditMarkdownMessageEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/ktg/effect/KtgEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class io/github/youndie/telek/ktg/effect/handler/EditMarkupEffectHandler : io/github/youndie/telek/ktg/effect/handler/KtgEffectHandler {
@@ -196,6 +228,15 @@ public abstract class io/github/youndie/telek/ktg/effect/handler/KtgEffectSucces
 	public fun <init> ()V
 	public abstract fun getChatId ()J
 	public abstract fun getMessageId ()J
+}
+
+public final class io/github/youndie/telek/ktg/effect/handler/SendMarkdownMessageEffectHandler : io/github/youndie/telek/ktg/effect/handler/KtgEffectHandler {
+	public fun <init> ()V
+	public synthetic fun handle (Ldev/inmo/tgbotapi/bot/RequestsExecutor;Lio/github/youndie/telek/ktg/effect/KtgEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handle (Ldev/inmo/tgbotapi/bot/RequestsExecutor;Lio/github/youndie/telek/ktg/effect/SendMarkdownMessageEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/ktg/effect/KtgEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/ktg/effect/SendMarkdownMessageEffect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class io/github/youndie/telek/ktg/effect/handler/SendMessageEffectHandler : io/github/youndie/telek/ktg/effect/handler/KtgEffectHandler {

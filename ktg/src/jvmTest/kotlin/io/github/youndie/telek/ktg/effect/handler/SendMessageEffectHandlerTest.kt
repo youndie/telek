@@ -5,9 +5,9 @@ import dev.inmo.tgbotapi.requests.send.SendTextMessage
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.MessageId
 import dev.inmo.tgbotapi.types.RawChatId
-import dev.inmo.tgbotapi.types.message.MarkdownParseMode
 import dev.inmo.tgbotapi.types.message.abstracts.PrivateContentMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
+import io.github.youndie.telek.MessageText
 import io.github.youndie.telek.ktg.effect.SendMessageEffect
 import io.github.youndie.telek.ktg.inlineKeyboard
 import io.mockk.coEvery
@@ -33,11 +33,11 @@ class SendMessageEffectHandlerTest {
             val request = slot<SendTextMessage>()
             coEvery { bot.execute(capture(request)) } returns sent
 
-            val result = handler.handle(bot, SendMessageEffect(chatId = 1, text = "hi"))
+            val result = handler.handle(bot, SendMessageEffect(chatId = 1, message = MessageText.plain("hi")))
 
             assertEquals(ChatId(RawChatId(1)), request.captured.chatId)
             assertEquals("hi", request.captured.text)
-            assertEquals(MarkdownParseMode, request.captured.parseMode)
+            assertNull(request.captured.parseMode)
             assertNull(request.captured.replyMarkup)
 
             val success = assertIs<SendMessageEffectResult>(result)
@@ -54,7 +54,7 @@ class SendMessageEffectHandlerTest {
             coEvery { bot.execute(capture(request)) } returns sent
             val markup = inlineKeyboard { row { callback("Yes", "yes") } }
 
-            handler.handle(bot, SendMessageEffect(chatId = 1, text = "hi", markup = markup))
+            handler.handle(bot, SendMessageEffect(chatId = 1, message = MessageText.plain("hi"), markup = markup))
 
             assertEquals(markup, request.captured.replyMarkup)
         }
@@ -68,7 +68,7 @@ class SendMessageEffectHandlerTest {
 
             val thrown =
                 assertFailsWith<RuntimeException> {
-                    handler.handle(bot, SendMessageEffect(chatId = 1, text = "hi"))
+                    handler.handle(bot, SendMessageEffect(chatId = 1, message = MessageText.plain("hi")))
                 }
 
             assertSame(boom, thrown)
