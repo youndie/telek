@@ -29,6 +29,34 @@ jobs:
         with:
           konan-cache: "true"
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install pyyaml
+
+      # The index in BACKLOG.md is generated from the frontmatter of the item files, and a generated
+      # block nobody regenerates is worse than a hand-written one: it looks authoritative and is
+      # stale. This also catches an id used twice and a `blocked_by` pointing at an item that does
+      # not exist.
+      #
+      # `test -d` first, and it is not belt-and-braces: with no `docs/backlog` directory the script
+      # prints "nothing checked" and exits 0, so a backlog that was moved or lost in a bad merge
+      # scores as a pass. The script is byte-identical across the portfolio and is not forked here
+      # for this; the guard goes in the caller instead.
+      - run: |
+          test -d docs/backlog
+          python3 scripts/backlog_index.py --check
+
+      # A number that was free when the branch was cut but has been taken on the base since. The
+      # refspec is explicit because `git fetch origin main` moves FETCH_HEAD and creates no
+      # remote-tracking ref. Pull requests only — a push has no base to compare against.
+      - if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags origin \
+            "+refs/heads/$GITHUB_BASE_REF:refs/remotes/origin/$GITHUB_BASE_REF"
+          python3 scripts/backlog_index.py --against "origin/$GITHUB_BASE_REF"
+
       # `build` rather than `test ktlintCheck`: the multiplatform modules have no `test` task at all
       # — they have `jvmTest` / `linuxX64Test` / `allTests` — so a bare `test` would silently cover
       # only :telegram and :router-telegram. `build` runs every target's tests, ktlint, and the
