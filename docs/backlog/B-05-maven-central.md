@@ -1,7 +1,7 @@
 ---
 id: B-05
 title: "Publish to Maven Central — after the breaking changes, not before"
-status: question
+status: dropped
 priority: P0
 size: S
 stage: stage-1-release
@@ -179,3 +179,24 @@ but it is not this item's to make.
 
 One thing that is settled either way: if `:telegram` is published, the README's JitPack block stays
 and stays explained. That part of the earlier section stands.
+
+## Dropped — 2026-09-17
+
+**Not deferred any more — dropped.** The owner's call, made the same day the deferral was written,
+and the two are different things: a deferral leaves an item at the top of a P0 list saying "soon",
+and an item that says "soon" for a year is a lie the backlog tells every reader.
+
+What drops with it: `sborka.central=true` is removed from `gradle.properties`. A flag that says this
+repository publishes to Maven Central, in a repository that has decided not to, is a sentence that
+outlives its reason — and it is not inert, it applies the publishing plugin that produces the
+javadoc jar and the signatures. Putting it back is one line, and this section is the note that says
+so.
+
+What does **not** drop: the `:telegram` question is moot rather than answered, and the two facts
+found while asking it stay worth having. Central's published requirements say nothing about whether
+a dependency resolves from Central; kotlin-telegram-bot is on Central under no coordinate at all.
+If this is ever reopened, start at the third option in the section above — publish only what
+resolves from Central alone — and not at the acceptance question, which was the wrong one.
+
+Artifacts go on being published as snapshots to `https://reposilite.kotlin.website/snapshots`, which
+is what `README.md` says, so nothing in the repository now describes a state it is not in.
