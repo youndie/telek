@@ -1,7 +1,7 @@
 ---
 id: B-01
 title: "The FSM key is a chatId, so a group chat has one state for everyone in it"
-status: wip
+status: done
 priority: P0
 size: L
 stage: stage-0-input-model
@@ -52,3 +52,29 @@ wizard overwrite each other's answers, and the second one's reply advances the f
   `core/src/commonMain/kotlin/io/github/youndie/telek/Event.kt`,
   `ktg/src/commonMain/kotlin/io/github/youndie/telek/ktg/Connect.kt`,
   `telegram/src/main/kotlin/io/github/youndie/telek/telegram/Connect.kt`.
+
+## Iteration 1 — 2026-09-17
+
+Done. `ConversationKey(chatId, userId: Long?)` with `chat()` / `chatAndUser()`, and a `Keying`
+enum the transports use to derive one; `Telek`, `ChatWorkers`, `UserStateStore`, `StateStorage`,
+`InitialStateProvider`, `TelekInterceptor` and `TransitionGate.post` take it.
+
+What the work found, beyond what the item assumed:
+
+- **`Event.chatId` is an address too, and needed no change.** `Telek` routes an event by the key
+  the async work was launched for, never by `event.chatId` — so `Event`, like `Input` and every
+  effect, was already address-only. The item expected to touch it.
+- **The chat-only key's on-disk name is byte-identical to the old one** (`storageId` is the bare
+  `chatId`), which was not designed for and turns out to matter: state written by any earlier
+  version is still found under `Keying.PerChat`. That narrows
+  [B-02](B-02-key-migration-on-disk.md) from "every bot's directory stops matching" to "only the
+  new per-user default starts empty", and it is the reason the release note can offer
+  `Keying.PerChat` as a deliberate, working fallback.
+- **`Keying.PerUserInChat` as the default is a decision this item made** and the item did not
+  name. It is correct in a group and indistinguishable from the old behaviour in a private chat,
+  where the only sender is the only member; the alternative — defaulting to the old shape and
+  making every bot opt in — leaves the defect switched on for anyone who does not read the notes.
+- **One test is weaker than it looks and it is not hidden:** `ConnectTest`'s group case asserts
+  through the same `ConversationKey.chatAndUser` the production path calls, so a mutation of that
+  constructor does not fail it. The engine, key and storage tests do fail on exactly that
+  mutation, which is what carries the acceptance.
