@@ -92,6 +92,15 @@ waiting, and the thing it waits for is a person.
 3. **Not yet.** Nothing here expires. The library goes on publishing snapshots to Reposilite, and
    the README goes on telling the truth about where the artifacts are.
 
+**One fact found after this question was written, and it belongs to the answer.**
+[B-19](B-19-telegram-needs-a-repository-nobody-mentions.md) established that `:telegram` depends on
+kotlin-telegram-bot, which is **404 on Maven Central and 200 on JitPack**. So publishing `:telegram`
+there would put a POM on Central whose dependency Central cannot serve, and every consumer of that
+module would have to add JitPack. That is a decision rather than an accident — publish `:ktg` and
+the multiplatform modules and leave `:telegram` on the snapshot repository, or publish it too and
+say plainly in the README that it needs a second repository. `:ktg` is unaffected: ktgbotapi is on
+Central.
+
 **Who decides.** The repository owner. What the loop must not do either way is close this item on
 the strength of `sborka.central=true`: configuration is not publication, and the criterion that
 would prove publication — a cold-cache scratch project resolving from `mavenCentral()` — is exactly
