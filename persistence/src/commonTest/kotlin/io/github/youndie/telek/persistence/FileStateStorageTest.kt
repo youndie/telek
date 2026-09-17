@@ -112,7 +112,7 @@ class FileStateStorageTest {
     // named after the chat alone, which is what a chat key still writes — so under the per-user
     // default it is simply not found. `null` is correct; being quiet about it is not.
     @Test
-    fun `a superseded chat-keyed file is not loaded under a per-user key, and is named in a warning`() =
+    fun `a superseded chat-keyed file is not loaded under a per-user key - and is named in a warning`() =
         runTest {
             val warnings = mutableListOf<String>()
             val storage = storage(logger = recording(warnings))
@@ -152,7 +152,7 @@ class FileStateStorageTest {
         }
 
     @Test
-    fun `a miss on a chat key is silent, because that key is the old shape itself`() =
+    fun `a miss on a chat key is silent - because that key is the old shape itself`() =
         runTest {
             val warnings = mutableListOf<String>()
             val storage = storage(logger = recording(warnings))
