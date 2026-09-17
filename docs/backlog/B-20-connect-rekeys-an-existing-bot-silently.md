@@ -1,7 +1,7 @@
 ---
 id: B-20
 title: "connect()'s keying default silently re-keys a bot that upgrades"
-status: open
+status: done
 priority: P1
 size: S
 stage: stage-0-input-model
@@ -43,3 +43,24 @@ reading them, and the failure has no symptom an author would connect to a defaul
 - Anchors: `ktg/src/commonMain/kotlin/io/github/youndie/telek/ktg/Connect.kt`,
   `telegram/src/main/kotlin/io/github/youndie/telek/telegram/Connect.kt`, `RELEASE_NOTES.md`,
   `ci/consumer/`.
+
+## Iteration 1 — 2026-09-17
+
+Done, by the option the item put first: `keying` is a **required** parameter of `connect()` in both
+`:ktg` and `:telegram`. An upgrading bot no longer compiles until it says which key it wants, which
+is the only form of "you cannot miss this" available at a seam whose failure has no symptom.
+
+- **The choice is a compile error at the exact line that makes it.** Not a release note a reader has
+  to arrive at, not a warning to a `NoOp` logger. The bot that upgrades reads one message from the
+  compiler and is standing in the file that decides the answer.
+- **It costs a new bot one word.** That was the whole case against; priced against a failure mode
+  where stored state stops being found and nothing says why, one word is not a price.
+- **`keying` moved ahead of `answerCallbackQueries`** in `:ktg`. A required parameter behind a
+  defaulted one forces every call site to name it, which reads worse than the thing it documents.
+  Recorded in the ABI dumps: the `connect$default` synthetic overload is gone.
+- **`ci/consumer` compiles `connect()`**, satisfying the second AC. It never ran a bot and still
+  does not — it links the call, which is what makes the required parameter a real constraint from
+  outside the repository rather than one the repository asserts about itself. Both transports are
+  covered: `:ktg` in the consumer, `:telegram` by `:example` and `docs-samples`.
+- **The default is not reopened.** `PerUserInChat` is still the right answer for a new bot; it is
+  now the answer a new bot writes down instead of inheriting.

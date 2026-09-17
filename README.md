@@ -207,7 +207,7 @@ val telek = Telek(
 )
 
 bot.buildBehaviourWithLongPolling {
-    connect(telek, contextSource)
+    connect(telek, contextSource, Keying.PerUserInChat)
 }.join()
 ```
 
@@ -255,7 +255,7 @@ val telek = Telek(
 bot {
     token = "telegram token"
 
-    dispatch { connect(telek, contextSource) }
+    dispatch { connect(telek, contextSource, Keying.PerUserInChat) }
 }
 ```
 
@@ -346,13 +346,18 @@ ConversationKey.chat(chatId = -1001234567890)                     // the whole c
 `connect()` derives the key for you, and how it does so is the `keying` parameter:
 
 ```kotlin
-connect(telek, contextSource)                          // Keying.PerUserInChat — the default
-connect(telek, contextSource, keying = Keying.PerChat) // one state for the whole chat
+connect(telek, contextSource, Keying.PerUserInChat) // one state per person per chat
+connect(telek, contextSource, Keying.PerChat)       // one state for the whole chat
 ```
 
-`PerUserInChat` is the default because a wizard wants it and a group requires it; an update with no
-identifiable sender (a channel post, an automatic forward) falls back to the chat. Ask for
-`PerChat` when the state genuinely belongs to everyone — a poll, a group game.
+**There is no default, deliberately.** `PerUserInChat` is what a wizard wants and what a group
+requires; an update with no identifiable sender (a channel post, an automatic forward) falls back to
+the chat. `PerChat` is for state that genuinely belongs to everyone — a poll, a group game.
+
+The parameter is required because a default decided this silently for a bot that merely upgraded:
+the key changed under it, stored state stopped being found, and a bot that also feeds some inputs
+through `Telek.onInput` directly ended up with one conversation split across two keys in the same
+process. None of that has a symptom anyone traces back to a parameter they never typed.
 
 **`chatId` on an `Input`, an `Event` and every effect is the address**, unchanged: it is where the
 reply goes, and in a group it is the same number for everybody. A dispatcher goes on writing

@@ -7,6 +7,7 @@ package io.github.youndie.telek.docs
 
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
+import io.github.youndie.telek.Keying
 import io.github.youndie.telek.Telek
 import io.github.youndie.telek.telegram.TelegramContextSource
 import io.github.youndie.telek.telegram.connect
@@ -24,6 +25,6 @@ fun telegramInitializationSample() {
     bot {
         token = "telegram token"
 
-        dispatch { connect(telek, contextSource) }
+        dispatch { connect(telek, contextSource, Keying.PerUserInChat) }
     }
 }

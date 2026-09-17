@@ -3,6 +3,7 @@ package io.github.youndie.telek.docs
 
 import dev.inmo.tgbotapi.bot.ktor.telegramBot
 import dev.inmo.tgbotapi.extensions.behaviour_builder.buildBehaviourWithLongPolling
+import io.github.youndie.telek.Keying
 import io.github.youndie.telek.Telek
 import io.github.youndie.telek.ktg.KtgContextSource
 import io.github.youndie.telek.ktg.connect
@@ -22,6 +23,6 @@ fun ktgInitializationSample() =
 
         bot
             .buildBehaviourWithLongPolling {
-                connect(telek, contextSource)
+                connect(telek, contextSource, Keying.PerUserInChat)
             }.join()
     }
