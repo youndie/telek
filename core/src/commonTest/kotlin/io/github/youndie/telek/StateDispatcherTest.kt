@@ -1,6 +1,7 @@
 package io.github.youndie.telek
 
 import io.github.youndie.telek.support.OtherState
+import io.github.youndie.telek.support.TestEffect
 import io.github.youndie.telek.support.TestEvent
 import io.github.youndie.telek.support.TestState
 import kotlin.reflect.KClass
@@ -17,7 +18,7 @@ private class RecordingDispatcher(
     override val stateClass: KClass<TestState> = TestState::class
 
     var transitionCalls = 0
-    val onEffectResultCalls = mutableListOf<EffectResult>()
+    val onEffectResultCalls = mutableListOf<EffectOutcome>()
 
     override fun entry(input: Input): TransitionResult<TestState>? = entryFn(input)
 
@@ -31,9 +32,9 @@ private class RecordingDispatcher(
 
     override fun onEffectResult(
         state: State,
-        effectResult: EffectResult,
+        outcome: EffectOutcome,
     ) {
-        onEffectResultCalls += effectResult
+        onEffectResultCalls += outcome
     }
 }
 
@@ -83,10 +84,18 @@ class StateDispatcherTest {
     fun `onEffectResults invokes onEffectResult with the last result`() {
         val dispatcher = RecordingDispatcher()
 
-        dispatcher.onEffectResults(TestState.Waiting(0), listOf(EffectSuccess, EffectFailed(IllegalStateException())))
+        dispatcher.onEffectResults(
+            TestState.Waiting(0),
+            listOf(
+                EffectOutcome(TestEffect("first"), EffectSuccess),
+                EffectOutcome(TestEffect("second"), EffectFailed(IllegalStateException())),
+            ),
+        )
 
         assertEquals(1, dispatcher.onEffectResultCalls.size)
-        assertTrue(dispatcher.onEffectResultCalls.single() is EffectFailed)
+        // Now says WHICH effect it was, which is the point of the item.
+        assertEquals(TestEffect("second"), dispatcher.onEffectResultCalls.single().effect)
+        assertTrue(dispatcher.onEffectResultCalls.single().result is EffectFailed)
     }
 
     @Test

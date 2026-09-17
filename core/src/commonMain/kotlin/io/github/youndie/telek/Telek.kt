@@ -75,7 +75,8 @@ public class Telek(
                         if (event != null) onEvent(key, event)
                     }
                 }
-            effectResults.filterIsInstance<EffectFailed>().forEach { failed ->
+            effectResults.forEach { outcome ->
+                val failed = outcome.result as? EffectFailed ?: return@forEach
                 interceptors.forEach { it.onError(key, input, failed.error) }
             }
             result.dispatcher?.onEffectResults(result.newState, effectResults)
