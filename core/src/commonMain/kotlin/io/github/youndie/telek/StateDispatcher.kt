@@ -49,16 +49,24 @@ public abstract class StateDispatcher<T : State> :
             null
         }
 
+    /**
+     * Every synchronous effect of the transition, each paired with what running it produced.
+     *
+     * Find a result by the effect it belongs to rather than by position — `outcomes.first {
+     * it.effect == theOne }` — because a position is only right until somebody adds an effect above
+     * it, and nothing fails when they do.
+     */
     public open fun onEffectResults(
         state: State,
-        effectResults: List<EffectResult>,
+        outcomes: List<EffectOutcome>,
     ) {
-        effectResults.lastOrNull()?.let { onEffectResult(state, it) }
+        outcomes.lastOrNull()?.let { onEffectResult(state, it) }
     }
 
+    /** The last outcome of the transition. Override [onEffectResults] to see all of them. */
     public open fun onEffectResult(
         state: State,
-        effectResult: EffectResult,
+        outcome: EffectOutcome,
     ) {
     }
 }

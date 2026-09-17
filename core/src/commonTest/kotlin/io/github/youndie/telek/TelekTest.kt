@@ -387,7 +387,7 @@ class TelekTest {
     @Test
     fun `dispatcher onEffectResults receives the effect execution results`() =
         runTest {
-            val results = mutableListOf<Pair<State, List<EffectResult>>>()
+            val results = mutableListOf<Pair<State, List<EffectOutcome>>>()
             val dispatcher =
                 object : StateDispatcher<TestState>() {
                     override val startCommand = "test"
@@ -410,9 +410,9 @@ class TelekTest {
 
                     override fun onEffectResults(
                         state: State,
-                        effectResults: List<EffectResult>,
+                        outcomes: List<EffectOutcome>,
                     ) {
-                        results += state to effectResults
+                        results += state to outcomes
                     }
                 }
             val executor = FakeEffectExecutor { EffectSuccess }
@@ -422,7 +422,7 @@ class TelekTest {
 
             assertEquals(1, results.size)
             assertEquals(TestState.Waiting(0), results.single().first)
-            assertTrue(results.single().second.all { it === EffectSuccess })
+            assertTrue(results.single().second.all { it.result === EffectSuccess })
         }
 
     @Test

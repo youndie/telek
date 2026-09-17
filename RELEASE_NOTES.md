@@ -66,6 +66,30 @@ argument is unaffected; anything linked against the old binary is not. Named her
 smoothed over with a secondary constructor, because nothing is published to Maven Central yet and
 there is nothing linked against it to protect.
 
+**An effect's result now says which effect it came from.** `EffectExecutor.execute` returns
+`List<EffectOutcome>` — an `Effect` paired with its `EffectResult` — and
+`StateDispatcher.onEffectResults` / `onEffectResult` receive those instead of bare results.
+
+```kotlin
+-outcomes[0]                                     // right until somebody adds an effect above it
++outcomes.first { it.effect == theGreeting }     // right regardless
+```
+
+Before this there was nothing connecting the list of results to the list of effects that produced
+them — not an index, not an id. A dispatcher that sent two messages and needed the id of the *first*
+had to assume the two lists line up. That assumption is correct until an effect is added to the
+transition, and then it is silently wrong: the dispatcher edits the wrong message, and no test that
+asserts on a single effect can see it.
+
+The pairing is a wrapper rather than a field on `EffectResult` because `EffectSuccess` is an
+`object` — one instance shared by every effect that succeeded, with nowhere to put "which effect".
+Every existing `EffectResult` implementation, transport ones included, is untouched.
+
+**What breaks:** a custom `EffectExecutor` changes its return type; a dispatcher that overrides
+`onEffectResults` or `onEffectResult` changes a parameter type and reads `.result` where it read the
+result directly. Nothing else — the default behaviour is unchanged, including that `onEffectResults`
+still passes only the last outcome to `onEffectResult`.
+
 ---
 
 ## 0.3.0
