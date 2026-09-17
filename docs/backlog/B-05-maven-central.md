@@ -1,7 +1,7 @@
 ---
 id: B-05
 title: "Publish to Maven Central — after the breaking changes, not before"
-status: open
+status: wip
 priority: P0
 size: S
 stage: stage-1-release
@@ -40,3 +40,35 @@ argument in [B-07](B-07-real-bot-in-production.md) about what a real consumer fi
 - AC: `README.md`'s installation section no longer names Reposilite.
 - Anchors: `gradle.properties`, `README.md`,
   `.github/workflows/publish-telek-snapshot.yaml`.
+
+## Iteration 1 — 2026-09-17
+
+**Stops half-finished on purpose, and the half it stops at is a decision rather than a limit.**
+
+Done: `sborka.central=true` is in `gradle.properties`, with the contract and the reason next to it.
+That one line is the whole build-side change, and it is load-bearing — checked by control rather
+than asserted: with the flag off, `:core:tasks --all` lists no `publishToMavenCentral` at all; with
+it on, the task is there. The full build is green with the publish plugin applied, so the javadoc
+jar and signing configuration do not break anything that was passing before.
+
+Not done, and not to be done by the loop:
+
+- **The dispatch.** `youndie/sborka`'s `central.yaml` takes a repository, a ref and a version, and
+  it uploads with a signing key and a portal token that live in that repository. Running it is an
+  action against a public registry; the standing permission covers merging this repository's own
+  pull requests when they are green, and it does not stretch to that.
+- **The release of the staged bundle.** Even the dispatch only stages. sborka's own comment says
+  why the last step is a person's: a version on Central can never be rewritten or taken back.
+
+Carried, and blocked on the release actually happening:
+
+- **AC 2** — a scratch project resolving `io.github.youndie.telek:core` from `mavenCentral()` with a
+  cold cache — cannot be run before there is something to resolve. It is the acceptance that
+  matters most, because it is the only one that tests publication rather than configuration.
+- **AC 3** — `README.md` no longer naming Reposilite — is deliberately NOT in this change. Landing
+  it now would leave the README pointing a stranger at `mavenCentral()` for an artifact that is not
+  there yet, which is worse than the honest snapshot instructions it has today. It goes in the same
+  change as the verification above, once the release is real.
+
+Next iteration resumes here and will find those two criteria open; it should not close the item on
+the strength of the flag alone.

@@ -55,7 +55,7 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 
 | Task | | Priority | Size | Blocked by |
 |---|---|---|---|---|
-| [B-05](docs/backlog/B-05-maven-central.md) `[ ]` | Publish to Maven Central — after the breaking changes, not before | P0 | S | B-01, B-03 |
+| [B-05](docs/backlog/B-05-maven-central.md) `[~]` | Publish to Maven Central — after the breaking changes, not before | P0 | S | B-01, B-03 |
 | [B-04](docs/backlog/B-04-command-parsing.md) `[ ]` | /cmd@botname and /cmd with an argument reach no dispatcher | P1 | S | - |
 | [B-06](docs/backlog/B-06-github-release.md) `[ ]` | Tag the release and put the notes where a stranger looks for them | P1 | XS | B-05 |
 | [B-07](docs/backlog/B-07-real-bot-in-production.md) `[ ]` | A bot that is not a sample: telek in production, as a native binary on :ktg | P1 | L | B-05 |
