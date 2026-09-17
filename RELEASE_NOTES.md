@@ -42,6 +42,30 @@ warning naming that path, because `null` at that interface is indistinguishable 
 user and an upgrade is otherwise invisible. Set a `logger` on the storage to see it; the default is
 `TelekLogger.NoOp`, which says nothing by design.
 
+**`/cmd@botname` and `/cmd argument` reach a dispatcher.** The routing used to compare the whole
+text after the slash against `startCommand`, so `/start@mybot` looked for a dispatcher called
+`start@mybot` and `/start ABC-123` for one called `start ABC-123`. Neither exists, so both fell
+through. The first form is not optional in a group — Telegram appends `@botname` whenever more than
+one bot can see the message.
+
+`Message.asCommand()` parses one into a `Command(name, addressedTo, argument)`, and a dispatcher
+reads its argument from there:
+
+```kotlin
+val token = (input as? Message)?.asCommand()?.argument
+```
+
+`DefaultFindDispatcherStrategy` takes an optional `botUsername`. Left unset, a command addressed to
+any bot is handled — right in a private chat and in a group with one bot, wrong in a group with two.
+Pass the name and a command addressed elsewhere stops being a command here, reaching the current
+state's dispatcher as the ordinary message it is.
+
+**Binary compatibility:** `DefaultFindDispatcherStrategy`'s single-argument constructor is gone,
+replaced by one with a defaulted second parameter. Kotlin source that constructs it with one
+argument is unaffected; anything linked against the old binary is not. Named here rather than
+smoothed over with a secondary constructor, because nothing is published to Maven Central yet and
+there is nothing linked against it to protect.
+
 ---
 
 ## 0.3.0
