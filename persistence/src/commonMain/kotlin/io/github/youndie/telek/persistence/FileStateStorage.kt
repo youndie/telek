@@ -28,6 +28,11 @@ public inline fun <reified T : State> stateStorageOf(
  *
  * File access goes through okio rather than `java.io`/`java.nio` so this works on every telek
  * target. [fileSystem] defaults to the real one; pass okio's `FakeFileSystem` in tests.
+ *
+ * @param logger defaults to [TelekLogger.NoOp], which discards everything. [save] throws as well,
+ * so its failure survives silence — but a [load] that cannot read a file returns `null`, which is
+ * what a first-time user looks like, and then the log was the only place it was ever said. See
+ * [TelekLogger].
  */
 public open class FileStateStorage<T : State>(
     private val dir: Path,

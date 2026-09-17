@@ -12,8 +12,11 @@ kotlin {
 }
 
 dependencies {
-    implementation(projects.core)
-    implementation(libs.kotlinTelegramBot)
+    // `api` for both, for the same reason as `:ktg`: `Dispatcher.connect(…)` and
+    // `TelegramContextSource.provide(bot: Bot)` name kotlin-telegram-bot's types, and the effect
+    // DSL names `:core`'s.
+    api(projects.core)
+    api(libs.kotlinTelegramBot)
     implementation(libs.retrofitCore)
     implementation(libs.kotlinxCoroutines)
 

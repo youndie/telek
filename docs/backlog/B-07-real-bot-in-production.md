@@ -1,11 +1,10 @@
 ---
 id: B-07
 title: "A bot that is not a sample: telek in production, as a native binary on :ktg"
-status: open
+status: done
 priority: P1
 size: L
 stage: stage-2-dogfood
-blocked_by: [B-05]
 ---
 
 # B-07 — A bot that is not a sample: telek in production, as a native binary on :ktg
@@ -34,3 +33,34 @@ compile, not to run for a month.
 - AC: at least one of the deliberately-not-done items is either promoted or dropped as a result,
   with the bot as the evidence.
 - Anchors: `README.md`, `ktg/`, `example/`.
+
+## Iteration 1 — 2026-09-17
+
+**Closed on the half that was the point, with the other half split out rather than assumed.**
+
+There is a real bot: closed-source, not in this repository, a production service with users, built
+on `:ktg` and resolving telek from the published coordinate — not from a project dependency, not
+from a shared catalogue, not from this build. It is the second implementation this item was asking
+for, and it paid immediately.
+
+- **It found what the suite could not, on the first day.** Migrating it across the conversation-key
+  change surfaced a silent re-keying that neither telek's own tests nor the bot's several hundred
+  notice: a bot that merely upgrades gets its key changed under it, stored state stops being found,
+  and one that also feeds inputs through `Telek.onInput` directly ends up with one conversation
+  split across two keys. That became [B-20](B-20-connect-rekeys-an-existing-bot-silently.md), and
+  `connect()` now takes `keying` as a required argument — a compile error at the seam that decides
+  it. That is this item's second and third criteria met in one finding: written into the backlog,
+  and it changed a decision B-01 had already made.
+- **A defect telek's own build cannot see, because telek's own build shares everything with itself.**
+  The same reasoning produced `ci/consumer` (B-17), which then found two more — B-18 and B-19 — and
+  those are permanent instrumentation rather than a one-off.
+- **The first criterion is NOT met, and the difference is worth naming rather than rounding off.**
+  It asks for a `linuxX64` binary running in a container. The bot has a native build and publishes a
+  native image on every change — which is what keeps the shared code from quietly acquiring `java.*`,
+  and that is real value — but the deployed workload is the JVM image. The switch between them is a
+  manual flag, and it is off. Checked by looking at what is running, not at what is built: the
+  published native image proves it links, not that it runs.
+
+So the README's sentence — "a bot can also ship as a native Linux binary" — is still a claim nobody
+has cashed. That is [B-21](B-21-native-binary-claim-uncashed.md), and it is small and specific,
+which is a better shape than leaving this L-sized item open around it.

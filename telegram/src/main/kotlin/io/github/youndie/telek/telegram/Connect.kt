@@ -10,13 +10,20 @@ import io.github.youndie.telek.Telek
 
 /**
  * @param keying how an update becomes the [io.github.youndie.telek.ConversationKey] the state is
- * filed under. The default keys per person per chat, which is what a wizard wants and what a group
- * requires; pass [Keying.PerChat] for state the whole chat shares.
+ * filed under, and **required on purpose**. [Keying.PerUserInChat] is what a wizard wants and what a
+ * group requires; [Keying.PerChat] is for state the whole chat shares — a poll, a group game.
+ *
+ * It has no default because a default made this decision silently for a bot that merely upgraded:
+ * the key changed under it, stored state stopped being found, and a bot that also feeds some inputs
+ * through [Telek.onInput] directly ended up with one conversation split across two keys in the same
+ * process. None of that has a symptom anyone would trace back to a parameter they never typed. A
+ * required parameter costs a new bot one word and turns that into a compile error at the exact seam
+ * that decides it.
  */
 public fun com.github.kotlintelegrambot.dispatcher.Dispatcher.connect(
     telek: Telek,
     contextSource: TelegramContextSource,
-    keying: Keying = Keying.PerUserInChat,
+    keying: Keying,
 ) {
     fun ensureContext(bot: Bot) {
         contextSource.provide(bot)

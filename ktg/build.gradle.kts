@@ -30,8 +30,11 @@ kotlin {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.core)
-            implementation(libs.tgbotapi)
+            // `api` for both: `KtgContextSource(bot: TelegramBot)` and
+            // `BehaviourContext.connect(…)` put ktgbotapi's types in this module's own signatures,
+            // and the effect DSL puts `:core`'s there.
+            api(projects.core)
+            api(libs.tgbotapi)
             implementation(libs.kotlinxCoroutines)
         }
         // MockK is JVM-only, and so are the sealed ktgbotapi message types these tests fake — see

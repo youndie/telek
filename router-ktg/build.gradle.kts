@@ -33,7 +33,9 @@ kotlin {
         commonMain.dependencies {
             api(projects.router)
             implementation(projects.core)
-            implementation(projects.ktg)
+            // `api`: the one function here is an extension on `:ktg`'s `RowBuilder`, so a consumer
+            // that cannot see `:ktg` cannot reach it.
+            api(projects.ktg)
             implementation(libs.tgbotapi)
         }
         commonTest.dependencies {
