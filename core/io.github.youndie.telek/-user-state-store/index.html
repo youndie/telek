@@ -94,54 +94,54 @@
   <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">io.github.youndie.telek</a><span class="delimiter">/</span><span class="current">UserStateStore</span></div>
   <div class="cover ">
     <h1 class="cover"><span>User</span><wbr><span>State</span><wbr><span><span>Store</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">UserStateStore</a></div><p class="paragraph">Stores per-chat FSM state.</p><p class="paragraph"><a href="update.html">update</a> is only ever called by <a href="../-telek/index.html">Telek</a>, through its internal per-chat actor (<a href="../../../core/io.github.youndie.telek/-chat-workers/index.html">ChatWorkers</a>), which guarantees that at most one <a href="update.html">update</a> call for a given <code class="lang-kotlin">chatId</code> is in flight at any time, in the order the corresponding inputs were received. Implementations do not need to — and should not — serialize <a href="update.html">update</a> internally with their own per-chat locking: that duplicates a guarantee the caller already provides, and doing it locally is easy to get subtly wrong (e.g. reading state before acquiring a lock, or leaking a lock/mutex map that's never cleaned up).</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">UserStateStore</a></div><p class="paragraph">Stores one FSM state per <a href="../-conversation-key/index.html">ConversationKey</a> — which is a chat, or a person within a chat; see <a href="../-conversation-key/index.html">ConversationKey</a> for why that is not the same as the chat a reply is addressed to.</p><p class="paragraph"><a href="update.html">update</a> is only ever called by <a href="../-telek/index.html">Telek</a>, through its internal per-conversation actor (<a href="../../../core/io.github.youndie.telek/-chat-workers/index.html">ChatWorkers</a>), which guarantees that at most one <a href="update.html">update</a> call for a given key is in flight at any time, in the order the corresponding inputs were received. Implementations do not need to — and should not — serialize <a href="update.html">update</a> internally with their own per-key locking: that duplicates a guarantee the caller already provides, and doing it locally is easy to get subtly wrong (e.g. reading state before acquiring a lock, or leaking a lock/mutex map that's never cleaned up).</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="FUNCTION">
         <h2 class="tableheader">Functions</h2>
-        <div class="table"><a data-name="-1534457661%2FFunctions%2F1239919082" anchor-label="clear" id="-1534457661%2FFunctions%2F1239919082" data-filterable-set=":core/commonMain"></a>
+        <div class="table"><a data-name="-1796479139%2FFunctions%2F1239919082" anchor-label="clear" id="-1796479139%2FFunctions%2F1239919082" data-filterable-set=":core/commonMain"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="clear.html"><span><span>clear</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1534457661%2FFunctions%2F1239919082"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1796479139%2FFunctions%2F1239919082"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="../-conversation-key/index.html">ConversationKey</a></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="-627281972%2FFunctions%2F1239919082" anchor-label="get" id="-627281972%2FFunctions%2F1239919082" data-filterable-set=":core/commonMain"></a>
+<a data-name="1958532838%2FFunctions%2F1239919082" anchor-label="get" id="1958532838%2FFunctions%2F1239919082" data-filterable-set=":core/commonMain"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get.html"><span><span>get</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-627281972%2FFunctions%2F1239919082"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1958532838%2FFunctions%2F1239919082"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token operator">?</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="get.html"><span class="token function">get</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="../-conversation-key/index.html">ConversationKey</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-state/index.html">State</a><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
-<a data-name="1510784349%2FFunctions%2F1239919082" anchor-label="update" id="1510784349%2FFunctions%2F1239919082" data-filterable-set=":core/commonMain"></a>
+<a data-name="-2063856137%2FFunctions%2F1239919082" anchor-label="update" id="-2063856137%2FFunctions%2F1239919082" data-filterable-set=":core/commonMain"></a>
           <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="update.html"><span><span>update</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1510784349%2FFunctions%2F1239919082"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2063856137%2FFunctions%2F1239919082"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="update.html"><span class="token function">update</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">chatId<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token punctuation">(</span><a href="../-state/index.html">State</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../-update-result/index.html">UpdateResult</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-update-result/index.html">UpdateResult</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="update.html"><span class="token function">update</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="../-conversation-key/index.html">ConversationKey</a><span class="token punctuation">, </span></span><span class="parameter ">block<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token punctuation">(</span><a href="../-state/index.html">State</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../-update-result/index.html">UpdateResult</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-update-result/index.html">UpdateResult</a></div></div></div>
                 </div>
               </div>
             </div>
