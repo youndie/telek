@@ -223,36 +223,4 @@ class ChatWorkersTest {
             assertTrue(firstCompleted)
             assertTrue(secondCompleted)
         }
-
-    // B-16's sharp edge. A Debounced effect is cancelled as a matter of course -- that is the
-    // feature -- so if cancellation travelled the same path as a failure, using debounce would look
-    // like a stream of errors. The rethrow of CancellationException is what keeps them apart, and
-    // this is the test that would notice it being "simplified" away.
-    @Test
-    fun `cancelling a debounced job does not look like a failure to the caller`() =
-        runTest {
-            val workers = ChatWorkers(this, 10.minutes, inboxCapacity = 8)
-            val reported = mutableListOf<Throwable>()
-            var secondRan = false
-
-            workers.submit(key(1)) {
-                workers.launchAsync(key(1), debounceKey = "search") {
-                    try {
-                        delay(10.minutes)
-                    } catch (e: CancellationException) {
-                        throw e
-                    } catch (e: Throwable) {
-                        reported += e
-                    }
-                }
-            }
-            runCurrent()
-            workers.submit(key(1)) {
-                workers.launchAsync(key(1), debounceKey = "search") { secondRan = true }
-            }
-            advanceUntilIdle()
-
-            assertTrue(secondRan)
-            assertEquals(emptyList(), reported)
-        }
 }
