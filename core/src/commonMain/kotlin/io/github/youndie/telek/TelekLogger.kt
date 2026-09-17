@@ -17,19 +17,19 @@ public enum class TelekLogLevel {
  * has made a decision belonging to the program that embeds it — but it is only defensible if the
  * cost is stated, so here is the whole list and what is lost with it.
  *
- * Three are **only** here. Nothing else in the API reports them, and with [NoOp] they are gone:
+ * Two are **only** here. Nothing else in the API reports them, and with [NoOp] they are gone:
  *
  * | What happened | Where | Looks like, unheard |
  * |---|---|---|
  * | An input was dropped because that conversation's inbox was full | [ChatWorkers] | A user's message vanished |
- * | An [AsyncEffectHandler] threw | [EffectExecutorImpl] | The effect produced no [Event] — indistinguishable from having nothing to say |
  * | A stored state file could not be read | `FileStateStorage.load` | `null` — indistinguishable from a first-time user |
  *
- * Three are also reachable another way, so silence costs detail rather than the fact:
+ * Four are also reachable another way, so silence costs the message rather than the fact:
  *
  * | What happened | Also reaches |
  * |---|---|
- * | A synchronous [EffectHandler] threw | [TelekInterceptor.onError], as an [EffectFailed] |
+ * | An [EffectHandler] threw | [TelekInterceptor.onError], as an [EffectFailed] |
+ * | An [AsyncEffectHandler] threw | [TelekInterceptor.onError] — it is rethrown to [Telek], which reports it |
  * | A stored state file could not be written | `FileStateStorage.save` throws |
  * | A per-user key found the chat-keyed file it supersedes | Nothing — but the key is new, so nothing is lost either, only unexplained |
  *

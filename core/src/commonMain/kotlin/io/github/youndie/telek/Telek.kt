@@ -76,8 +76,24 @@ public class Telek(
             val effectResults =
                 effectExecutor.execute(result.effects) { debounceKey, asyncWork ->
                     chatWorkers.launchAsync(key, debounceKey) {
-                        val event = asyncWork()
-                        if (event != null) onEvent(key, event)
+                        // The interceptors live here, not in the executor, so this is the only
+                        // place an async failure can reach them — and it must, or the two halves
+                        // of one mechanism report failure to two different places and the async
+                        // half reports it only to a logger that is off by default.
+                        //
+                        // [input] rather than `null`: it is the input whose transition launched
+                        // this work, which is the same thing the synchronous path passes. The
+                        // cancellation rethrow is not tidiness — a [Debounced] effect is cancelled
+                        // as a matter of course, and reporting that as an error would make the
+                        // feature look like a fault.
+                        try {
+                            val event = asyncWork()
+                            if (event != null) onEvent(key, event)
+                        } catch (e: CancellationException) {
+                            throw e
+                        } catch (e: Throwable) {
+                            interceptors.forEach { it.onError(key, input, e) }
+                        }
                     }
                 }
             effectResults.forEach { outcome ->

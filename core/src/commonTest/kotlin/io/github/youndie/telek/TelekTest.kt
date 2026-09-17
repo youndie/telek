@@ -264,6 +264,57 @@ class TelekTest {
             )
         }
 
+    // B-16. The synchronous half already reported here; the async half logged and went quiet, so a
+    // bot with an interceptor saw one kind of failure and not the other, with nothing saying why.
+    @Test
+    fun `an async effect that throws reaches onError like a synchronous one`() =
+        runTest {
+            val interceptor = RecordingInterceptor()
+            val boom = RuntimeException("the fetch failed")
+            val input = Message(1, "/async")
+            val executor =
+                FakeEffectExecutor(
+                    asyncWorkFor = { { throw boom } },
+                )
+            val telek =
+                Telek(
+                    scope = this,
+                    dispatchers = listOf(AsyncDispatcher()),
+                    effectExecutor = executor,
+                    interceptors = listOf(interceptor),
+                )
+
+            telek.onInput(key(1), input)
+            advanceUntilIdle()
+
+            val error = interceptor.errors.single()
+            assertSame(boom, error.error)
+            assertEquals(key(1), error.key)
+            // The input whose transition launched the work, same as the synchronous path passes.
+            assertEquals(input, error.input)
+        }
+
+    // The control. Without it the assertion above is satisfied just as well by an engine that
+    // reports every async effect, and `null` from a handler is the ordinary "nothing to report".
+    @Test
+    fun `an async effect that simply produces no event reaches no interceptor`() =
+        runTest {
+            val interceptor = RecordingInterceptor()
+            val executor = FakeEffectExecutor(asyncWorkFor = { { null } })
+            val telek =
+                Telek(
+                    scope = this,
+                    dispatchers = listOf(AsyncDispatcher()),
+                    effectExecutor = executor,
+                    interceptors = listOf(interceptor),
+                )
+
+            telek.onInput(key(1), Message(1, "/async"))
+            advanceUntilIdle()
+
+            assertEquals(emptyList(), interceptor.errors)
+        }
+
     @Test
     fun `reaching a FinalState clears the stored state`() =
         runTest {
