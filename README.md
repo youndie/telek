@@ -563,7 +563,42 @@ val telek = Telek(
 
 Notes:
 - JSON serialization is powered by `kotlinx.serialization` with `classDiscriminator = "state_type"` and `ignoreUnknownKeys = true`.
-- When a transition returns a `FinalState`, the storage entry is automatically deleted by `PersistableUserStateStoreImpl`.
+- When a transition returns a `FinalState`, the storage entry is automatically deleted by `PersistableUserStateStoreImpl` — which is right when the state is all you keep per user. If something outlives the flow, see [State that outlives a flow](#-state-that-outlives-a-flow).
+
+### 👤 State that outlives a flow
+
+A conversation has exactly one telek `State`, and it is the flow's. A language, a timezone, a chosen
+workspace, the id of the message your live menu occupies — none of those end when a wizard reaches
+`FinalState`, and telek has no second concept for them **on purpose**: `UserStateStore` is the seam.
+Implement it, keep the flow state as one field of your own row, and reset that field where the
+shipped stores delete the entry.
+
+```kotlin
+class ProfileStore(
+    private val rows: MutableMap<Long, Profile> = mutableMapOf(),
+) : UserStateStore {
+    override suspend fun get(key: ConversationKey): State? = rows[key.chatId]?.flow
+
+    override suspend fun update(
+        key: ConversationKey,
+        block: suspend (State?) -> UpdateResult,
+    ): UpdateResult {
+        val row = rows[key.chatId] ?: Profile()
+        val result = block(row.flow)
+        // A FinalState ends the flow, not the person: clear the field, keep the row.
+        rows[key.chatId] = row.copy(flow = result.newState.takeUnless { it is FinalState })
+        return result
+    }
+
+    override suspend fun clear(key: ConversationKey) {
+        rows[key.chatId]?.let { rows[key.chatId] = it.copy(flow = null) }
+    }
+}
+```
+
+The reason to do it here rather than in a store of your own beside telek's is that both halves are
+written inside the same `update` call, which `Telek` has already serialized per conversation. Two
+stores have two writers and nothing ordering them.
 
 ### 🧭 Router module
 
