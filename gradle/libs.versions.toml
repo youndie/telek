@@ -1,8 +1,10 @@
 [versions]
 # The shared build conventions. One number: every sborka plugin below takes its version from here.
-sborka = "0.4.0.43"
+# The shared build conventions, and the compiler with them: the `wip` catalog this release
+# publishes carries `kotlin`, so there is no Kotlin version in this file to drift from the rest
+# of the portfolio.
+sborka = "0.4.0.87"
 dokka = "2.1.0"
-kotlin = "2.4.10"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerializationJson = "1.11.0"
 kotlinTelegramBot = "10.0.0"
@@ -13,7 +15,6 @@ okio = "3.18.1"
 mockk = "1.14.11"
 
 [libraries]
-kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinTelegramBot = { module = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram", version.ref = "kotlinTelegramBot" }
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
@@ -34,8 +35,5 @@ sborkaJvm = { id = "io.github.youndie.sborka.jvm", version.ref = "sborka" }
 sborkaLint = { id = "io.github.youndie.sborka.lint", version.ref = "sborka" }
 sborkaPublish = { id = "io.github.youndie.sborka.publish", version.ref = "sborka" }
 dokkaPlugin = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-serializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 # The Kotlin plugins are named here now. They used to arrive on the classpath through buildSrc, which
 # is gone: `sborka.kmp` and `sborka.jvm` configure Kotlin and deliberately do not choose its version.
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

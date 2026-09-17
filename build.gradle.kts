@@ -8,9 +8,9 @@ plugins {
     // value ... loaded with InstrumentingVisitableURLClassLoader(... project-docs-samples) using a
     // provider ... loaded with (... project-core)". `buildSrc` used to hold that classpath for
     // everyone, which is why it never came up before it was deleted.
-    alias(libs.plugins.kotlinMultiplatform) apply false
-    alias(libs.plugins.kotlinJvm) apply false
-    alias(libs.plugins.serializationPlugin) apply false
+    alias(wip.plugins.kotlinMultiplatform) apply false
+    alias(wip.plugins.kotlinJvm) apply false
+    alias(wip.plugins.kotlinSerialization) apply false
     alias(libs.plugins.sborkaKmp) apply false
     alias(libs.plugins.sborkaJvm) apply false
     alias(libs.plugins.sborkaLint) apply false
