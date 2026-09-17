@@ -20,6 +20,6 @@ private fun BehaviourContext.keyingSample(
     telek: Telek,
     contextSource: KtgContextSource,
 ) {
-    connect(telek, contextSource)
-    connect(telek, contextSource, keying = Keying.PerChat)
+    connect(telek, contextSource, Keying.PerUserInChat)
+    connect(telek, contextSource, Keying.PerChat)
 }

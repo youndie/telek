@@ -1,6 +1,6 @@
 public final class io/github/youndie/telek/ktg/ConnectKt {
-	public static final fun connect (Ldev/inmo/tgbotapi/extensions/behaviour_builder/BehaviourContext;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/ktg/KtgContextSource;ZLio/github/youndie/telek/Keying;)V
-	public static synthetic fun connect$default (Ldev/inmo/tgbotapi/extensions/behaviour_builder/BehaviourContext;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/ktg/KtgContextSource;ZLio/github/youndie/telek/Keying;ILjava/lang/Object;)V
+	public static final fun connect (Ldev/inmo/tgbotapi/extensions/behaviour_builder/BehaviourContext;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/ktg/KtgContextSource;Lio/github/youndie/telek/Keying;Z)V
+	public static synthetic fun connect$default (Ldev/inmo/tgbotapi/extensions/behaviour_builder/BehaviourContext;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/ktg/KtgContextSource;Lio/github/youndie/telek/Keying;ZILjava/lang/Object;)V
 }
 
 public final class io/github/youndie/telek/ktg/InlineKeyboardBuilder {

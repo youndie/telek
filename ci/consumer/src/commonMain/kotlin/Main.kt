@@ -3,6 +3,7 @@
 // Everything here is API this repository added today, so a publication that is missing a module, a
 // target, or a class fails to compile rather than passing quietly.
 
+import dev.inmo.tgbotapi.extensions.behaviour_builder.BehaviourContext
 import io.github.youndie.telek.Callback
 import io.github.youndie.telek.Command
 import io.github.youndie.telek.ConversationKey
@@ -20,6 +21,8 @@ import io.github.youndie.telek.Telek
 import io.github.youndie.telek.TransitionResult
 import io.github.youndie.telek.asCommand
 import io.github.youndie.telek.noTransition
+import io.github.youndie.telek.ktg.KtgContextSource
+import io.github.youndie.telek.ktg.connect
 import io.github.youndie.telek.persistence.stateStorageOf
 import io.github.youndie.telek.router.Route
 import io.github.youndie.telek.router.RouteContext
@@ -154,4 +157,21 @@ fun main() {
     telek.onInput(alice, Message(-100, "/passport ABC-123"))
 
     println("telek consumer: resolved and exercised the published artefacts")
+}
+
+/**
+ * The wiring, compiled but not run.
+ *
+ * B-20: `connect()` is the seam that decides the [ConversationKey], and until this existed the
+ * consumer exercised only [Telek.onInput] — so telek's own acceptance had the blind spot it had
+ * just found in somebody else's. Running it needs a bot and a token; compiling it is what catches a
+ * signature change, which is the failure this is for.
+ */
+@Suppress("unused")
+private fun BehaviourContext.wiring(
+    telek: Telek,
+    contextSource: KtgContextSource,
+) {
+    connect(telek, contextSource, Keying.PerUserInChat)
+    connect(telek, contextSource, Keying.PerChat, answerCallbackQueries = false)
 }

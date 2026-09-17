@@ -1,6 +1,10 @@
 # Release notes
 
-## Unreleased
+## 0.4.0
+
+The conversation key, the input model, and the API surface a consumer actually sees. Most of what
+follows is breaking, and all of it breaks in the same direction: telek now says what it means
+instead of implying it, and says it at compile time where it used to decide silently.
 
 **A conversation is no longer keyed by its `chatId`.** State, the per-conversation actor, the
 inbox and the stored file are all filed under a new `ConversationKey` — a chat, or a person within
@@ -13,10 +17,21 @@ other's questions.
 +telek.onInput(key = ConversationKey.chatAndUser(message.chat.id, userId), input = input)
 ```
 
-**A bot that calls `connect()` changes nothing.** Both transports derive the key themselves and
-default to `Keying.PerUserInChat`, which is correct in a group and indistinguishable from the old
-behaviour in a private chat. Pass `keying = Keying.PerChat` to keep one state for the whole chat —
-a poll, a group game.
+**`connect()` requires a `keying` argument; it no longer has a default.**
+
+```kotlin
+-connect(telek, contextSource)
++connect(telek, contextSource, Keying.PerUserInChat)   // or Keying.PerChat
+```
+
+The default decided this silently for a bot that merely upgraded: the key changed under it, stored
+state stopped being found, and a bot that also feeds some inputs through `Telek.onInput` directly
+ended up with one conversation split across two keys in the same process. None of that has a symptom
+anyone traces back to a parameter they never typed. Required, it is a compile error at the exact
+seam that decides it, and costs a new bot one word.
+
+`keying` also moved ahead of `answerCallbackQueries` in `:ktg`'s parameter list, since a required
+parameter after a defaulted one reads badly at every call site.
 
 **`chatId` on `Input`, on `Event` and on every effect is unchanged, and it never was the key.** It
 is the *address* a reply is sent to. Dispatchers go on writing `sendMessage(input.chatId, ...)`
@@ -32,9 +47,10 @@ dispatchers changes nothing.
 **Stored state.** `FileStateStorage` names each file after the key's `storageId`:
 `<chatId>.json` for a chat key — byte-identical to what every earlier version wrote — and
 `<chatId>.<userId>.json` for a per-person key. So state stored by an earlier version is still found
-under `Keying.PerChat`, and is **not** found under the new default: those conversations start
-empty. For a bot mid-flow that means the flow restarts; drain before upgrading, or pass
-`Keying.PerChat` and move deliberately.
+under `Keying.PerChat`, and is **not** found under `Keying.PerUserInChat`: those conversations
+start empty. For a bot mid-flow that means the flow restarts; drain before upgrading, or pass
+`Keying.PerChat` and move deliberately. That choice is exactly what the required argument puts in
+front of you.
 
 Nothing is migrated and nothing is deleted — but it is not silent either. When a per-user key finds
 no file and the chat-keyed file it supersedes is sitting right there, `FileStateStorage` logs a
