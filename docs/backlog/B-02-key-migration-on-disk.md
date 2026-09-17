@@ -1,7 +1,7 @@
 ---
 id: B-02
 title: "FileStateStorage names each file after the key, so changing the key rewrites the disk"
-status: open
+status: wip
 priority: P1
 size: S/M
 stage: stage-0-input-model

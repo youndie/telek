@@ -56,7 +56,7 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 | Task | | Priority | Size | Blocked by |
 |---|---|---|---|---|
 | [B-05](docs/backlog/B-05-maven-central.md) `[ ]` | Publish to Maven Central — after the breaking changes, not before | P0 | S | B-01, B-03 |
-| [B-02](docs/backlog/B-02-key-migration-on-disk.md) `[ ]` | FileStateStorage names each file after the key, so changing the key rewrites the disk | P1 | S/M | B-01 |
+| [B-02](docs/backlog/B-02-key-migration-on-disk.md) `[~]` | FileStateStorage names each file after the key, so changing the key rewrites the disk | P1 | S/M | B-01 |
 | [B-03](docs/backlog/B-03-input-beyond-text.md) `[ ]` | Input is a text message or a callback, so no wizard can ask for a photo | P1 | M | B-01 |
 | [B-04](docs/backlog/B-04-command-parsing.md) `[ ]` | /cmd@botname and /cmd with an argument reach no dispatcher | P1 | S | - |
 | [B-06](docs/backlog/B-06-github-release.md) `[ ]` | Tag the release and put the notes where a stranger looks for them | P1 | XS | B-05 |
