@@ -156,6 +156,16 @@ public class Telek(
     )
 }
 
+/**
+ * Routes on the two things that can *start* a flow — a command and a callback — and on the
+ * conversation's current state for everything else.
+ *
+ * That "everything else" is the load-bearing part, and it is why adding an [Input] type is not a
+ * change here. A photo, a document, a contact, a location or a type a bot declared itself all reach
+ * the dispatcher that owns the current state, which is what a wizard step wants: the step asked for
+ * something, and whatever arrived is the answer to it. Only a command and a callback carry routing
+ * information of their own, because only they can arrive with no state to belong to.
+ */
 public class DefaultFindDispatcherStrategy(
     private val dispatchers: List<StateDispatcher<out State>>,
 ) : FindDispatcherStrategy {

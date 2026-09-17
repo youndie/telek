@@ -17,6 +17,28 @@ public final class io/github/youndie/telek/Callback : io/github/youndie/telek/In
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/youndie/telek/Contact : io/github/youndie/telek/Input {
+	public fun <init> (JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;)V
+	public synthetic fun <init> (JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/Long;
+	public final fun copy (JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;)Lio/github/youndie/telek/Contact;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/Contact;JJLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;ILjava/lang/Object;)Lio/github/youndie/telek/Contact;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getChatId ()J
+	public final fun getFirstName ()Ljava/lang/String;
+	public final fun getLastName ()Ljava/lang/String;
+	public final fun getMessageId ()J
+	public final fun getPhoneNumber ()Ljava/lang/String;
+	public final fun getUserId ()Ljava/lang/Long;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/youndie/telek/ConversationKey {
 	public static final field Companion Lio/github/youndie/telek/ConversationKey$Companion;
 	public fun <init> (JLjava/lang/Long;)V
@@ -49,6 +71,28 @@ public final class io/github/youndie/telek/DefaultFindDispatcherStrategy : io/gi
 
 public abstract interface class io/github/youndie/telek/Dispatcher {
 	public abstract fun getStartCommand ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/Document : io/github/youndie/telek/Input {
+	public fun <init> (JJLio/github/youndie/telek/FileRef;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (JJLio/github/youndie/telek/FileRef;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()Lio/github/youndie/telek/FileRef;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun component6 ()Ljava/lang/String;
+	public final fun copy (JJLio/github/youndie/telek/FileRef;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/telek/Document;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/Document;JJLio/github/youndie/telek/FileRef;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/Document;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCaption ()Ljava/lang/String;
+	public fun getChatId ()J
+	public final fun getFile ()Lio/github/youndie/telek/FileRef;
+	public final fun getFileName ()Ljava/lang/String;
+	public final fun getMessageId ()J
+	public final fun getMimeType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class io/github/youndie/telek/Effect {
@@ -110,6 +154,22 @@ public abstract interface class io/github/youndie/telek/Event {
 public abstract interface class io/github/youndie/telek/ExecutionContext {
 }
 
+public final class io/github/youndie/telek/FileRef {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/Long;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;)Lio/github/youndie/telek/FileRef;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/FileRef;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;ILjava/lang/Object;)Lio/github/youndie/telek/FileRef;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFileId ()Ljava/lang/String;
+	public final fun getSizeBytes ()Ljava/lang/Long;
+	public final fun getUniqueId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public abstract interface class io/github/youndie/telek/FinalState {
 }
 
@@ -143,6 +203,23 @@ public final class io/github/youndie/telek/Keying : java/lang/Enum {
 	public static fun values ()[Lio/github/youndie/telek/Keying;
 }
 
+public final class io/github/youndie/telek/Location : io/github/youndie/telek/Input {
+	public fun <init> (JJDD)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()D
+	public final fun component4 ()D
+	public final fun copy (JJDD)Lio/github/youndie/telek/Location;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/Location;JJDDILjava/lang/Object;)Lio/github/youndie/telek/Location;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getChatId ()J
+	public final fun getLatitude ()D
+	public final fun getLongitude ()D
+	public final fun getMessageId ()J
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/youndie/telek/Message : io/github/youndie/telek/Input {
 	public fun <init> (JLjava/lang/String;)V
 	public final fun component1 ()J
@@ -152,6 +229,24 @@ public final class io/github/youndie/telek/Message : io/github/youndie/telek/Inp
 	public fun equals (Ljava/lang/Object;)Z
 	public fun getChatId ()J
 	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/Photo : io/github/youndie/telek/Input {
+	public fun <init> (JJLio/github/youndie/telek/FileRef;Ljava/lang/String;)V
+	public synthetic fun <init> (JJLio/github/youndie/telek/FileRef;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()J
+	public final fun component2 ()J
+	public final fun component3 ()Lio/github/youndie/telek/FileRef;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (JJLio/github/youndie/telek/FileRef;Ljava/lang/String;)Lio/github/youndie/telek/Photo;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/Photo;JJLio/github/youndie/telek/FileRef;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/Photo;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCaption ()Ljava/lang/String;
+	public fun getChatId ()J
+	public final fun getFile ()Lio/github/youndie/telek/FileRef;
+	public final fun getMessageId ()J
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

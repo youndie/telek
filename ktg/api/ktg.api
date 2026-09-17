@@ -30,7 +30,12 @@ public final class io/github/youndie/telek/ktg/KtgContextSource {
 }
 
 public final class io/github/youndie/telek/ktg/KtgInputsKt {
+	public static final fun asTelekFileRef (Ldev/inmo/tgbotapi/types/files/TelegramMediaFile;)Lio/github/youndie/telek/FileRef;
+	public static final fun asTelekInput (Ldev/inmo/tgbotapi/types/message/abstracts/ContentMessage;)Lio/github/youndie/telek/Contact;
+	public static final fun asTelekInput (Ldev/inmo/tgbotapi/types/message/abstracts/ContentMessage;)Lio/github/youndie/telek/Document;
+	public static final fun asTelekInput (Ldev/inmo/tgbotapi/types/message/abstracts/ContentMessage;)Lio/github/youndie/telek/Location;
 	public static final fun asTelekInput (Ldev/inmo/tgbotapi/types/message/abstracts/ContentMessage;)Lio/github/youndie/telek/Message;
+	public static final fun asTelekInput (Ldev/inmo/tgbotapi/types/message/abstracts/ContentMessage;)Lio/github/youndie/telek/Photo;
 	public static final fun asTelekInput (Ldev/inmo/tgbotapi/types/queries/callback/DataCallbackQuery;)Lio/github/youndie/telek/Callback;
 	public static final fun getTelekChatId (Ldev/inmo/tgbotapi/types/message/abstracts/Message;)J
 	public static final fun getTelekUserId (Ldev/inmo/tgbotapi/types/message/abstracts/Message;)Ljava/lang/Long;

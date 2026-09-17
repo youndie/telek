@@ -209,6 +209,55 @@ The router equivalent is `router-ktg` — same `RowBuilder.callback(name, route)
 `io.github.youndie.telek.ktg.RowBuilder`.
 
 
+### 📥 What an input can be
+
+`Input` is what a user sent. Six types ship:
+
+| Type | Carries |
+|---|---|
+| `Message` | `text` |
+| `Callback` | `messageId`, `data` — the button that was pressed |
+| `Photo` | `messageId`, `file`, `caption` |
+| `Document` | `messageId`, `file`, `fileName`, `mimeType`, `caption` |
+| `Contact` | `messageId`, `phoneNumber`, `firstName`, `lastName`, `userId` |
+| `Location` | `messageId`, `latitude`, `longitude` |
+
+A file arrives as a `FileRef` — `fileId`, `uniqueId`, `sizeBytes` — and not as bytes. telek does not
+download anything: that is a request to Telegram, which is an effect, which is where a transport
+belongs. What a dispatcher gets is the identifier it needs to ask for the bytes later, without
+naming a transport type to do it:
+
+```kotlin
+override fun transition(state: Passport, input: Input): TransitionResult<Passport> =
+    when {
+        state is Passport.AwaitingScan && input is Photo ->
+            transition {
+                newState = Passport.Received(input.file.fileId)
+                add(SendMessageEffect(input.chatId, "Got it."))
+            }
+
+        else -> noTransition(state)
+    }
+```
+
+**Routing.** Only a command and a callback carry routing information of their own, because only they
+can arrive with no state to belong to. Everything else — a photo, a document, a contact, a location
+— goes to the dispatcher that owns the conversation's current state, which is what a wizard step
+wants: the step asked for something, and whatever arrived is the answer.
+
+**`Input` is not sealed, and that is the design.** A bot that needs something telek does not model
+declares its own and feeds it through `Telek.onInput`; it routes by state like any other non-command
+input, and nothing in `core` has to know it exists:
+
+```kotlin
+data class Voice(override val chatId: Long, val file: FileRef) : Input
+```
+
+The same property is what lets telek add a type without breaking your `when`. The cost of that
+freedom is the one thing to know: `connect()` subscribes exactly the content types telek models, so
+a voice message never reaches the FSM until you wire its trigger yourself — the `asTelekInput()`
+adapters are public so that path reuses them.
+
 ### 🔑 What a conversation is keyed by
 
 A state machine has to file each conversation's state under something, and telek files it under a
