@@ -199,6 +199,25 @@ final class io.github.youndie.telek/Callback : io.github.youndie.telek/Input { /
     final fun toString(): kotlin/String // io.github.youndie.telek/Callback.toString|toString(){}[0]
 }
 
+final class io.github.youndie.telek/Command { // io.github.youndie.telek/Command|null[0]
+    constructor <init>(kotlin/String, kotlin/String? = ..., kotlin/String? = ...) // io.github.youndie.telek/Command.<init>|<init>(kotlin.String;kotlin.String?;kotlin.String?){}[0]
+
+    final val addressedTo // io.github.youndie.telek/Command.addressedTo|{}addressedTo[0]
+        final fun <get-addressedTo>(): kotlin/String? // io.github.youndie.telek/Command.addressedTo.<get-addressedTo>|<get-addressedTo>(){}[0]
+    final val argument // io.github.youndie.telek/Command.argument|{}argument[0]
+        final fun <get-argument>(): kotlin/String? // io.github.youndie.telek/Command.argument.<get-argument>|<get-argument>(){}[0]
+    final val name // io.github.youndie.telek/Command.name|{}name[0]
+        final fun <get-name>(): kotlin/String // io.github.youndie.telek/Command.name.<get-name>|<get-name>(){}[0]
+
+    final fun component1(): kotlin/String // io.github.youndie.telek/Command.component1|component1(){}[0]
+    final fun component2(): kotlin/String? // io.github.youndie.telek/Command.component2|component2(){}[0]
+    final fun component3(): kotlin/String? // io.github.youndie.telek/Command.component3|component3(){}[0]
+    final fun copy(kotlin/String = ..., kotlin/String? = ..., kotlin/String? = ...): io.github.youndie.telek/Command // io.github.youndie.telek/Command.copy|copy(kotlin.String;kotlin.String?;kotlin.String?){}[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // io.github.youndie.telek/Command.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // io.github.youndie.telek/Command.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // io.github.youndie.telek/Command.toString|toString(){}[0]
+}
+
 final class io.github.youndie.telek/Contact : io.github.youndie.telek/Input { // io.github.youndie.telek/Contact|null[0]
     constructor <init>(kotlin/Long, kotlin/Long, kotlin/String, kotlin/String, kotlin/String? = ..., kotlin/Long? = ...) // io.github.youndie.telek/Contact.<init>|<init>(kotlin.Long;kotlin.Long;kotlin.String;kotlin.String;kotlin.String?;kotlin.Long?){}[0]
 
@@ -251,7 +270,7 @@ final class io.github.youndie.telek/ConversationKey { // io.github.youndie.telek
 }
 
 final class io.github.youndie.telek/DefaultFindDispatcherStrategy : io.github.youndie.telek/FindDispatcherStrategy { // io.github.youndie.telek/DefaultFindDispatcherStrategy|null[0]
-    constructor <init>(kotlin.collections/List<io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>>) // io.github.youndie.telek/DefaultFindDispatcherStrategy.<init>|<init>(kotlin.collections.List<io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>>){}[0]
+    constructor <init>(kotlin.collections/List<io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>>, kotlin/String? = ...) // io.github.youndie.telek/DefaultFindDispatcherStrategy.<init>|<init>(kotlin.collections.List<io.github.youndie.telek.StateDispatcher<out|io.github.youndie.telek.State>>;kotlin.String?){}[0]
 
     final fun findDispatcher(io.github.youndie.telek/State?, io.github.youndie.telek/Input?): io.github.youndie.telek/StateDispatcher<out io.github.youndie.telek/State>? // io.github.youndie.telek/DefaultFindDispatcherStrategy.findDispatcher|findDispatcher(io.github.youndie.telek.State?;io.github.youndie.telek.Input?){}[0]
 }
@@ -424,5 +443,6 @@ final object io.github.youndie.telek/EmptyState : io.github.youndie.telek/State 
 final val io.github.youndie.telek/telekIoDispatcher // io.github.youndie.telek/telekIoDispatcher|{}telekIoDispatcher[0]
     final fun <get-telekIoDispatcher>(): kotlinx.coroutines/CoroutineDispatcher // io.github.youndie.telek/telekIoDispatcher.<get-telekIoDispatcher>|<get-telekIoDispatcher>(){}[0]
 
+final fun (io.github.youndie.telek/Message).io.github.youndie.telek/asCommand(): io.github.youndie.telek/Command? // io.github.youndie.telek/asCommand|asCommand@io.github.youndie.telek.Message(){}[0]
 final fun <#A: io.github.youndie.telek/State> io.github.youndie.telek/noTransition(#A): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/noTransition|noTransition(0:0){0§<io.github.youndie.telek.State>}[0]
 final inline fun <#A: io.github.youndie.telek/State> io.github.youndie.telek/transition(kotlin/Function1<io.github.youndie.telek/TransitionBuilder<#A>, kotlin/Unit>): io.github.youndie.telek/TransitionResult<#A> // io.github.youndie.telek/transition|transition(kotlin.Function1<io.github.youndie.telek.TransitionBuilder<0:0>,kotlin.Unit>){0§<io.github.youndie.telek.State>}[0]

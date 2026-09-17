@@ -4,6 +4,7 @@ import io.github.youndie.telek.support.OtherState
 import io.github.youndie.telek.support.SimpleDispatcher
 import io.github.youndie.telek.support.TestState
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertSame
 
@@ -153,4 +154,65 @@ class DefaultFindDispatcherStrategyTest {
     private data class ConsumerDefinedInput(
         override val chatId: Long,
     ) : Input
+
+    // B-04. In a group Telegram appends @botname to every command, so without this the command
+    // reached no dispatcher at all.
+    @Test
+    fun `a command addressed to a bot reaches the same dispatcher as a bare one`() {
+        val strategy = DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher))
+
+        val found = strategy.findDispatcher(state = null, input = Message(1, "/example@mybot"))
+
+        assertSame(exampleDispatcher, found)
+    }
+
+    @Test
+    fun `a command with an argument reaches its dispatcher and the argument survives`() {
+        val strategy = DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher))
+        val input = Message(1, "/example ABC-123")
+
+        assertSame(exampleDispatcher, strategy.findDispatcher(state = null, input = input))
+        assertEquals("ABC-123", input.asCommand()?.argument)
+    }
+
+    @Test
+    fun `with no bot name configured a command addressed elsewhere is still handled`() {
+        val strategy = DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher))
+
+        val found = strategy.findDispatcher(state = null, input = Message(1, "/example@someoneelse"))
+
+        // Documented, not accidental: telek cannot know its own username, so the default is to
+        // answer. A group with two bots is exactly where passing the name matters.
+        assertSame(exampleDispatcher, found)
+    }
+
+    @Test
+    fun `with a bot name configured a command addressed elsewhere is not a command here`() {
+        val strategy =
+            DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher), botUsername = "mybot")
+
+        // No state either, so there is nothing to fall through to and the answer is null rather
+        // than somebody else's dispatcher.
+        assertNull(strategy.findDispatcher(state = null, input = Message(1, "/example@someoneelse")))
+    }
+
+    @Test
+    fun `a command addressed elsewhere falls through to the current state's dispatcher`() {
+        val strategy =
+            DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher), botUsername = "mybot")
+
+        val found = strategy.findDispatcher(TestState.Waiting(), Message(1, "/other@someoneelse"))
+
+        // It is an ordinary message as far as this bot is concerned, so the flow in progress sees
+        // it rather than losing it.
+        assertSame(exampleDispatcher, found)
+    }
+
+    @Test
+    fun `the bot's own name matches whatever case telegram sends it in`() {
+        val strategy =
+            DefaultFindDispatcherStrategy(listOf(exampleDispatcher, otherDispatcher), botUsername = "MyBot")
+
+        assertSame(exampleDispatcher, strategy.findDispatcher(null, Message(1, "/example@mybot")))
+    }
 }

@@ -165,17 +165,26 @@ public class Telek(
  * the dispatcher that owns the current state, which is what a wizard step wants: the step asked for
  * something, and whatever arrived is the answer to it. Only a command and a callback carry routing
  * information of their own, because only they can arrive with no state to belong to.
+ *
+ * @param botUsername the bot's own `@name`, without the `@`. Telegram appends `@botname` to a
+ * command whenever more than one bot can see the chat, and that suffix is the only thing saying
+ * which bot was meant. Left `null` — the default, because telek cannot know the name on its own —
+ * a command addressed to *any* bot is handled, which is right in a private chat and in a group with
+ * one bot, and wrong in a group with two: this bot would answer commands meant for the other. Pass
+ * the name and a command addressed elsewhere stops being a command here; it reaches the current
+ * state's dispatcher as the ordinary message it is, rather than vanishing.
  */
 public class DefaultFindDispatcherStrategy(
     private val dispatchers: List<StateDispatcher<out State>>,
+    private val botUsername: String? = null,
 ) : FindDispatcherStrategy {
     override fun findDispatcher(
         state: State?,
         input: Input?,
     ): StateDispatcher<out State>? {
-        if (input != null && input is Message && input.text.startsWith("/")) {
-            val cmd = input.text.removePrefix("/")
-            return dispatchers.firstOrNull { it.startCommand == cmd }
+        val command = (input as? Message)?.asCommand()
+        if (command != null && command.isForThisBot()) {
+            return dispatchers.firstOrNull { it.startCommand == command.name }
                 ?: dispatchers.firstOrNull { it.startCommand == "*" }
         }
 
@@ -185,6 +194,11 @@ public class DefaultFindDispatcherStrategy(
 
         return state?.let { s -> dispatchers.firstOrNull { it.stateClass.isInstance(s) } }
     }
+
+    // Usernames are case-insensitive on Telegram's side, so comparing them case-sensitively would
+    // make `/start@MyBot` a command for somebody else.
+    private fun Command.isForThisBot(): Boolean =
+        botUsername == null || addressedTo == null || addressedTo.equals(botUsername, ignoreCase = true)
 }
 
 public data class UpdateResult(
