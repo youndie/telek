@@ -71,11 +71,21 @@ CI runs three checks over prose, and each exists because something drifted silen
 
 ## Release
 
-Version head in `gradle.properties`; CI appends the run number. `sborka.central=true` is the whole
-build-side contract for Maven Central, but the upload is a manual `workflow_dispatch` in
-`youndie/sborka` and it leaves the bundle **staged** — releasing it is a person's click, because a
-version on Central can never be rewritten or withdrawn. Publishing to Central is currently deferred;
-`docs/backlog/B-05-maven-central.md` holds the decision and what is still open.
+Version head in `gradle.properties`; CI appends its run number, so `0.4.0` is a name and
+`0.4.0.72` is the coordinate that resolves. Artifacts are snapshots on
+`https://reposilite.kotlin.website/snapshots`, and that is the plan rather than a stopgap —
+publishing to Maven Central was considered and **dropped** (`docs/backlog/B-05-maven-central.md`
+says why, and what to read first if it is ever reopened). There is no `sborka.central` flag here;
+adding it back is one line and a decision.
+
+Releasing is by hand and small: tag the **published** version (`v0.4.0.72`, not `v0.4.0` — a tag
+spelling a version nobody can resolve points at nothing) and make its GitHub Release body that
+version's section of `RELEASE_NOTES.md`. Check every module is at that version before tagging: a
+half-published version looks exactly like a wrong one from outside, and a tag makes it permanent.
+
+Renovate extends sborka's presets; majors get a human. `com.squareup.retrofit2:retrofit` is
+switched off for a reason written in `.github/renovate.json5` — it follows kotlin-telegram-bot's own
+POM, and no check here would notice it being wrong.
 
 Every release note entry says what breaks and why the break is worth it. Kotlin/Native forbids a
 comma inside a backticked test name — legal on the JVM, so a green local run means nothing.
