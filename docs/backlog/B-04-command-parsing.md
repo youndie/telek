@@ -1,7 +1,7 @@
 ---
 id: B-04
 title: "/cmd@botname and /cmd with an argument reach no dispatcher"
-status: wip
+status: done
 priority: P1
 size: S
 stage: stage-0-input-model
@@ -42,3 +42,29 @@ makes telek usable for. The second is how a deep link or a shared identifier ent
 - Anchors: `core/src/commonMain/kotlin/io/github/youndie/telek/Telek.kt`,
   `core/src/commonMain/kotlin/io/github/youndie/telek/StateDispatcher.kt`,
   `router/src/commonMain/kotlin/io/github/youndie/telek/router/Routes.kt`.
+
+## Iteration 1 — 2026-09-17
+
+Done. `Message.asCommand()` returns a `Command(name, addressedTo, argument)`, and
+`DefaultFindDispatcherStrategy` routes on `command.name`. A dispatcher reads its argument from the
+same place, so nothing about `entry` or `StateDispatcher` had to change.
+
+- **Split at the first whitespace, not at a space.** A command pasted with a newline after it is
+  still that command, and Telegram's own clients produce exactly that.
+- **The third criterion was a decision, and it is made where it can be made.** telek cannot know its
+  own username, so it cannot decide alone whether `/start@someoneelse` is for it. The strategy takes
+  an optional `botUsername`: unset — the default — any addressed command is answered, which is right
+  in a private chat and in a group with one bot and wrong in a group with two; set, an
+  elsewhere-addressed command stops being a command here and reaches the current state's dispatcher
+  as the ordinary message it is, rather than vanishing. Both halves are tested, and the default's
+  wrong case is written down rather than left to be discovered.
+- **A binary break, named rather than smoothed over.** `DefaultFindDispatcherStrategy`'s
+  single-argument constructor is gone from the ABI, replaced by one with a defaulted second
+  parameter; Kotlin source is unaffected. A secondary constructor would have preserved it, and was
+  not added: nothing is on Maven Central yet ([B-05](B-05-maven-central.md) is a question), so there
+  is nothing linked against the old binary to protect, and the constructor would outlive the reason
+  for its existence. `RELEASE_NOTES.md` says so.
+- **The first mutation was too coarse and was replaced.** Making the strategy never parse a command
+  failed eleven tests including every wizard entry — proof the mechanism is exercised, but no
+  isolation of what this item added. Removing only the `@`-suffix split fails exactly six, all six
+  about the suffix, while bare commands, the argument and every wizard stay green.
