@@ -146,6 +146,19 @@ public abstract interface class io/github/youndie/telek/EffectHandler {
 	public abstract fun handle (Lio/github/youndie/telek/ExecutionContext;Lio/github/youndie/telek/Effect;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class io/github/youndie/telek/EffectOutcome {
+	public fun <init> (Lio/github/youndie/telek/Effect;Lio/github/youndie/telek/EffectResult;)V
+	public final fun component1 ()Lio/github/youndie/telek/Effect;
+	public final fun component2 ()Lio/github/youndie/telek/EffectResult;
+	public final fun copy (Lio/github/youndie/telek/Effect;Lio/github/youndie/telek/EffectResult;)Lio/github/youndie/telek/EffectOutcome;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/EffectOutcome;Lio/github/youndie/telek/Effect;Lio/github/youndie/telek/EffectResult;ILjava/lang/Object;)Lio/github/youndie/telek/EffectOutcome;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEffect ()Lio/github/youndie/telek/Effect;
+	public final fun getResult ()Lio/github/youndie/telek/EffectResult;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/youndie/telek/EffectRegistry {
 	public fun <init> ()V
 	public final fun get (Lkotlin/reflect/KClass;)Lio/github/youndie/telek/EffectHandler;
@@ -285,7 +298,7 @@ public abstract class io/github/youndie/telek/StateDispatcher : io/github/youndi
 	protected final fun getTransitionGate ()Lio/github/youndie/telek/TransitionGate;
 	public final fun handle (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Input;)Lio/github/youndie/telek/TransitionResult;
 	public final fun handleEvent (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Event;)Lio/github/youndie/telek/TransitionResult;
-	public fun onEffectResult (Lio/github/youndie/telek/State;Lio/github/youndie/telek/EffectResult;)V
+	public fun onEffectResult (Lio/github/youndie/telek/State;Lio/github/youndie/telek/EffectOutcome;)V
 	public fun onEffectResults (Lio/github/youndie/telek/State;Ljava/util/List;)V
 	protected final fun setTransitionGate (Lio/github/youndie/telek/TransitionGate;)V
 	public fun transition (Lio/github/youndie/telek/State;Lio/github/youndie/telek/Event;)Lio/github/youndie/telek/TransitionResult;

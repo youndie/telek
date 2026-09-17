@@ -25,7 +25,7 @@ class EffectExecutorImplTest {
 
             val results = executor.execute(listOf(TestEffect("a"))) { _, _ -> }
 
-            assertEquals(listOf(EffectSuccess), results)
+            assertEquals(listOf(EffectOutcome(TestEffect("a"), EffectSuccess)), results)
             assertEquals(listOf(TestEffect("a")), handler.handled)
         }
 
@@ -36,7 +36,8 @@ class EffectExecutorImplTest {
 
             val results = executor.execute(listOf(TestEffect("missing"))) { _, _ -> }
 
-            val failed = assertIs<EffectFailed>(results.single())
+            assertEquals(TestEffect("missing"), results.single().effect)
+            val failed = assertIs<EffectFailed>(results.single().result)
             assertIs<IllegalStateException>(failed.error)
             assertTrue(
                 failed.error.message
@@ -58,7 +59,7 @@ class EffectExecutorImplTest {
 
             val results = executor.execute(listOf(TestEffect("a"))) { _, _ -> }
 
-            val failed = assertIs<EffectFailed>(results.single())
+            val failed = assertIs<EffectFailed>(results.single().result)
             assertSame(boom, failed.error)
         }
 
@@ -85,9 +86,14 @@ class EffectExecutorImplTest {
                 ) { _, _ -> }
 
             assertEquals(3, results.size)
-            assertEquals(EffectSuccess, results[0])
-            assertIs<EffectFailed>(results[1]).let { assertSame(boom, it.error) }
-            assertIs<EffectFailed>(results[2])
+            assertEquals(EffectSuccess, results[0].result)
+            assertIs<EffectFailed>(results[1].result).let { assertSame(boom, it.error) }
+            assertIs<EffectFailed>(results[2].result)
+            // Each one now says which effect it came from, in the order they were run.
+            assertEquals(
+                listOf(TestEffect("ok"), TestEffect("throws"), NoHandlerEffect),
+                results.map { it.effect },
+            )
         }
 
     @Test
@@ -114,8 +120,8 @@ class EffectExecutorImplTest {
                 ) { _, _ -> }
 
             assertEquals(2, results.size)
-            assertEquals(EffectSuccess, results[0])
-            assertIs<EffectFailed>(results[1])
+            assertEquals(EffectSuccess, results[0].result)
+            assertIs<EffectFailed>(results[1].result)
         }
 
     @Test
@@ -203,7 +209,7 @@ class EffectExecutorImplTest {
 
             val results = executor.execute(listOf(TestEffect("a"), NoHandlerEffect)) { _, _ -> }
 
-            assertEquals(listOf(EffectSuccess), results)
+            assertEquals(listOf(EffectOutcome(TestEffect("a"), EffectSuccess)), results)
         }
 
     @Test

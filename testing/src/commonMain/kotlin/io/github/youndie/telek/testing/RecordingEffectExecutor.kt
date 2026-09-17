@@ -3,6 +3,7 @@ package io.github.youndie.telek.testing
 import io.github.youndie.telek.Debounced
 import io.github.youndie.telek.Effect
 import io.github.youndie.telek.EffectExecutor
+import io.github.youndie.telek.EffectOutcome
 import io.github.youndie.telek.EffectResult
 import io.github.youndie.telek.EffectSuccess
 import io.github.youndie.telek.Event
@@ -32,16 +33,16 @@ public class RecordingEffectExecutor(
     override suspend fun execute(
         effects: List<Effect>,
         dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
-    ): List<EffectResult> {
+    ): List<EffectOutcome> {
         _executed += effects
-        val results = mutableListOf<EffectResult>()
+        val results = mutableListOf<EffectOutcome>()
         for (effect in effects) {
             val asyncWork = asyncWorkFor(effect)
             if (asyncWork != null) {
                 dispatchAsync((effect as? Debounced)?.debounceKey, asyncWork)
                 continue
             }
-            results += resultsFor(effect)
+            results += EffectOutcome(effect, resultsFor(effect))
         }
         return results
     }

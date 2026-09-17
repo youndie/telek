@@ -5,7 +5,9 @@ import kotlin.coroutines.cancellation.CancellationException
 
 public interface EffectExecutor {
     /**
-     * Runs [effects] and returns one [EffectResult] per *synchronous* effect, in order. An effect
+     * Runs [effects] and returns one [EffectOutcome] per *synchronous* effect, in order, each
+     * carrying the effect it came from — see [EffectOutcome] for why the pairing is here and not
+     * on [EffectResult]. An effect
      * registered as async (see [EffectRegistry.registerAsync]) produces no [EffectResult] here —
      * instead, [dispatchAsync] is called with the effect's [Debounced.debounceKey] (or `null` if
      * it isn't [Debounced]) and a suspend block that runs that handler and returns its [Event];
@@ -17,7 +19,7 @@ public interface EffectExecutor {
     public suspend fun execute(
         effects: List<Effect>,
         dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
-    ): List<EffectResult>
+    ): List<EffectOutcome>
 }
 
 /** What to do when an effect in a batch fails. */
@@ -49,11 +51,11 @@ public class EffectExecutorImpl(
     override suspend fun execute(
         effects: List<Effect>,
         dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
-    ): List<EffectResult> {
+    ): List<EffectOutcome> {
         if (effects.isEmpty()) return emptyList()
         val resolvedContext = context()
 
-        val results = mutableListOf<EffectResult>()
+        val results = mutableListOf<EffectOutcome>()
         for (effect in effects) {
             @Suppress("UNCHECKED_CAST")
             val asyncHandler = effectRegistry.getAsync(effect::class) as? AsyncEffectHandler<Effect>
@@ -64,7 +66,7 @@ public class EffectExecutorImpl(
             }
 
             val result = executeOne(resolvedContext, effect)
-            results += result
+            results += EffectOutcome(effect, result)
             if (failurePolicy == EffectFailurePolicy.FAIL_FAST && result is EffectFailed) break
         }
         return results

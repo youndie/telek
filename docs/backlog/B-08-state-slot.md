@@ -5,6 +5,7 @@ status: open
 priority: P2
 size: M
 stage: stage-3-debts
+blocked_by: [B-07]
 ---
 
 # B-08 — StateSlot: a bot with a user profile has nowhere to put it
@@ -24,7 +25,10 @@ with it, and today nothing distinguishes the two.
 - This has been deferred before, and the reason it stayed deferred is worth keeping: nothing built
   since has needed it, and a slot API designed without a consumer is a guess. That is the same
   reason it should wait for [B-07](B-07-real-bot-in-production.md) rather than be designed now —
-  a real bot with a profile is precisely the consumer this needs.
+  a real bot with a profile is precisely the consumer this needs. **That is in the frontmatter now
+  rather than only here**, because the picking rule reads the field and would otherwise have taken
+  this item next and designed the API on a guess, which is the one thing its own text argues
+  against.
 - The rejected alternative is a `State` that is a pair of flow-state and profile. It works and it
   is what a bot does today by hand; it is rejected as an API because `FinalState` then cannot mean
   what it means.
