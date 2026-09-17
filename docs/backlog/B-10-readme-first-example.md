@@ -1,7 +1,7 @@
 ---
 id: B-10
 title: "The first README example is stringly typed, in a type-safe toolkit"
-status: open
+status: wip
 priority: P1
 size: S
 stage: stage-4-positioning
