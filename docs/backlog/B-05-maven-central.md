@@ -1,7 +1,7 @@
 ---
 id: B-05
 title: "Publish to Maven Central — after the breaking changes, not before"
-status: open
+status: wip
 priority: P0
 size: S
 stage: stage-1-release
