@@ -32,7 +32,7 @@ class PassportDispatcher : StateDispatcher<Passport>() {
             state is Passport.AwaitingScan && input is Photo -> {
                 transition {
                     newState = Passport.Received(input.file.fileId)
-                    sendMessage(input.chatId, "Got it.")
+                    sendMessage(input.chatId, message = { text("Got it.") })
                 }
             }
 

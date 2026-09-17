@@ -267,6 +267,58 @@ public final class io/github/youndie/telek/Message : io/github/youndie/telek/Inp
 	public fun toString ()Ljava/lang/String;
 }
 
+public final class io/github/youndie/telek/MessageText {
+	public static final field Companion Lio/github/youndie/telek/MessageText$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lio/github/youndie/telek/MessageText;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/MessageText;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/telek/MessageText;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPieces ()Ljava/util/List;
+	public final fun getPlain ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/MessageText$Companion {
+	public final fun getEmpty ()Lio/github/youndie/telek/MessageText;
+	public final fun plain (Ljava/lang/String;)Lio/github/youndie/telek/MessageText;
+}
+
+public final class io/github/youndie/telek/MessageTextBuilder {
+	public fun <init> ()V
+	public final fun blockquote (Lkotlin/jvm/functions/Function1;)V
+	public final fun bold (Ljava/lang/String;)V
+	public final fun bold (Lkotlin/jvm/functions/Function1;)V
+	public final fun br ()V
+	public final fun br2 ()V
+	public final fun build ()Lio/github/youndie/telek/MessageText;
+	public final fun code (Ljava/lang/String;)V
+	public final fun codeBlock (Ljava/lang/String;Ljava/lang/String;)V
+	public static synthetic fun codeBlock$default (Lio/github/youndie/telek/MessageTextBuilder;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public final fun expandableBlockquote (Lkotlin/jvm/functions/Function1;)V
+	public final fun italic (Ljava/lang/String;)V
+	public final fun italic (Lkotlin/jvm/functions/Function1;)V
+	public final fun link (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun link (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public final fun list (Ljava/util/List;Lkotlin/jvm/functions/Function2;)V
+	public final fun row (Lkotlin/jvm/functions/Function1;)V
+	public final fun spoiler (Ljava/lang/String;)V
+	public final fun spoiler (Lkotlin/jvm/functions/Function1;)V
+	public final fun strikethrough (Ljava/lang/String;)V
+	public final fun strikethrough (Lkotlin/jvm/functions/Function1;)V
+	public final fun text (Ljava/lang/String;)V
+	public final fun underline (Ljava/lang/String;)V
+	public final fun underline (Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class io/github/youndie/telek/MessageTextBuilderKt {
+	public static final fun message (Lkotlin/jvm/functions/Function1;)Lio/github/youndie/telek/MessageText;
+}
+
+public abstract interface annotation class io/github/youndie/telek/MessageTextDsl : java/lang/annotation/Annotation {
+}
+
 public final class io/github/youndie/telek/Photo : io/github/youndie/telek/Input {
 	public fun <init> (JJLio/github/youndie/telek/FileRef;Ljava/lang/String;)V
 	public synthetic fun <init> (JJLio/github/youndie/telek/FileRef;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -363,6 +415,124 @@ public final class io/github/youndie/telek/TelekLogger$DefaultImpls {
 	public static synthetic fun log$default (Lio/github/youndie/telek/TelekLogger;Lio/github/youndie/telek/TelekLogLevel;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
 	public static fun warn (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;Ljava/lang/Throwable;)V
 	public static synthetic fun warn$default (Lio/github/youndie/telek/TelekLogger;Ljava/lang/String;Ljava/lang/Throwable;ILjava/lang/Object;)V
+}
+
+public final class io/github/youndie/telek/TextEntity {
+	public fun <init> (Lio/github/youndie/telek/TextEntityType;IILjava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Lio/github/youndie/telek/TextEntityType;IILjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lio/github/youndie/telek/TextEntityType;
+	public final fun component2 ()I
+	public final fun component3 ()I
+	public final fun component4 ()Ljava/lang/String;
+	public final fun component5 ()Ljava/lang/String;
+	public final fun copy (Lio/github/youndie/telek/TextEntityType;IILjava/lang/String;Ljava/lang/String;)Lio/github/youndie/telek/TextEntity;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/TextEntity;Lio/github/youndie/telek/TextEntityType;IILjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/TextEntity;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLanguage ()Ljava/lang/String;
+	public final fun getLength ()I
+	public final fun getOffset ()I
+	public final fun getType ()Lio/github/youndie/telek/TextEntityType;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/TextEntityKt {
+	public static final fun entities (Lio/github/youndie/telek/MessageText;)Ljava/util/List;
+}
+
+public final class io/github/youndie/telek/TextEntityType : java/lang/Enum {
+	public static final field Blockquote Lio/github/youndie/telek/TextEntityType;
+	public static final field Bold Lio/github/youndie/telek/TextEntityType;
+	public static final field Code Lio/github/youndie/telek/TextEntityType;
+	public static final field ExpandableBlockquote Lio/github/youndie/telek/TextEntityType;
+	public static final field Italic Lio/github/youndie/telek/TextEntityType;
+	public static final field Pre Lio/github/youndie/telek/TextEntityType;
+	public static final field Spoiler Lio/github/youndie/telek/TextEntityType;
+	public static final field Strikethrough Lio/github/youndie/telek/TextEntityType;
+	public static final field TextLink Lio/github/youndie/telek/TextEntityType;
+	public static final field Underline Lio/github/youndie/telek/TextEntityType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/youndie/telek/TextEntityType;
+	public static fun values ()[Lio/github/youndie/telek/TextEntityType;
+}
+
+public abstract interface class io/github/youndie/telek/TextPiece {
+}
+
+public final class io/github/youndie/telek/TextPiece$Code : io/github/youndie/telek/TextPiece {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/telek/TextPiece$Code;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/TextPiece$Code;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/TextPiece$Code;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/TextPiece$CodeBlock : io/github/youndie/telek/TextPiece {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lio/github/youndie/telek/TextPiece$CodeBlock;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/TextPiece$CodeBlock;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/TextPiece$CodeBlock;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLanguage ()Ljava/lang/String;
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/TextPiece$Link : io/github/youndie/telek/TextPiece {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;)Lio/github/youndie/telek/TextPiece$Link;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/TextPiece$Link;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/telek/TextPiece$Link;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/util/List;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/TextPiece$Plain : io/github/youndie/telek/TextPiece {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lio/github/youndie/telek/TextPiece$Plain;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/TextPiece$Plain;Ljava/lang/String;ILjava/lang/Object;)Lio/github/youndie/telek/TextPiece$Plain;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/TextPiece$Styled : io/github/youndie/telek/TextPiece {
+	public fun <init> (Lio/github/youndie/telek/TextStyle;Ljava/util/List;)V
+	public final fun component1 ()Lio/github/youndie/telek/TextStyle;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Lio/github/youndie/telek/TextStyle;Ljava/util/List;)Lio/github/youndie/telek/TextPiece$Styled;
+	public static synthetic fun copy$default (Lio/github/youndie/telek/TextPiece$Styled;Lio/github/youndie/telek/TextStyle;Ljava/util/List;ILjava/lang/Object;)Lio/github/youndie/telek/TextPiece$Styled;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getStyle ()Lio/github/youndie/telek/TextStyle;
+	public final fun getText ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class io/github/youndie/telek/TextStyle : java/lang/Enum {
+	public static final field Blockquote Lio/github/youndie/telek/TextStyle;
+	public static final field Bold Lio/github/youndie/telek/TextStyle;
+	public static final field ExpandableBlockquote Lio/github/youndie/telek/TextStyle;
+	public static final field Italic Lio/github/youndie/telek/TextStyle;
+	public static final field Spoiler Lio/github/youndie/telek/TextStyle;
+	public static final field Strikethrough Lio/github/youndie/telek/TextStyle;
+	public static final field Underline Lio/github/youndie/telek/TextStyle;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/youndie/telek/TextStyle;
+	public static fun values ()[Lio/github/youndie/telek/TextStyle;
 }
 
 public final class io/github/youndie/telek/TransitionBuilder {

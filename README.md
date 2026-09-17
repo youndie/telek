@@ -565,6 +565,50 @@ Notes:
 - JSON serialization is powered by `kotlinx.serialization` with `classDiscriminator = "state_type"` and `ignoreUnknownKeys = true`.
 - When a transition returns a `FinalState`, the storage entry is automatically deleted by `PersistableUserStateStoreImpl` — which is right when the state is all you keep per user. If something outlives the flow, see [State that outlives a flow](#-state-that-outlives-a-flow).
 
+### ✍️ Formatting a message
+
+A message body is a document, not a string Telegram parses. Build it with the same `message { }`
+block both transports take:
+
+```kotlin
+message {
+    bold("Order confirmed")
+    br2()
+    // Whatever the person typed. No escaping, at any call site, ever.
+    text("Thanks, ")
+    text(customerName)
+    text("!")
+    br2()
+    blockquote { text("Delivery on Friday") }
+    br()
+    spoiler("There is a free sticker in the box")
+    br2()
+    link(url = "https://example.test/orders", value = "Track it")
+    br()
+    code("ORD-4711")
+}
+```
+
+`text`, `bold`, `italic`, `underline`, `strikethrough`, `spoiler`, `code`, `codeBlock`, `link`,
+`blockquote`, `expandableBlockquote`, plus `br`, `br2`, `row` and `list` for layout. They nest:
+bold inside a blockquote is two ranges over the same text, which is what Telegram's entities are.
+
+**Why this instead of a string with `parse_mode`.** Markup in a string is characters *inside* the
+text, so any text the bot did not write — a name, a product title, an error from somewhere else —
+can open markup that never closes, and Telegram rejects the **whole** message. From the outside that
+is a button that does nothing. The defence is escaping, at every call site, and it is silently wrong
+the day the parse mode changes. Here nothing is parsed, so there is nothing to escape.
+
+Two projections, for tests:
+
+```kotlin
+body.plain       // the text with no markup — assert on what was said
+body.entities()  // the ranges — assert on how it was styled
+```
+
+`MessageText.plain("…")` builds a body that is exactly one literal string, which is what you want
+for anything a person typed.
+
 ### 👤 State that outlives a flow
 
 A conversation has exactly one telek `State`, and it is the flow's. A language, a timezone, a chosen

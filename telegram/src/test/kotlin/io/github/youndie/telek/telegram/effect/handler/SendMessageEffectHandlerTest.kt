@@ -3,8 +3,8 @@ package io.github.youndie.telek.telegram.effect.handler
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
 import com.github.kotlintelegrambot.entities.Message
-import com.github.kotlintelegrambot.entities.ParseMode
 import com.github.kotlintelegrambot.types.TelegramBotResult
+import io.github.youndie.telek.MessageText
 import io.github.youndie.telek.telegram.effect.SendMessageEffect
 import io.mockk.every
 import io.mockk.mockk
@@ -26,12 +26,12 @@ class SendMessageEffectHandlerTest {
                 bot.sendMessage(
                     chatId = ChatId.fromId(1),
                     text = "hi",
-                    parseMode = ParseMode.MARKDOWN,
+                    entities = emptyList(),
                     replyMarkup = null,
                 )
             } returns TelegramBotResult.Success(message)
 
-            val result = handler.handle(bot, SendMessageEffect(chatId = 1, text = "hi"))
+            val result = handler.handle(bot, SendMessageEffect(chatId = 1, message = MessageText.plain("hi")))
 
             val success = assertIs<SendMessageEffectResult>(result)
             assertEquals(1, success.chatId)
@@ -40,7 +40,7 @@ class SendMessageEffectHandlerTest {
                 bot.sendMessage(
                     chatId = ChatId.fromId(1),
                     text = "hi",
-                    parseMode = ParseMode.MARKDOWN,
+                    entities = emptyList(),
                     replyMarkup = null,
                 )
             }
@@ -55,12 +55,12 @@ class SendMessageEffectHandlerTest {
                 bot.sendMessage(
                     chatId = ChatId.fromId(1),
                     text = "hi",
-                    parseMode = ParseMode.MARKDOWN,
+                    entities = emptyList(),
                     replyMarkup = null,
                 )
             } returns error
 
-            val result = handler.handle(bot, SendMessageEffect(chatId = 1, text = "hi"))
+            val result = handler.handle(bot, SendMessageEffect(chatId = 1, message = MessageText.plain("hi")))
 
             val failed = assertIs<TelegramEffectError>(result)
             assertEquals(1, failed.chatId)

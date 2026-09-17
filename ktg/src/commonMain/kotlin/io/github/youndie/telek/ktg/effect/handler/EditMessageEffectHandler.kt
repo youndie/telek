@@ -3,9 +3,9 @@ package io.github.youndie.telek.ktg.effect.handler
 import dev.inmo.tgbotapi.bot.TelegramBot
 import dev.inmo.tgbotapi.extensions.api.edit.text.editMessageText
 import dev.inmo.tgbotapi.types.asTelegramMessageId
-import dev.inmo.tgbotapi.types.message.MarkdownParseMode
 import dev.inmo.tgbotapi.types.toChatId
 import io.github.youndie.telek.EffectResult
+import io.github.youndie.telek.ktg.asTextSources
 import io.github.youndie.telek.ktg.effect.EditMessageEffect
 
 public class EditMessageEffectHandler : KtgEffectHandler<EditMessageEffect> {
@@ -17,8 +17,7 @@ public class EditMessageEffectHandler : KtgEffectHandler<EditMessageEffect> {
             .editMessageText(
                 chatId = effect.chatId.toChatId(),
                 messageId = effect.messageId.asTelegramMessageId(),
-                text = effect.text,
-                parseMode = MarkdownParseMode,
+                entities = effect.message.asTextSources(),
                 replyMarkup = effect.markup,
             ).let {
                 EditMessageEffectResult(effect.chatId, effect.messageId)

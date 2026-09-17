@@ -2,9 +2,9 @@ package io.github.youndie.telek.ktg.effect.handler
 
 import dev.inmo.tgbotapi.bot.TelegramBot
 import dev.inmo.tgbotapi.extensions.api.send.sendMessage
-import dev.inmo.tgbotapi.types.message.MarkdownParseMode
 import dev.inmo.tgbotapi.types.toChatId
 import io.github.youndie.telek.EffectResult
+import io.github.youndie.telek.ktg.asTextSources
 import io.github.youndie.telek.ktg.effect.SendMessageEffect
 
 public class SendMessageEffectHandler : KtgEffectHandler<SendMessageEffect> {
@@ -15,8 +15,7 @@ public class SendMessageEffectHandler : KtgEffectHandler<SendMessageEffect> {
         bot
             .sendMessage(
                 chatId = effect.chatId.toChatId(),
-                text = effect.text,
-                parseMode = MarkdownParseMode,
+                entities = effect.message.asTextSources(),
                 replyMarkup = effect.markup,
             ).let { sent ->
                 SendMessageEffectResult(effect.chatId, sent.messageId.long)

@@ -2,8 +2,8 @@ package io.github.youndie.telek.telegram.effect.handler
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.entities.ChatId
-import com.github.kotlintelegrambot.entities.ParseMode
 import io.github.youndie.telek.EffectFailed
+import io.github.youndie.telek.MessageText
 import io.github.youndie.telek.telegram.effect.EditMessageEffect
 import io.mockk.every
 import io.mockk.mockk
@@ -26,12 +26,16 @@ class EditMessageEffectHandlerTest {
                     chatId = ChatId.fromId(1),
                     messageId = 2,
                     text = "edited",
-                    parseMode = ParseMode.MARKDOWN,
+                    entities = emptyList(),
                     replyMarkup = null,
                 )
             } returns (null to null)
 
-            val result = handler.handle(bot, EditMessageEffect(chatId = 1, messageId = 2, text = "edited"))
+            val result =
+                handler.handle(
+                    bot,
+                    EditMessageEffect(chatId = 1, messageId = 2, message = MessageText.plain("edited")),
+                )
 
             val success = assertIs<EditMessageEffectResult>(result)
             assertEquals(1, success.chatId)
@@ -41,7 +45,7 @@ class EditMessageEffectHandlerTest {
                     chatId = ChatId.fromId(1),
                     messageId = 2,
                     text = "edited",
-                    parseMode = ParseMode.MARKDOWN,
+                    entities = emptyList(),
                     replyMarkup = null,
                 )
             }
@@ -57,12 +61,16 @@ class EditMessageEffectHandlerTest {
                     chatId = ChatId.fromId(1),
                     messageId = 2,
                     text = "edited",
-                    parseMode = ParseMode.MARKDOWN,
+                    entities = emptyList(),
                     replyMarkup = null,
                 )
             } returns (null to exception)
 
-            val result = handler.handle(bot, EditMessageEffect(chatId = 1, messageId = 2, text = "edited"))
+            val result =
+                handler.handle(
+                    bot,
+                    EditMessageEffect(chatId = 1, messageId = 2, message = MessageText.plain("edited")),
+                )
 
             val failed = assertIs<EffectFailed>(result)
             assertSame(exception, failed.error)

@@ -26,7 +26,7 @@ class ExampleDispatcherTest {
             result.effects
                 .filterIsInstance<SendMessageEffect>()
                 .single()
-                .text,
+                .message.plain,
         )
     }
 
@@ -42,7 +42,7 @@ class ExampleDispatcherTest {
             result.effects
                 .filterIsInstance<SendMessageEffect>()
                 .single()
-                .text,
+                .message.plain,
         )
     }
 }

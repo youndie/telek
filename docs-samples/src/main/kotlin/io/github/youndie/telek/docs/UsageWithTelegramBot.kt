@@ -88,9 +88,9 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                     newState = ExampleState.Done
                     editMarkup(input.chatId, input.messageId, null)
                     if (input.isRouteOf<ExampleConfirm>(exampleRoutes)) {
-                        sendMessage(input.chatId, "confirmed")
+                        sendMessage(input.chatId, message = { text("confirmed") })
                     } else {
-                        sendMessage(input.chatId, "canceled")
+                        sendMessage(input.chatId, message = { text("canceled") })
                     }
                 }
             }

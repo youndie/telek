@@ -5,9 +5,9 @@ import dev.inmo.tgbotapi.requests.edit.text.EditChatMessageText
 import dev.inmo.tgbotapi.types.ChatId
 import dev.inmo.tgbotapi.types.MessageId
 import dev.inmo.tgbotapi.types.RawChatId
-import dev.inmo.tgbotapi.types.message.MarkdownParseMode
 import dev.inmo.tgbotapi.types.message.abstracts.ContentMessage
 import dev.inmo.tgbotapi.types.message.content.TextContent
+import io.github.youndie.telek.MessageText
 import io.github.youndie.telek.ktg.effect.EditMessageEffect
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -17,6 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 import kotlin.test.assertSame
 
 class EditMessageEffectHandlerTest {
@@ -29,12 +30,16 @@ class EditMessageEffectHandlerTest {
             val request = slot<EditChatMessageText>()
             coEvery { bot.execute(capture(request)) } returns mockk<ContentMessage<TextContent>>()
 
-            val result = handler.handle(bot, EditMessageEffect(chatId = 1, messageId = 2, text = "edited"))
+            val result =
+                handler.handle(
+                    bot,
+                    EditMessageEffect(chatId = 1, messageId = 2, message = MessageText.plain("edited")),
+                )
 
             assertEquals(ChatId(RawChatId(1)), request.captured.chatId)
             assertEquals(MessageId(2), request.captured.messageId)
             assertEquals("edited", request.captured.text)
-            assertEquals(MarkdownParseMode, request.captured.parseMode)
+            assertNull(request.captured.parseMode)
 
             val success = assertIs<EditMessageEffectResult>(result)
             assertEquals(1L, success.chatId)
@@ -50,7 +55,10 @@ class EditMessageEffectHandlerTest {
 
             val thrown =
                 assertFailsWith<RuntimeException> {
-                    handler.handle(bot, EditMessageEffect(chatId = 1, messageId = 2, text = "edited"))
+                    handler.handle(
+                        bot,
+                        EditMessageEffect(chatId = 1, messageId = 2, message = MessageText.plain("edited")),
+                    )
                 }
 
             assertSame(boom, thrown)
