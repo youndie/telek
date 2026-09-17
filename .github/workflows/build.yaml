@@ -35,7 +35,7 @@ jobs:
 
       - run: pip install pyyaml
 
-      # The index in BACKLOG.md is generated from the frontmatter of the item files, and a generated
+      # The index in backlog.md is generated from the frontmatter of the item files, and a generated
       # block nobody regenerates is worse than a hand-written one: it looks authoritative and is
       # stale. This also catches an id used twice and a `blocked_by` pointing at an item that does
       # not exist.
