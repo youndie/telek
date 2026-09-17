@@ -1,7 +1,7 @@
 ---
 id: B-01
 title: "The FSM key is a chatId, so a group chat has one state for everyone in it"
-status: open
+status: wip
 priority: P0
 size: L
 stage: stage-0-input-model
