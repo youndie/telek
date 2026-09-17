@@ -10,6 +10,8 @@ import com.github.kotlintelegrambot.entities.Update
 import com.github.kotlintelegrambot.entities.User
 import com.github.kotlintelegrambot.types.TelegramBotResult
 import io.github.youndie.telek.Callback
+import io.github.youndie.telek.ConversationKey
+import io.github.youndie.telek.Keying
 import io.github.youndie.telek.Telek
 import io.mockk.every
 import io.mockk.mockk
@@ -36,19 +38,21 @@ class ConnectTest {
         chatId: Long,
         text: String?,
         messageId: Long = 100,
-    ) = Message(messageId = messageId, date = 0, chat = chat(chatId), text = text)
+        from: User? = null,
+    ) = Message(messageId = messageId, date = 0, chat = chat(chatId), text = text, from = from)
 
-    private fun user() = User(id = 1, isBot = false, firstName = "Test")
+    private fun user(id: Long = 1) = User(id = id, isBot = false, firstName = "Test")
 
     private fun capturedHandlers(
         telek: Telek,
         contextSource: TelegramContextSource,
+        keying: Keying = Keying.PerUserInChat,
     ): List<Handler> {
         val handlers = mutableListOf<Handler>()
         val dispatcher = mockk<Dispatcher>(relaxed = true)
         every { dispatcher.addHandler(any()) } answers { handlers += firstArg<Handler>() }
 
-        dispatcher.connect(telek, contextSource)
+        dispatcher.connect(telek, contextSource, keying)
 
         return handlers
     }
@@ -65,7 +69,7 @@ class ConnectTest {
             messageHandler.handleUpdate(bot, update)
 
             assertSame(bot, contextSource.context().bot)
-            verify { telek.onInput(chatId = 42, input = TelekMessage(chatId = 42, text = "hello")) }
+            verify { telek.onInput(key = ConversationKey.chat(42), input = TelekMessage(chatId = 42, text = "hello")) }
         }
 
     @Test
@@ -78,7 +82,7 @@ class ConnectTest {
 
             messageHandler.handleUpdate(bot, update)
 
-            verify { telek.onInput(chatId = 42, input = TelekMessage(chatId = 42, text = "")) }
+            verify { telek.onInput(key = ConversationKey.chat(42), input = TelekMessage(chatId = 42, text = "")) }
         }
 
     @Test
@@ -102,7 +106,58 @@ class ConnectTest {
             val callbackHandler = capturedHandlers(telek, TelegramContextSource()).single { it.checkUpdate(update) }
             callbackHandler.handleUpdate(bot, update)
 
-            verify { telek.onInput(chatId = 7, input = Callback(chatId = 7, messageId = 55, data = "route:data")) }
+            verify {
+                telek.onInput(
+                    key = ConversationKey.chatAndUser(chatId = 7, userId = 1),
+                    input = Callback(chatId = 7, messageId = 55, data = "route:data"),
+                )
+            }
+        }
+
+    @Test
+    fun `two members of one chat are two keys, and both carry the same address`() =
+        runBlocking {
+            val bot = mockk<Bot>(relaxed = true)
+            val telek = mockk<Telek>(relaxed = true)
+
+            listOf(11L, 22L).forEach { userId ->
+                val update =
+                    Update(updateId = 1, message = message(chatId = -100, text = "hi", from = user(userId)))
+                capturedHandlers(telek, TelegramContextSource())
+                    .single { it.checkUpdate(update) }
+                    .handleUpdate(bot, update)
+            }
+
+            // Two keys, so two states and two per-conversation actors — and one address, because
+            // both replies go to the same group.
+            listOf(11L, 22L).forEach { userId ->
+                verify {
+                    telek.onInput(
+                        key = ConversationKey.chatAndUser(chatId = -100, userId = userId),
+                        input = TelekMessage(chatId = -100, text = "hi"),
+                    )
+                }
+            }
+        }
+
+    @Test
+    fun `Keying PerChat files everyone in a chat under the chat itself`() =
+        runBlocking {
+            val bot = mockk<Bot>(relaxed = true)
+            val telek = mockk<Telek>(relaxed = true)
+            val update =
+                Update(updateId = 1, message = message(chatId = -100, text = "hi", from = user(11)))
+
+            capturedHandlers(telek, TelegramContextSource(), Keying.PerChat)
+                .single { it.checkUpdate(update) }
+                .handleUpdate(bot, update)
+
+            verify {
+                telek.onInput(
+                    key = ConversationKey.chat(-100),
+                    input = TelekMessage(chatId = -100, text = "hi"),
+                )
+            }
         }
 
     @Test

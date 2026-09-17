@@ -1,6 +1,7 @@
 package io.github.youndie.telek.support
 
 import io.github.youndie.telek.AsyncEffectHandler
+import io.github.youndie.telek.ConversationKey
 import io.github.youndie.telek.Debounced
 import io.github.youndie.telek.Effect
 import io.github.youndie.telek.EffectExecutor
@@ -17,6 +18,9 @@ import io.github.youndie.telek.TelekInterceptor
 import io.github.youndie.telek.TransitionResult
 import io.github.youndie.telek.noTransition
 import kotlin.reflect.KClass
+
+/** The key the tests file everything under; a chat-only key keeps them reading as they did. */
+fun key(chatId: Long): ConversationKey = ConversationKey.chat(chatId)
 
 sealed interface TestState : State {
     data class Waiting(
@@ -119,18 +123,18 @@ class FakeEffectExecutor(
 
 class RecordingInterceptor : TelekInterceptor {
     data class BeforeInputCall(
-        val chatId: Long,
+        val key: ConversationKey,
         val input: Input,
     )
 
     data class AfterStateChangedCall(
-        val chatId: Long,
+        val key: ConversationKey,
         val oldState: State?,
         val newState: State,
     )
 
     data class ErrorCall(
-        val chatId: Long,
+        val key: ConversationKey,
         val input: Input?,
         val error: Throwable,
     )
@@ -140,25 +144,25 @@ class RecordingInterceptor : TelekInterceptor {
     val errors = mutableListOf<ErrorCall>()
 
     override fun onBeforeInput(
-        chatId: Long,
+        key: ConversationKey,
         input: Input,
     ) {
-        beforeInput += BeforeInputCall(chatId, input)
+        beforeInput += BeforeInputCall(key, input)
     }
 
     override fun onAfterStateChanged(
-        chatId: Long,
+        key: ConversationKey,
         oldState: State?,
         newState: State,
     ) {
-        afterStateChanged += AfterStateChangedCall(chatId, oldState, newState)
+        afterStateChanged += AfterStateChangedCall(key, oldState, newState)
     }
 
     override fun onError(
-        chatId: Long,
+        key: ConversationKey,
         input: Input?,
         error: Throwable,
     ) {
-        errors += ErrorCall(chatId, input, error)
+        errors += ErrorCall(key, input, error)
     }
 }

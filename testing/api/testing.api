@@ -11,7 +11,7 @@ public final class io/github/youndie/telek/testing/SyncTransitionGate : io/githu
 	public fun <init> (Lio/github/youndie/telek/State;Lkotlin/jvm/functions/Function1;)V
 	public synthetic fun <init> (Lio/github/youndie/telek/State;Lkotlin/jvm/functions/Function1;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun currentState ()Lio/github/youndie/telek/State;
-	public fun post (JLkotlin/jvm/functions/Function1;)V
+	public fun post (Lio/github/youndie/telek/ConversationKey;Lkotlin/jvm/functions/Function1;)V
 }
 
 public final class io/github/youndie/telek/testing/TestExecutionContext : io/github/youndie/telek/ExecutionContext {

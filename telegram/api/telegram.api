@@ -1,5 +1,6 @@
 public final class io/github/youndie/telek/telegram/ConnectKt {
-	public static final fun connect (Lcom/github/kotlintelegrambot/dispatcher/Dispatcher;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/telegram/TelegramContextSource;)V
+	public static final fun connect (Lcom/github/kotlintelegrambot/dispatcher/Dispatcher;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/telegram/TelegramContextSource;Lio/github/youndie/telek/Keying;)V
+	public static synthetic fun connect$default (Lcom/github/kotlintelegrambot/dispatcher/Dispatcher;Lio/github/youndie/telek/Telek;Lio/github/youndie/telek/telegram/TelegramContextSource;Lio/github/youndie/telek/Keying;ILjava/lang/Object;)V
 }
 
 public final class io/github/youndie/telek/telegram/InlineKeyboardBuilder {

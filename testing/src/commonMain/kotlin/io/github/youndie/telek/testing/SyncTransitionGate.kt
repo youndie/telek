@@ -1,5 +1,6 @@
 package io.github.youndie.telek.testing
 
+import io.github.youndie.telek.ConversationKey
 import io.github.youndie.telek.State
 import io.github.youndie.telek.TransitionGate
 import io.github.youndie.telek.TransitionResult
@@ -16,7 +17,7 @@ public class SyncTransitionGate<S : State>(
     private val onPost: (TransitionResult<S>) -> Unit = {},
 ) : TransitionGate<S> {
     override fun post(
-        chatId: Long,
+        key: ConversationKey,
         reducer: (S) -> TransitionResult<S>,
     ) {
         val result = reducer(currentState)

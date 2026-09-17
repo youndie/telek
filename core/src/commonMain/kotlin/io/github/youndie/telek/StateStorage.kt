@@ -2,11 +2,11 @@ package io.github.youndie.telek
 
 public interface StateStorage<S : State> {
     public suspend fun save(
-        chatId: Long,
+        key: ConversationKey,
         state: S,
     )
 
-    public suspend fun load(chatId: Long): S?
+    public suspend fun load(key: ConversationKey): S?
 
-    public suspend fun delete(chatId: Long)
+    public suspend fun delete(key: ConversationKey)
 }

@@ -37,7 +37,7 @@ internal suspend fun chatWorkersStressScenario() {
         chatIds.forEach { chatId ->
             launch {
                 repeat(perChatSubmissions) { i ->
-                    workers.submit(chatId) { results.record(chatId, i) }
+                    workers.submit(key(chatId)) { results.record(chatId, i) }
                     // Occasionally idle past the 1ms timeout, racing the next submit against that
                     // chat's worker retiring itself.
                     if (i % 3 == 0) delay(1)

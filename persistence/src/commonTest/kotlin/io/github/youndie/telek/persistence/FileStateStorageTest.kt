@@ -1,5 +1,6 @@
 package io.github.youndie.telek.persistence
 
+import io.github.youndie.telek.ConversationKey
 import kotlinx.coroutines.test.runTest
 import okio.IOException
 import okio.Path
@@ -33,8 +34,8 @@ class FileStateStorageTest {
             val storage = storage()
             val state = PersistenceTestState.Waiting(value = 7)
 
-            storage.save(chatId = 1, state = state)
-            val loaded = storage.load(chatId = 1)
+            storage.save(key = k(1), state = state)
+            val loaded = storage.load(key = k(1))
 
             assertEquals(state, loaded)
         }
@@ -44,19 +45,56 @@ class FileStateStorageTest {
         runTest {
             val storage = storage()
 
-            storage.save(1, PersistenceTestState.Waiting(1))
-            storage.save(2, PersistenceTestState.Waiting(2))
+            storage.save(k(1), PersistenceTestState.Waiting(1))
+            storage.save(k(2), PersistenceTestState.Waiting(2))
 
             assertTrue(fs.exists(dir / "1.json"))
             assertTrue(fs.exists(dir / "2.json"))
-            assertEquals(PersistenceTestState.Waiting(1), storage.load(1))
-            assertEquals(PersistenceTestState.Waiting(2), storage.load(2))
+            assertEquals(PersistenceTestState.Waiting(1), storage.load(k(1)))
+            assertEquals(PersistenceTestState.Waiting(2), storage.load(k(2)))
+        }
+
+    @Test
+    fun `two members of one chat get two files and a chat key keeps the old bare name`() =
+        runTest {
+            val storage = storage()
+            val group = -100L
+
+            storage.save(ConversationKey.chatAndUser(group, 11), PersistenceTestState.Waiting(11))
+            storage.save(ConversationKey.chatAndUser(group, 22), PersistenceTestState.Waiting(22))
+            storage.save(ConversationKey.chat(group), PersistenceTestState.Waiting(0))
+
+            // The bare name is what every version before the key change wrote, so state stored by
+            // one of those is still found — under a chat key, and only under a chat key.
+            assertTrue(fs.exists(dir / "-100.json"))
+            assertTrue(fs.exists(dir / "-100.11.json"))
+            assertTrue(fs.exists(dir / "-100.22.json"))
+            assertEquals(
+                PersistenceTestState.Waiting(11),
+                storage.load(ConversationKey.chatAndUser(group, 11)),
+            )
+            assertEquals(PersistenceTestState.Waiting(0), storage.load(ConversationKey.chat(group)))
+        }
+
+    @Test
+    fun `deleting one member's state leaves the other's alone`() =
+        runTest {
+            val storage = storage()
+            val alice = ConversationKey.chatAndUser(-100, 11)
+            val bob = ConversationKey.chatAndUser(-100, 22)
+            storage.save(alice, PersistenceTestState.Waiting(11))
+            storage.save(bob, PersistenceTestState.Waiting(22))
+
+            storage.delete(alice)
+
+            assertNull(storage.load(alice))
+            assertEquals(PersistenceTestState.Waiting(22), storage.load(bob))
         }
 
     @Test
     fun `load of unknown chatId returns null`() =
         runTest {
-            assertNull(storage().load(chatId = 999))
+            assertNull(storage().load(key = k(999)))
         }
 
     @Test
@@ -65,25 +103,25 @@ class FileStateStorageTest {
             val storage = storage()
             writeRaw(dir / "5.json", "{ not valid json ")
 
-            assertNull(storage.load(chatId = 5))
+            assertNull(storage.load(key = k(5)))
         }
 
     @Test
     fun `delete removes the file so a subsequent load returns null`() =
         runTest {
             val storage = storage()
-            storage.save(1, PersistenceTestState.Waiting(1))
+            storage.save(k(1), PersistenceTestState.Waiting(1))
 
-            storage.delete(1)
+            storage.delete(k(1))
 
             assertFalse(fs.exists(dir / "1.json"))
-            assertNull(storage.load(1))
+            assertNull(storage.load(k(1)))
         }
 
     @Test
     fun `delete of a non-existent file does not throw`() =
         runTest {
-            storage().delete(chatId = 42)
+            storage().delete(key = k(42))
         }
 
     @Test
@@ -92,9 +130,9 @@ class FileStateStorageTest {
             val storage = storage()
             val state = PersistenceTestState.Done(value = 3)
 
-            storage.save(1, state)
+            storage.save(k(1), state)
 
-            assertEquals(state, storage.load(1))
+            assertEquals(state, storage.load(k(1)))
         }
 
     @Test
@@ -112,7 +150,7 @@ class FileStateStorageTest {
                 """.trimIndent(),
             )
 
-            assertEquals(PersistenceTestState.Waiting(4), storage.load(1))
+            assertEquals(PersistenceTestState.Waiting(4), storage.load(k(1)))
         }
 
     @Test
@@ -120,7 +158,7 @@ class FileStateStorageTest {
         runTest {
             val storage = storage()
 
-            storage.save(1, PersistenceTestState.Waiting(1))
+            storage.save(k(1), PersistenceTestState.Waiting(1))
 
             val raw = fs.read(dir / "1.json") { readUtf8() }
             assertTrue(raw.contains("\"state_type\""))
@@ -132,7 +170,7 @@ class FileStateStorageTest {
             val missingDir = dir / "nested/does/not/exist"
             val storage = storage(missingDir)
 
-            storage.save(1, PersistenceTestState.Waiting(1))
+            storage.save(k(1), PersistenceTestState.Waiting(1))
 
             assertTrue(fs.exists(missingDir / "1.json"))
         }
@@ -142,7 +180,7 @@ class FileStateStorageTest {
         runTest {
             val storage = storage()
 
-            storage.save(1, PersistenceTestState.Waiting(1))
+            storage.save(k(1), PersistenceTestState.Waiting(1))
 
             assertFalse(fs.exists(dir / "1.json.tmp"))
         }
@@ -151,12 +189,12 @@ class FileStateStorageTest {
     fun `a leftover tmp file from a crashed save doesn't affect loading the real file`() =
         runTest {
             val storage = storage()
-            storage.save(1, PersistenceTestState.Waiting(1))
+            storage.save(k(1), PersistenceTestState.Waiting(1))
             // Simulates a process that died mid-write, after writing the tmp file but before the
             // atomic rename — the previous save's target file is untouched.
             writeRaw(dir / "1.json.tmp", "{ this would be corrupted if it were ever read ")
 
-            assertEquals(PersistenceTestState.Waiting(1), storage.load(1))
+            assertEquals(PersistenceTestState.Waiting(1), storage.load(k(1)))
         }
 
     @Test
@@ -167,7 +205,7 @@ class FileStateStorageTest {
             fs.createDirectories(dir / "1.json.tmp")
 
             assertFailsWith<IOException> {
-                storage.save(1, PersistenceTestState.Waiting(1))
+                storage.save(k(1), PersistenceTestState.Waiting(1))
             }
         }
 }
