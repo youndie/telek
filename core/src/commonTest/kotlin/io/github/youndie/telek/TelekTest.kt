@@ -4,11 +4,14 @@ package io.github.youndie.telek
 
 import io.github.youndie.telek.support.FakeEffectExecutor
 import io.github.youndie.telek.support.RecordingInterceptor
+import io.github.youndie.telek.support.TestDebouncedEffect
 import io.github.youndie.telek.support.TestEffect
 import io.github.youndie.telek.support.TestEvent
 import io.github.youndie.telek.support.TestState
 import io.github.youndie.telek.support.key
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,6 +19,7 @@ import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.minutes
 
 private class WizardDispatcher : StateDispatcher<TestState>() {
     override val startCommand = "test"
@@ -93,6 +97,26 @@ private class AsyncDispatcher : StateDispatcher<TestState>() {
         } else {
             noTransition(state)
         }
+}
+
+private class DebouncedAsyncDispatcher : StateDispatcher<TestState>() {
+    override val startCommand = "debounced"
+    override val stateClass = TestState::class
+
+    override fun entry(input: Input): TransitionResult<TestState>? =
+        if (input is Message && input.text == "/debounced") {
+            transition {
+                newState = TestState.Waiting(0)
+                add(TestDebouncedEffect("search", debounceKey = "search"))
+            }
+        } else {
+            null
+        }
+
+    override fun transition(
+        state: TestState,
+        input: Input,
+    ): TransitionResult<TestState> = noTransition(state)
 }
 
 private sealed interface PhotoFlowState : State {
@@ -262,6 +286,91 @@ class TelekTest {
                 listOf<List<Effect>>(listOf(TestEffect("ask-for-photo")), listOf(TestEffect("stored-scan-1"))),
                 executor.executed,
             )
+        }
+
+    // B-16. The synchronous half already reported here; the async half logged and went quiet, so a
+    // bot with an interceptor saw one kind of failure and not the other, with nothing saying why.
+    @Test
+    fun `an async effect that throws reaches onError like a synchronous one`() =
+        runTest {
+            val interceptor = RecordingInterceptor()
+            val boom = RuntimeException("the fetch failed")
+            val input = Message(1, "/async")
+            val executor =
+                FakeEffectExecutor(
+                    asyncWorkFor = { { throw boom } },
+                )
+            val telek =
+                Telek(
+                    scope = this,
+                    dispatchers = listOf(AsyncDispatcher()),
+                    effectExecutor = executor,
+                    interceptors = listOf(interceptor),
+                )
+
+            telek.onInput(key(1), input)
+            advanceUntilIdle()
+
+            val error = interceptor.errors.single()
+            assertSame(boom, error.error)
+            assertEquals(key(1), error.key)
+            // The input whose transition launched the work, same as the synchronous path passes.
+            assertEquals(input, error.input)
+        }
+
+    // The control. Without it the assertion above is satisfied just as well by an engine that
+    // reports every async effect, and `null` from a handler is the ordinary "nothing to report".
+    @Test
+    fun `an async effect that simply produces no event reaches no interceptor`() =
+        runTest {
+            val interceptor = RecordingInterceptor()
+            val executor = FakeEffectExecutor(asyncWorkFor = { { null } })
+            val telek =
+                Telek(
+                    scope = this,
+                    dispatchers = listOf(AsyncDispatcher()),
+                    effectExecutor = executor,
+                    interceptors = listOf(interceptor),
+                )
+
+            telek.onInput(key(1), Message(1, "/async"))
+            advanceUntilIdle()
+
+            assertEquals(emptyList(), interceptor.errors)
+        }
+
+    // B-16's sharp edge, and it has to run through Telek: a ChatWorkers-level version of this test
+    // passed with the rethrow removed, because the catch it guards is in Telek and not there.
+    // A Debounced effect is cancelled as a matter of course -- that is the feature -- so if
+    // cancellation travelled the failure path, using debounce would look like a stream of errors.
+    @Test
+    fun `a debounced async effect that is cancelled is not reported as a failure`() =
+        runTest {
+            val interceptor = RecordingInterceptor()
+            val executor =
+                FakeEffectExecutor(
+                    asyncWorkFor = {
+                        {
+                            delay(10.minutes)
+                            TestEvent(chatId = 1, tag = "late")
+                        }
+                    },
+                )
+            val telek =
+                Telek(
+                    scope = this,
+                    dispatchers = listOf(DebouncedAsyncDispatcher()),
+                    effectExecutor = executor,
+                    interceptors = listOf(interceptor),
+                )
+
+            telek.onInput(key(1), Message(1, "/debounced"))
+            runCurrent()
+            // Same debounceKey, so launching the second cancels the first.
+            telek.onInput(key(1), Message(1, "/debounced"))
+            advanceUntilIdle()
+
+            assertEquals(emptyList(), interceptor.errors)
         }
 
     @Test

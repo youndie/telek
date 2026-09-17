@@ -1,7 +1,7 @@
 ---
 id: B-16
 title: "An async effect that throws reaches no interceptor, only the logger"
-status: open
+status: done
 priority: P2
 size: S
 stage: stage-3-debts
@@ -42,3 +42,28 @@ way to see failures — sees synchronous ones and not asynchronous ones, with no
 - Anchors: `core/src/commonMain/kotlin/io/github/youndie/telek/EffectExecutor.kt`,
   `core/src/commonMain/kotlin/io/github/youndie/telek/Telek.kt`,
   `core/src/commonMain/kotlin/io/github/youndie/telek/TelekInterceptor.kt`.
+
+## Iteration 1 — 2026-09-17
+
+Done. `EffectExecutorImpl.runAsync` logs **and rethrows** — the shape `FileStateStorage.save`
+already had — and `Telek` catches it where the interceptors live and reports it.
+
+- **The item's open question answered itself.** It asked what to pass as the input, guessing the
+  input would be "long gone". It is not: the input whose transition launched the work is captured in
+  the closure, and passing it makes the async path identical to the synchronous one, which was the
+  whole complaint.
+- **An existing test asserted the old behaviour by name** — `a throwing async handler is caught and
+  logged and its work yields null instead of propagating`. That is a decision written down, not an
+  accident, so it was rewritten rather than deleted and its comment says what changed and why.
+- **The cancellation half is where this is easy to get wrong, and the first test for it guarded
+  nothing.** A `Debounced` effect is cancelled as a matter of course, so if cancellation travelled
+  the failure path, using debounce would look like a stream of errors. The first version of that
+  test exercised `ChatWorkers.launchAsync` directly — and removing the rethrow from `Telek` left it
+  green, because the catch it was supposed to guard is in `Telek` and not there. Caught by running
+  the mutation rather than by reading the test. Replaced with one that goes through `Telek`: the
+  same mutation now fails exactly it.
+- **The guard from [B-14](B-14-diagnostics-are-off-by-default.md) did not catch the documentation
+  going stale, and that is its documented limit.** This change moved one diagnostic from "reported
+  nowhere else" to "also reachable another way"; the count stayed at six, so the script stayed
+  green while the table was wrong. Fixed by hand. A guard that reads the descriptions would have to
+  understand them, which is why it counts instead.

@@ -9,6 +9,7 @@ import io.github.youndie.telek.support.TestExecutionContext
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 import kotlin.test.assertNull
 import kotlin.test.assertSame
@@ -164,8 +165,12 @@ class EffectExecutorImplTest {
             assertSame(expectedEvent, work?.invoke())
         }
 
+    // Was `caught and logged and its work yields null instead of propagating`. It now propagates:
+    // swallowing made a thrown handler indistinguishable from one that succeeded with nothing to
+    // report, and the log was the only account of it — on a logger that is NoOp by default. See
+    // B-16; `Telek` catches it and reports it to the interceptors, which is where the caller lives.
     @Test
-    fun `a throwing async handler is caught and logged and its work yields null instead of propagating`() =
+    fun `a throwing async handler is logged and rethrown so the caller can report it`() =
         runTest {
             val registry = EffectRegistry()
             val boom = RuntimeException("boom")
@@ -186,7 +191,7 @@ class EffectExecutorImplTest {
 
             executor.execute(listOf(TestEffect("a"))) { _, w -> work = w }
 
-            assertNull(work?.invoke())
+            assertSame(boom, assertFailsWith<RuntimeException> { work?.invoke() })
             assertSame(boom, loggedError)
         }
 

@@ -90,6 +90,21 @@ Every existing `EffectResult` implementation, transport ones included, is untouc
 result directly. Nothing else — the default behaviour is unchanged, including that `onEffectResults`
 still passes only the last outcome to `onEffectResult`.
 
+**An `AsyncEffectHandler` that throws now reaches `TelekInterceptor.onError`.** It used to be caught,
+logged and turned into `null` — the same `null` a handler returns when it succeeded and had nothing
+to report. So the two halves of one mechanism reported failure to two different places, and the
+async half reported it only to a logger that is `NoOp` by default: a bot with an interceptor wired
+up saw synchronous failures and not asynchronous ones, with nothing saying why.
+
+`onError` receives the input whose transition launched the work, exactly as the synchronous path
+does. **A cancelled effect is still not a failure** — a `Debounced` effect is cancelled as a matter
+of course, and reporting that as an error would make the feature look like a fault.
+
+**What breaks:** a custom `EffectExecutor` whose `dispatchAsync` work swallowed handler exceptions
+keeps its old behaviour; `EffectExecutorImpl` no longer does. A bot that relied on a throwing async
+handler being silently equivalent to one returning `null` will now see it at its interceptor, which
+is the point.
+
 ---
 
 ## 0.3.0

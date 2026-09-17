@@ -42,9 +42,9 @@ public enum class EffectFailurePolicy {
  * workers run on. Async handlers (see [AsyncEffectHandler]) are handed to the caller-supplied
  * `dispatchAsync` as-is; where they actually run is up to the caller.
  *
- * @param logger defaults to [TelekLogger.NoOp], which discards everything. A synchronous handler's
- * failure also reaches [TelekInterceptor.onError]; **an [AsyncEffectHandler]'s does not** — with
- * the default logger it is reported nowhere at all. See [TelekLogger].
+ * @param logger defaults to [TelekLogger.NoOp], which discards everything. A handler's failure,
+ * synchronous or not, also reaches [TelekInterceptor.onError], so silence costs the message rather
+ * than the fact. See [TelekLogger].
  */
 public class EffectExecutorImpl(
     private val effectRegistry: EffectRegistry,
@@ -85,13 +85,18 @@ public class EffectExecutorImpl(
         // answers `null` for a cancelled effect exactly as it does for a failed one. `null` here
         // means "produced no event", so the caller went on as if the effect had simply had nothing
         // to say — while the coroutine that was cancelled kept running.
+        //
+        // Logged AND rethrown, the way a failed `FileStateStorage.save` is. Swallowing it turned a
+        // thrown handler into the same `null` a handler returns when it succeeded with nothing to
+        // report, so the only account of the failure was a log line — and the default logger
+        // discards those. The caller is what reaches [TelekInterceptor], so the caller has to see it.
         try {
             handler.handle(context, effect)
         } catch (e: CancellationException) {
             throw e
         } catch (e: Throwable) {
             logger.error("Async effect ${effect::class.simpleName} failed: ${e.message}", e)
-            null
+            throw e
         }
 
     private suspend fun executeOne(
