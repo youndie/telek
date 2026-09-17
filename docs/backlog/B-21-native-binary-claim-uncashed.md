@@ -40,3 +40,32 @@ has not been thrown.
   the same numbers for the JVM build, so the README's sentence can be read by someone deciding.
 - AC: whatever it finds is filed here, including anything that contradicts the current ordering.
 - Anchors: `README.md`, `ktg/`, `ci/consumer/`.
+
+## What could be measured without a deploy — 2026-09-17
+
+One of the three numbers AC 2 asks for does not need anything to run, so it is here rather than
+waiting: **image size**, read from the registry manifests rather than from a build log.
+
+| build | layers | compressed |
+|---|---|---|
+| JVM | 7 | 101.9 MB |
+| native | 3 | 44.4 MB |
+
+**Read it as an order of magnitude and not as a measurement.** The two tags are not the same build:
+the JVM one is tonight's, the native one is from August, because the native image is only published
+on a manual dispatch. So this says "roughly half", not "2.3× exactly", and a controlled pair would
+have to come from one commit. It is consistent with the 4.4× a sibling service measured, which is
+the only reason it is worth writing down at all before the rest.
+
+**The other two numbers cannot be taken from here, and the reason is not effort.** RSS against a
+container limit and startup are properties of a bot that is *running*, and a bot only runs with a
+real Telegram token. Measuring an instance that fails to authenticate would produce a number for an
+idle process that never polls — the shape of a green run where nothing was exercised. So AC 1 and the
+rest of AC 2 need somebody to throw the switch: the native image is built and pushed on dispatch,
+the tag is bumped in the chart automatically, and `bot.native.enabled` is left to a person on
+purpose.
+
+What that person should watch for, so the run is not wasted: RSS at rest and under a burst of
+updates against the container's limit; time from start to first successful long poll; whether the
+file-backed state on the mounted volume survives the switch in both directions; and behaviour across
+a restart and a redeploy rather than at t=0.
