@@ -1,7 +1,7 @@
 ---
 id: B-14
 title: "Every diagnostic the library emits is off by default, because the logger is NoOp"
-status: open
+status: wip
 priority: P2
 size: S
 stage: stage-3-debts
