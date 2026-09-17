@@ -31,23 +31,28 @@ repositories {
 dependencies {
     implementation("io.github.youndie.telek:core:<VERSION>")
 
-    // pick one transport:
-    implementation("io.github.youndie.telek:telegram:<VERSION>") // kotlin-telegram-bot
-    // implementation("io.github.youndie.telek:ktg:<VERSION>")   // ktgbotapi
+    // the transport:
+    implementation("io.github.youndie.telek:ktg:<VERSION>")        // ktgbotapi
+    // implementation("io.github.youndie.telek:telegram:<VERSION>") // kotlin-telegram-bot, maintenance
 }
 ```
-The core module contains the FSM engine, transitions, and effect system.
-The telegram module provides integration
-with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot), and the
-`ktg` module the same integration
-on [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI) — same API shape, pick whichever
-Telegram client you already use (see [Using ktgbotapi instead](#-using-ktgbotapi-instead)).
+The core module contains the FSM engine, transitions, and effect system. The `ktg` module is the
+integration on [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI), and it is **the**
+transport: it is multiplatform, so it is the one a native binary can use, and it is where new work
+lands.
+
+`telegram`, on [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot), is
+in **maintenance** — the same API shape, still built, still tested, still published, and not
+deprecated. What maintenance means here is narrow and worth saying exactly: it does not get new
+input types or other additions to the model unless somebody asks for them. Use it if your bot
+already runs on kotlin-telegram-bot; reach for `ktg` otherwise.
 
 **Multiplatform.** `core`, `ktg`, `router`, `router-ktg`, `persistence` and `testing` are Kotlin
 Multiplatform, published for **JVM, linuxX64 and linuxArm64** — so a bot can also ship as a native
-Linux binary. `telegram` and `router-telegram` are JVM-only, because kotlin-telegram-bot is. A plain
-JVM Gradle project resolves the right variant automatically from Gradle module metadata; nothing
-changes for JVM consumers.
+Linux binary. `telegram` and `router-telegram` are JVM-only, because kotlin-telegram-bot is, and
+that is the concrete half of the sentence above: those two modules are the ones a native binary
+cannot contain. A plain JVM Gradle project resolves the right variant automatically from Gradle
+module metadata; nothing changes for JVM consumers.
 
 
 ### 💬 Usage with Telegram bot
@@ -152,6 +157,9 @@ on, so a slow Telegram API call for one chat never blocks another chat's turn.
 
 
 ### 🤖 Using ktgbotapi instead
+
+> This section reads as "instead" for historical reasons: `telegram` was here first. `ktg` is the
+> transport now — see [Installation](#-installation) — and `telegram` is in maintenance.
 
 The `ktg` module is the same integration built
 on [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI) instead of kotlin-telegram-bot.

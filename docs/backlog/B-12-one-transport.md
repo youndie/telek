@@ -1,7 +1,7 @@
 ---
 id: B-12
 title: "Name :ktg the transport and put :telegram into maintenance"
-status: open
+status: done
 priority: P1
 size: S
 stage: stage-4-positioning
@@ -34,3 +34,26 @@ will run in production.
 - AC: the non-goals section ([B-11](B-11-non-goals.md)) records that a third transport is not coming
   and that `:telegram` is in maintenance.
 - Anchors: `README.md`, `ktg/`, `telegram/`, `router-telegram/`, `router-ktg/`.
+
+## Iteration 1 — 2026-09-17
+
+Done as a documentation change, because that is all this item ever was: nothing in the build or the
+code changes, `telegram` and `router-telegram` go on building, testing and publishing exactly as
+before. What changes is which transport a reader reaches for first.
+
+- `README.md`'s installation block now lists `ktg` uncommented and `telegram` commented out, with
+  the reason in one line: `ktg` is multiplatform, so it is the one a native binary can contain.
+- "Maintenance" is spelled out rather than implied, because the word is usually read as
+  abandonment: still built, still tested, still published, not deprecated, and **no new input
+  types** unless somebody asks.
+- The "Using ktgbotapi instead" heading is now flagged for what it is — a historical name, since
+  `telegram` was here first — rather than renamed. Renaming it would break every external link to
+  the anchor, and the section is accurate under its own title.
+
+- **Second acceptance criterion is NOT ticked.** It asks the non-goals section to record that a
+  third transport is not coming — and that section does not exist yet; writing it is
+  [B-11](B-11-non-goals.md). Creating it here would be doing B-11's work under B-12's number. The
+  criterion is carried over: B-11 has the sentence to add.
+- **Ordering found and fixed:** [B-03](B-03-input-beyond-text.md)'s body said to settle this item
+  first and its `blocked_by` did not say so, so the picking rule would have taken B-03 next and
+  adapted every new input type twice. The field now says what the prose always said.

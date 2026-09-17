@@ -5,7 +5,7 @@ status: open
 priority: P1
 size: M
 stage: stage-0-input-model
-blocked_by: [B-01]
+blocked_by: [B-01, B-12]
 ---
 
 # B-03 — Input is a text message or a callback, so no wizard can ask for a photo
@@ -29,8 +29,11 @@ dispatcher cannot see that the user answered at all.
   dispatchers, which is the one thing a transport-agnostic core is for. It may still be worth having
   *as well*, for what telek does not model.
 - Not covered: sending media. That is an effect, and effects already have a place to grow.
-- **Cost note.** Every input type has to be adapted twice while there are two transports — see
-  [B-12](B-12-one-transport.md), which is the reason to settle that first.
+- **Blocked by [B-12](B-12-one-transport.md), and that is now in the frontmatter rather than only
+  here.** Every input type has to be adapted, tested and documented once per transport, so settling
+  which transports get new work is the difference between paying that cost once and twice. The prose
+  said "settle that first" from the start; the field did not, so the picking rule would have taken
+  this item first and paid twice.
 
 - AC: a wizard step asks for a photo, receives it, and can reach the file through telek's own types
   without naming a transport type in the dispatcher.
