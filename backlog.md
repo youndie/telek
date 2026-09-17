@@ -61,7 +61,7 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 | [B-06](docs/backlog/B-06-github-release.md) `[ ]` | Tag the release and put the notes where a stranger looks for them | P1 | XS | B-05 |
 | [B-07](docs/backlog/B-07-real-bot-in-production.md) `[ ]` | A bot that is not a sample: telek in production, as a native binary on :ktg | P1 | L | B-05 |
 | [B-10](docs/backlog/B-10-readme-first-example.md) `[ ]` | The first README example is stringly typed, in a type-safe toolkit | P1 | S | - |
-| [B-12](docs/backlog/B-12-one-transport.md) `[ ]` | Name :ktg the transport and put :telegram into maintenance | P1 | S | - |
+| [B-12](docs/backlog/B-12-one-transport.md) `[~]` | Name :ktg the transport and put :telegram into maintenance | P1 | S | - |
 | [B-08](docs/backlog/B-08-state-slot.md) `[ ]` | StateSlot: a bot with a user profile has nowhere to put it | P2 | M | - |
 | [B-09](docs/backlog/B-09-effect-result-correlation.md) `[ ]` | onEffectResults cannot say which result came from which effect | P2 | S/M | - |
 | [B-11](docs/backlog/B-11-non-goals.md) `[ ]` | Write down the non-goals, because the unwritten ones get re-litigated | P2 | XS | - |

@@ -1,7 +1,7 @@
 ---
 id: B-12
 title: "Name :ktg the transport and put :telegram into maintenance"
-status: open
+status: wip
 priority: P1
 size: S
 stage: stage-4-positioning
