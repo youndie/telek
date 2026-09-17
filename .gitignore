@@ -44,3 +44,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# The consumer acceptance project builds outside the root build; its output is not ours to track.
+ci/consumer/build/
+ci/consumer/.gradle/
