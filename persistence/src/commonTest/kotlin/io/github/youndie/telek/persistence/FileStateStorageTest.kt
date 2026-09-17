@@ -1,6 +1,8 @@
 package io.github.youndie.telek.persistence
 
 import io.github.youndie.telek.ConversationKey
+import io.github.youndie.telek.TelekLogLevel
+import io.github.youndie.telek.TelekLogger
 import kotlinx.coroutines.test.runTest
 import okio.IOException
 import okio.Path
@@ -21,7 +23,22 @@ class FileStateStorageTest {
     private val fs = FakeFileSystem()
     private val dir: Path = "/state".toPath()
 
-    private fun storage(at: Path = dir) = stateStorageOf<PersistenceTestState>(at, fileSystem = fs)
+    private fun storage(
+        at: Path = dir,
+        logger: TelekLogger = TelekLogger.NoOp,
+    ) = stateStorageOf<PersistenceTestState>(at, logger = logger, fileSystem = fs)
+
+    /** Records warnings only. `log` is the interface's one abstract member; warn/error delegate to it. */
+    private fun recording(into: MutableList<String>) =
+        object : TelekLogger {
+            override fun log(
+                level: TelekLogLevel,
+                message: String,
+                error: Throwable?,
+            ) {
+                if (level == TelekLogLevel.WARN) into += message
+            }
+        }
 
     private fun writeRaw(
         path: Path,
@@ -89,6 +106,61 @@ class FileStateStorageTest {
 
             assertNull(storage.load(alice))
             assertEquals(PersistenceTestState.Waiting(22), storage.load(bob))
+        }
+
+    // B-02: the upgrade case. A file written before conversations were keyed by ConversationKey is
+    // named after the chat alone, which is what a chat key still writes — so under the per-user
+    // default it is simply not found. `null` is correct; being quiet about it is not.
+    @Test
+    fun `a superseded chat-keyed file is not loaded under a per-user key - and is named in a warning`() =
+        runTest {
+            val warnings = mutableListOf<String>()
+            val storage = storage(logger = recording(warnings))
+            storage.save(ConversationKey.chat(-100), PersistenceTestState.Waiting(7))
+
+            val loaded = storage.load(ConversationKey.chatAndUser(-100, 11))
+
+            assertNull(loaded)
+            assertEquals(1, warnings.size)
+            assertTrue(warnings.single().contains("-100.json"), warnings.single())
+        }
+
+    @Test
+    fun `the superseded file is left on disk and still reads back under a chat key`() =
+        runTest {
+            val storage = storage()
+            storage.save(ConversationKey.chat(-100), PersistenceTestState.Waiting(7))
+
+            storage.load(ConversationKey.chatAndUser(-100, 11))
+
+            // Not migrated and not deleted: the documented fallback has to actually work.
+            assertTrue(fs.exists(dir / "-100.json"))
+            assertEquals(PersistenceTestState.Waiting(7), storage.load(ConversationKey.chat(-100)))
+        }
+
+    // The control. Without it the assertion above passes just as well for a storage that warns on
+    // every miss, which would make the warning noise rather than a signal.
+    @Test
+    fun `a genuinely new conversation is silent`() =
+        runTest {
+            val warnings = mutableListOf<String>()
+            val storage = storage(logger = recording(warnings))
+
+            assertNull(storage.load(ConversationKey.chatAndUser(-100, 11)))
+
+            assertEquals(emptyList(), warnings)
+        }
+
+    @Test
+    fun `a miss on a chat key is silent - because that key is the old shape itself`() =
+        runTest {
+            val warnings = mutableListOf<String>()
+            val storage = storage(logger = recording(warnings))
+            storage.save(ConversationKey.chat(-100), PersistenceTestState.Waiting(7))
+
+            assertNull(storage.load(ConversationKey.chat(-999)))
+
+            assertEquals(emptyList(), warnings)
         }
 
     @Test

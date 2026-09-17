@@ -36,6 +36,12 @@ under `Keying.PerChat`, and is **not** found under the new default: those conver
 empty. For a bot mid-flow that means the flow restarts; drain before upgrading, or pass
 `Keying.PerChat` and move deliberately.
 
+Nothing is migrated and nothing is deleted — but it is not silent either. When a per-user key finds
+no file and the chat-keyed file it supersedes is sitting right there, `FileStateStorage` logs a
+warning naming that path, because `null` at that interface is indistinguishable from a first-time
+user and an upgrade is otherwise invisible. Set a `logger` on the storage to see it; the default is
+`TelekLogger.NoOp`, which says nothing by design.
+
 ---
 
 ## 0.3.0
