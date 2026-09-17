@@ -21,4 +21,23 @@
     "github>youndie/sborka",
     "github>youndie/sborka:automerge-harness",
   ],
+
+  packageRules: [
+    // RETROFIT IS NOT OURS TO UPGRADE. telek names no retrofit type anywhere -- `:telegram` declares
+    // the dependency only because kotlin-telegram-bot needs it at runtime, and that library's own
+    // POM (10.0.0) pins `com.squareup.retrofit2:retrofit:2.12.0`. Raising it here makes Gradle
+    // resolve the higher version and run somebody else's library against a major it was not built
+    // against.
+    //
+    // Nothing in this build would notice. The dependency is `implementation` and unused in source,
+    // so no compilation fails, and telek has no test that exercises kotlin-telegram-bot at runtime
+    // -- a green check on such a bump measures nothing. Renovate proposed v3 and it was green.
+    //
+    // So the version follows kotlin-telegram-bot, by hand, when kotlin-telegram-bot moves. If that
+    // ever stops being true, the fix is to delete this rule, not to edit the number under it.
+    {
+      matchPackageNames: ["com.squareup.retrofit2:retrofit"],
+      enabled: false,
+    },
+  ],
 }
