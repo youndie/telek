@@ -48,6 +48,11 @@ jobs:
           test -d docs/backlog
           python3 scripts/backlog_index.py --check
 
+      # TelekLogger's documentation lists what a bot loses by leaving the default NoOp in place,
+      # and says how many there are. That is a hand-written list beside a growing set: the seventh
+      # logger call anybody adds makes it wrong, and nothing about adding one would say so.
+      - run: python3 scripts/diagnostics_documented.py
+
       # A number that was free when the branch was cut but has been taken on the base since. The
       # refspec is explicit because `git fetch origin main` moves FETCH_HEAD and creates no
       # remote-tracking ref. Pull requests only — a push has no base to compare against.
