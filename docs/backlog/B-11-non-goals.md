@@ -1,7 +1,7 @@
 ---
 id: B-11
 title: "Write down the non-goals, because the unwritten ones get re-litigated"
-status: open
+status: wip
 priority: P2
 size: XS
 stage: stage-4-positioning
