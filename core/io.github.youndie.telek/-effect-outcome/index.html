@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>EffectExecutor</title>
+    <title>EffectOutcome</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -90,28 +90,62 @@
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" data-page-type="classlike" id="content" pageids="core::io.github.youndie.telek/EffectExecutor///PointingToDeclaration//1239919082">
-  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">io.github.youndie.telek</a><span class="delimiter">/</span><span class="current">EffectExecutor</span></div>
+<div class="main-content" data-page-type="classlike" id="content" pageids="core::io.github.youndie.telek/EffectOutcome///PointingToDeclaration//1239919082">
+  <div class="breadcrumbs"><a href="../../index.html">core</a><span class="delimiter">/</span><a href="../index.html">io.github.youndie.telek</a><span class="delimiter">/</span><span class="current">EffectOutcome</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>Effect</span><wbr><span><span>Executor</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">EffectExecutor</a></div><h4 class="tableheader">Inheritors</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-effect-executor-impl/index.html">EffectExecutorImpl</a></div></span></div><div></div></div></div></div></div></div>
+    <h1 class="cover"><span>Effect</span><wbr><span><span>Outcome</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">EffectOutcome</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>effect<span class="token operator">: </span><a href="../-effect/index.html">Effect</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>result<span class="token operator">: </span><a href="../-effect-result/index.html">EffectResult</a></span></span><span class="token punctuation">)</span></div><p class="paragraph">An <a href="../-effect/index.html">Effect</a> and what running it produced.</p><p class="paragraph">The pairing lives here rather than as a field on <a href="../-effect-result/index.html">EffectResult</a> because <a href="../-effect-success/index.html">EffectSuccess</a> is an <code class="lang-kotlin">object</code> — there is one of it, shared by every effect that succeeded, so it has nowhere to put "which effect". Pairing at the boundary also leaves every existing <a href="../-effect-result/index.html">EffectResult</a> implementation, transport ones included, exactly as it was.</p><p class="paragraph">Why it exists at all: <a href="../-state-dispatcher/on-effect-results.html">StateDispatcher.onEffectResults</a> used to receive a bare list of results, and nothing connected it to the list of effects that produced them — not an index, not an id. A dispatcher that sent two messages and needed the id of the <i>first</i> had to assume the two lists line up positionally. That assumption is correct until somebody adds an effect to the transition, and then it is silently wrong: the dispatcher edits the wrong message, and no test that asserts on a single effect can see it.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
-      <div data-togglable="FUNCTION">
-        <h2 class="tableheader">Functions</h2>
-        <div class="table"><a data-name="-157028706%2FFunctions%2F1239919082" anchor-label="execute" id="-157028706%2FFunctions%2F1239919082" data-filterable-set=":core/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-271390934%2FConstructors%2F1239919082" anchor-label="EffectOutcome" id="-271390934%2FConstructors%2F1239919082" data-filterable-set=":core/commonMain"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="execute.html"><span><span>execute</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-157028706%2FFunctions%2F1239919082"></span>
+                  <div><a href="-effect-outcome.html"><span>Effect</span><wbr><span><span>Outcome</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-271390934%2FConstructors%2F1239919082"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">suspend </span><span class="token keyword">fun </span><a href="execute.html"><span class="token function">execute</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">effects<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-effect/index.html">Effect</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">dispatchAsync<span class="token operator">: </span><span class="token punctuation">(</span>key<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token punctuation">, </span>work<span class="token operator">: </span><span class="token keyword">suspend </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="../-event/index.html">Event</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-effect-outcome/index.html">EffectOutcome</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Runs <a href="execute.html">effects</a> and returns one <a href="../-effect-outcome/index.html">EffectOutcome</a> per <i>synchronous</i> effect, in order, each carrying the effect it came from — see <a href="../-effect-outcome/index.html">EffectOutcome</a> for why the pairing is here and not on <a href="../-effect-result/index.html">EffectResult</a>. An effect registered as async (see <a href="../-effect-registry/register-async.html">EffectRegistry.registerAsync</a>) produces no <a href="../-effect-result/index.html">EffectResult</a> here — instead, <a href="execute.html">dispatchAsync</a> is called with the effect's <a href="../-debounced/debounce-key.html">Debounced.debounceKey</a> (or <code class="lang-kotlin">null</code> if it isn't <a href="../-debounced/index.html">Debounced</a>) and a suspend block that runs that handler and returns its <a href="../-event/index.html">Event</a>; the caller (telek's <code class="lang-kotlin">Telek</code>) is responsible for actually launching that block somewhere that outlives this <a href="execute.html">execute</a> call, for cancelling a previous same-key launch first, and for routing a non-null <a href="../-event/index.html">Event</a> back into the FSM. <a href="execute.html">dispatchAsync</a> is expected to be fire-and-forget from this method's perspective.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">effect<span class="token operator">: </span><a href="../-effect/index.html">Effect</a><span class="token punctuation">, </span></span><span class="parameter ">result<span class="token operator">: </span><a href="../-effect-result/index.html">EffectResult</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="79418576%2FProperties%2F1239919082" anchor-label="effect" id="79418576%2FProperties%2F1239919082" data-filterable-set=":core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="effect.html"><span><span>effect</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="79418576%2FProperties%2F1239919082"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="effect.html">effect</a><span class="token operator">: </span><a href="../-effect/index.html">Effect</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1037695940%2FProperties%2F1239919082" anchor-label="result" id="1037695940%2FProperties%2F1239919082" data-filterable-set=":core/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":core/commonMain" data-filterable-set=":core/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="result.html"><span><span>result</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1037695940%2FProperties%2F1239919082"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":core/commonMain"><div class="symbol monospace"><span class="token keyword">val </span><a href="result.html">result</a><span class="token operator">: </span><a href="../-effect-result/index.html">EffectResult</a></div></div></div>
                 </div>
               </div>
             </div>
