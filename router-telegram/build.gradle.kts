@@ -15,7 +15,8 @@ kotlin {
 dependencies {
     api(projects.router)
     implementation(projects.core)
-    implementation(projects.telegram)
+    // `api`: the one function here is an extension on `:telegram`'s `RowBuilder`.
+    api(projects.telegram)
     implementation(libs.kotlinTelegramBot)
 
     testImplementation(kotlin("test"))

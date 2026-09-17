@@ -1,7 +1,7 @@
 ---
 id: B-18
 title: "Published modules hide, behind implementation, the types their own API names"
-status: open
+status: done
 priority: P1
 size: S
 stage: stage-1-release
@@ -50,3 +50,35 @@ not hit, because that consumer does not construct a `Telek`.
   says they should — read off the metadata, not off the build file.
 - Anchors: `core/build.gradle.kts`, `router/build.gradle.kts`, `persistence/build.gradle.kts`,
   `testing/build.gradle.kts`.
+
+## Iteration 1 — 2026-09-17
+
+Done, and **wider than the table above**, because the table was what the consumer had hit rather
+than what existed. Checking the other modules while fixing these three found the same one-word
+defect in four more, including the sharpest case of all: `:ktg` — the transport telek tells people
+to use — hid ktgbotapi behind `implementation` while `KtgContextSource(bot: TelegramBot)` and
+`BehaviourContext.connect(…)` put ktgbotapi's types in its own signatures. Fixing three of seven
+instances of one defect would have been shipping a half-fix, so all seven moved:
+
+| Module | Now `api` | Because its own API names |
+|---|---|---|
+| `core` | kotlinx-coroutines-core | `Telek(scope: CoroutineScope, …)` |
+| `router` | `core`, kotlinx-serialization-core | `Callback.isRouteOf(…)`; consumers write `@Serializable` routes |
+| `persistence` | `core`, kotlinx-serialization-core | `StateStorage<S : State>`; consumers write `@Serializable` states |
+| `ktg` | `core`, tgbotapi | `KtgContextSource(bot: TelegramBot)`, `BehaviourContext.connect(…)` |
+| `telegram` | `core`, kotlin-telegram-bot | `Dispatcher.connect(…)`, `TelegramContextSource.provide(bot: Bot)` |
+| `router-ktg` | `ktg` | its one function is an extension on `:ktg`'s `RowBuilder` |
+| `router-telegram` | `telegram` | the same, over `:telegram`'s |
+
+- **The formats stay `implementation`,** as the item said they should:
+  `kotlinx-serialization-json` and `-properties` are how `:persistence` and `:router` encode, and a
+  consumer never names either. It is `-core` that carries `@Serializable`, so `-core` is what the
+  catalogue gained and what got promoted.
+- **Verified through the metadata, not the build file**, which is what the second criterion asked
+  for: the locally published `.module` of each of the seven now lists exactly the table's right-hand
+  column in `jvmApiElements`, and nothing else beyond `kotlin-stdlib`.
+- **And verified through the consumer, which is the point.** `ci/consumer` now declares **no
+  `kotlinx` dependency of its own at all** — the workaround this item was filed for is deleted — and
+  it constructs a `Telek` with its own `CoroutineScope`, which it previously could not name. Cold
+  cache, aimed at the locally published artefacts through `-Ptelek.repo`, native binary linked and
+  run, exit 0.

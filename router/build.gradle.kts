@@ -33,7 +33,12 @@ kotlin {
         commonMain.dependencies {
             // No kotlin("reflect") any more: @RouteContext is read off the generated
             // SerialDescriptor instead of via KClass.annotations — see RouteUtils.getRouteContext.
-            implementation(projects.core)
+            // `api`: `Callback.isRouteOf(…)` is an extension on a `:core` type, and every
+            // `Route` a consumer writes must be `@Serializable` — so both are types this module
+            // demands of its callers rather than uses privately. The properties FORMAT stays
+            // `implementation`: nobody names it.
+            api(projects.core)
+            api(libs.kotlinxSerializationCore)
             implementation(libs.kotlinxSerializationProperties)
             implementation(libs.kotlinxCoroutines)
             implementation(libs.atomicfu)

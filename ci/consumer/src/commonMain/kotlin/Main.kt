@@ -16,6 +16,7 @@ import io.github.youndie.telek.Message
 import io.github.youndie.telek.Photo
 import io.github.youndie.telek.State
 import io.github.youndie.telek.StateDispatcher
+import io.github.youndie.telek.Telek
 import io.github.youndie.telek.TransitionResult
 import io.github.youndie.telek.asCommand
 import io.github.youndie.telek.noTransition
@@ -24,7 +25,10 @@ import io.github.youndie.telek.router.Route
 import io.github.youndie.telek.router.RouteContext
 import io.github.youndie.telek.router.isRouteOf
 import io.github.youndie.telek.router.routes
+import io.github.youndie.telek.testing.RecordingEffectExecutor
 import io.github.youndie.telek.transition
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.Serializable
 import okio.Path.Companion.toPath
 
@@ -137,6 +141,17 @@ fun main() {
 
     // :persistence resolves and constructs on every target.
     stateStorageOf<PassportState>(dir = "./state".toPath())
+
+    // B-18's other half: `Telek`'s constructor takes a CoroutineScope, and until :core exposed
+    // kotlinx-coroutines as `api` a consumer could not name the type it was being asked for.
+    // Nothing here declares a coroutines dependency -- if this line compiles, :core carries it.
+    val telek =
+        Telek(
+            scope = CoroutineScope(Dispatchers.Default),
+            dispatchers = listOf(dispatcher),
+            effectExecutor = RecordingEffectExecutor(),
+        )
+    telek.onInput(alice, Message(-100, "/passport ABC-123"))
 
     println("telek consumer: resolved and exercised the published artefacts")
 }
