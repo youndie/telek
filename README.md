@@ -57,8 +57,9 @@ module metadata; nothing changes for JVM consumers.
 
 ### 💬 Usage with Telegram bot
 
-*telek* integrates seamlessly with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot)  
-Each **StateDispatcher** describes one conversational flow — for example, a multistep wizard
+*telek* integrates with [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI) through
+`:ktg`, the transport this example is written against. Each **StateDispatcher** describes one
+conversational flow — for example, a multistep wizard
 
 Below is a simple dispatcher handling a confirmation dialog. The two buttons are **routes** — a
 route is a type, so the compiler keeps the button and the branch that handles it in step; rename one
@@ -181,7 +182,54 @@ This example shows how *telek* lets you:
 
 ### 🚀 Initialization
 
-below is a minimal setup example using a parent coroutine scope, and interceptors.
+Below is a minimal setup.
+
+```kotlin
+val bot = telegramBot("telegram token")
+val contextSource = KtgContextSource(bot)
+
+val telek = Telek(
+    dispatchers = listOf(ExampleDispatcher()),
+    effectExecutor = ktgEffectExecutor(contextSource),
+)
+
+bot.buildBehaviourWithLongPolling {
+    connect(telek, contextSource)
+}.join()
+```
+
+`KtgContextSource` is what lets the effect executor reach the bot. ktgbotapi hands its `TelegramBot`
+out up front, so `KtgContextSource(bot)` usually resolves immediately; the deferred form
+(`KtgContextSource()` + `provide(bot)`) is there for wiring built before the bot exists.
+
+`connect()` is an extension on ktgbotapi's `BehaviourContext`. It subscribes text, data callbacks,
+photos, documents, contacts and locations, maps them to telek `Input`s and keys them per person per
+chat — see [What a conversation is keyed by](#-what-a-conversation-is-keyed-by). It answers each
+handled callback query by default so Telegram stops the client's spinner; pass
+`answerCallbackQueries = false` if a dispatcher answers with its own text or alert. A callback query
+with no message attached (an inline-mode one) cannot be keyed and is ignored.
+
+Both `EffectExecutor.execute` and every `EffectHandler.handle` are `suspend` — handlers run on a
+dedicated I/O dispatcher, off whatever dispatcher your chats' transitions run on, so a slow Telegram
+API call for one chat never blocks another chat's turn.
+
+
+<a id="-using-ktgbotapi-instead"></a>
+
+### 🤖 The same on kotlin-telegram-bot
+
+> The heading above used to read "Using ktgbotapi instead", back when `telegram` was the transport
+> and `ktg` was the alternative. That is the other way round now — see
+> [Installation](#-installation) — so the section swapped sides. The old anchor is kept above so
+> links to it still land here.
+
+`:telegram` is the same integration on
+[kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot), and it is in
+**maintenance**: still built, still tested, still published, not deprecated, and not receiving new
+input types unless somebody asks. Use it if your bot already runs on kotlin-telegram-bot.
+
+The dispatcher above needs no change — only the effect DSL's package
+(`io.github.youndie.telek.ktg.*` → `io.github.youndie.telek.telegram.*`) and the wiring:
 
 ```kotlin
 val contextSource = TelegramContextSource()
@@ -198,64 +246,26 @@ bot {
 }
 ```
 
-`TelegramContextSource` is what lets the effect executor reach the `Bot` instance: `bot { }` only
-hands one out inside a `dispatch { }` handler, so the executor and `connect()` share one source that
-resolves lazily on the first update. Both `EffectExecutor.execute` and every `EffectHandler.handle`
-are `suspend` — handlers run on a dedicated I/O dispatcher, off whatever dispatcher your chats' transitions run
-on, so a slow Telegram API call for one chat never blocks another chat's turn.
-
-
-### 🤖 Using ktgbotapi instead
-
-> This section reads as "instead" for historical reasons: `telegram` was here first. `ktg` is the
-> transport now — see [Installation](#-installation) — and `telegram` is in maintenance.
-
-The `ktg` module is the same integration built
-on [ktgbotapi](https://github.com/InsanusMokrassar/TelegramBotAPI) instead of kotlin-telegram-bot.
-Everything above — dispatchers, transitions, `sendMessage` / `editMessage` / `editMarkup`, the text
-and inline-keyboard DSLs — reads identically; only the imports change
-(`io.github.youndie.telek.telegram.*` → `io.github.youndie.telek.ktg.*`) and the types they produce
-are ktgbotapi's (`InlineKeyboardMarkup`, `TelegramBot`).
-
-```kotlin
-val bot = telegramBot("telegram token")
-val contextSource = KtgContextSource(bot)
-
-val telek = Telek(
-    dispatchers = listOf(ExampleDispatcher()),
-    effectExecutor = ktgEffectExecutor(contextSource),
-)
-
-bot.buildBehaviourWithLongPolling {
-    connect(telek, contextSource)
-}.join()
-```
-
-`connect()` is an extension on ktgbotapi's `BehaviourContext`: it subscribes `onText` and
-`onDataCallbackQuery`, maps them to telek `Message` / `Callback` inputs keyed by `chatId`, and hands
-the `TelegramBot` to the shared `KtgContextSource`. It answers each handled callback query by default
-so Telegram stops the client's spinner — pass `answerCallbackQueries = false` if a dispatcher answers
-with its own text or alert. Callback queries with no message attached (inline-mode ones) can't be
-keyed by `chatId` and are ignored.
-
-Unlike kotlin-telegram-bot, ktgbotapi hands out its `TelegramBot` up front, so `KtgContextSource(bot)`
-usually resolves immediately; the deferred form (`KtgContextSource()` + `provide(bot)`) is still there
-for wiring built before the bot exists.
+`TelegramContextSource` resolves lazily rather than up front: `bot { }` only hands out its `Bot`
+inside a `dispatch { }` handler, so the executor and `connect()` share one source that resolves on
+the first update.
 
 Differences worth knowing:
 
-* Effect handler interfaces are `KtgEffectHandler` / `KtgAsyncEffectHandler`, taking ktgbotapi's
-  `TelegramBot` rather than kotlin-telegram-bot's `Bot`; the marker interface for effects is
-  `KtgEffect`.
-* ktgbotapi reports API failures by throwing rather than returning a result type, so the built-in
-  handlers don't return a failure result of their own — the exception reaches `EffectExecutorImpl`,
-  which logs it and turns it into an `EffectFailed` that reaches `TelekInterceptor.onError`.
-* `ContentMessage<TextContent>.asTelekInput()`, `DataCallbackQuery.asTelekInput()` and
-  `Message.telekChatId` are public, so a bot wiring its own updates (webhooks, a custom
-  `FlowsUpdatesFilter`) can reuse the mapping without going through `connect()`.
+* Effect handler interfaces are `TelegramEffectHandler` / `TelegramAsyncEffectHandler`, taking
+  kotlin-telegram-bot's `Bot`; on `:ktg` they are `KtgEffectHandler` / `KtgAsyncEffectHandler`
+  taking ktgbotapi's `TelegramBot`, and the effect marker is `KtgEffect` rather than
+  `TelegramEffect`.
+* kotlin-telegram-bot returns a result type where ktgbotapi throws, so the two transports' built-in
+  handlers arrive at `EffectFailed` by different routes — the outcome a dispatcher sees is the same.
+* `:telegram` and `:router-telegram` are **JVM-only**, because kotlin-telegram-bot is. They are the
+  two modules a native Linux binary cannot contain.
+* The router equivalent is `router-telegram` — the same `RowBuilder.callback(name, route)`
+  extension, over `io.github.youndie.telek.telegram.RowBuilder`.
 
-The router equivalent is `router-ktg` — same `RowBuilder.callback(name, route)` extension, over
-`io.github.youndie.telek.ktg.RowBuilder`.
+On `:ktg`, `ContentMessage<TextContent>.asTelekInput()` and the other adapters are public, so a bot
+wiring its own updates (webhooks, a custom `FlowsUpdatesFilter`) can reuse the mapping without going
+through `connect()`.
 
 
 ### 📥 What an input can be

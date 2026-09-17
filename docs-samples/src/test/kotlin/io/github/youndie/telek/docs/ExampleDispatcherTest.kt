@@ -2,8 +2,8 @@
 package io.github.youndie.telek.docs
 
 import io.github.youndie.telek.Callback
+import io.github.youndie.telek.ktg.effect.SendMessageEffect
 import io.github.youndie.telek.router.RouteUtils
-import io.github.youndie.telek.telegram.effect.SendMessageEffect
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

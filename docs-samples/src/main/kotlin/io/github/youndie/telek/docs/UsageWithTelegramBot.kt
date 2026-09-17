@@ -7,14 +7,14 @@ import io.github.youndie.telek.Message
 import io.github.youndie.telek.State
 import io.github.youndie.telek.StateDispatcher
 import io.github.youndie.telek.TransitionResult
+import io.github.youndie.telek.ktg.editMarkup
+import io.github.youndie.telek.ktg.sendMessage
 import io.github.youndie.telek.noTransition
 import io.github.youndie.telek.router.Route
 import io.github.youndie.telek.router.RouteContext
 import io.github.youndie.telek.router.callback
 import io.github.youndie.telek.router.isRouteOf
 import io.github.youndie.telek.router.routes
-import io.github.youndie.telek.telegram.editMarkup
-import io.github.youndie.telek.telegram.sendMessage
 import io.github.youndie.telek.transition
 import kotlinx.serialization.Serializable
 

@@ -1,7 +1,7 @@
 ---
 id: B-15
 title: "The first worked example is written against the transport in maintenance"
-status: open
+status: done
 priority: P2
 size: S
 stage: stage-4-positioning
@@ -33,3 +33,25 @@ one. Whichever they copy, the README contradicted itself first.
 - AC: the test beside it ([B-10](B-10-readme-first-example.md)) still runs, since it is about the
   transition and not about the transport.
 - Anchors: `README.md`, `docs-samples/src/main/kotlin/io/github/youndie/telek/docs/UsageWithTelegramBot.kt`.
+
+## Iteration 1 — 2026-09-17
+
+Done. The worked example and the wiring that runs it are on `:ktg`; kotlin-telegram-bot keeps a
+section of its own, which is what maintenance means — a module that still compiles, still has a
+sample, and is not where a newcomer starts.
+
+- **The headings were "not covered" by this item and one of them had to move anyway.** "Using
+  ktgbotapi instead" described the transport that is now the default, so leaving it would have been
+  the same contradiction one section lower. It reads "The same on kotlin-telegram-bot" now, with an
+  explicit `<a id="-using-ktgbotapi-instead">` above it so existing links still land there — which
+  is the concern [B-12](B-12-one-transport.md) had when it declined to rename anything, answered
+  rather than inherited.
+- **A duplicate went with it.** `KtgExampleDispatcher` in `:docs-samples` was a copy of the worked
+  example for the ktg section — and [B-10](B-10-readme-first-example.md) never reached it, so it
+  still matched callbacks with `callback(text =, data =)` and a raw string. The example *is* the ktg
+  one now, so the copy is gone rather than fixed twice.
+- **Verified by mutation, and the first attempt measured the wrong gate.** Putting the example back
+  on the `:telegram` DSL first failed `ktlintMainSourceSetCheck` on import ordering, which says
+  nothing about transports. Running `:docs-samples:test` directly fails both README tests with
+  `NoSuchElementException: List is empty` — the test filters for `:ktg`'s `SendMessageEffect` and
+  finds none. That is the check that actually binds the sample to the transport.
