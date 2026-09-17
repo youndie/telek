@@ -67,12 +67,43 @@ public open class FileStateStorage<T : State>(
             )
             runCatching {
                 val file = dir / "${key.storageId}.json"
-                if (!fileSystem.exists(file)) return@withContext null
+                if (!fileSystem.exists(file)) {
+                    warnIfSupersededFileExists(key)
+                    return@withContext null
+                }
                 json.decodeFromString(serializer, fileSystem.read(file) { readUtf8() })
             }.onFailure {
                 logger.error("Failed to load $key: ${it.message}", it)
             }.getOrNull()
         }
+
+    /**
+     * The one moment at which an upgrade is visible, so it is the one moment worth speaking at.
+     *
+     * Before conversations were keyed by [ConversationKey] they were keyed by the chat alone, and
+     * that is still exactly what a chat key writes — `<chatId>.json`. A bot that upgrades and takes
+     * the new per-user default therefore asks for `<chatId>.<userId>.json`, does not find it, and
+     * gets `null` — which is indistinguishable from a first-time user, because at the level of this
+     * interface it *is* `null` either way. That silence is the whole defect: a person mid-wizard
+     * looks to the bot like someone who has never written to it.
+     *
+     * So: nothing is migrated, nothing is deleted, and the file that would have been loaded under
+     * the old key is named out loud once. Costs one `exists` on a path that is normally absent, and
+     * only for keys that carry a user.
+     */
+    private fun warnIfSupersededFileExists(key: ConversationKey) {
+        if (key.userId == null) return
+
+        val superseded = dir / "${ConversationKey.chat(key.chatId).storageId}.json"
+        if (!fileSystem.exists(superseded)) return
+
+        logger.warn(
+            "No stored state for $key, but $superseded exists. That file was written when a " +
+                "conversation was keyed by its chat alone; it is NOT loaded and NOT deleted, and " +
+                "this conversation starts empty. Pass Keying.PerChat to go on reading it, or " +
+                "remove it once the flow it holds no longer matters.",
+        )
+    }
 
     override suspend fun delete(key: ConversationKey) {
         withContext(telekIoDispatcher) {
