@@ -144,3 +144,38 @@ dispatches recognises it instead of rediscovering it.
 
 So AC 3 — `README.md` no longer naming Reposilite — now means: Central for the coordinates, JitPack
 kept and kept explained. Not Reposilite.
+
+## Deferred — 2026-09-17
+
+**Not yet, by the owner's decision.** Choice 3 of the three above. Nothing here expires: snapshots
+go on publishing to Reposilite (`0.4.0.71` is there), and `README.md` goes on saying truthfully
+where the artifacts are. The asymmetry is the whole argument — a version on Central cannot be
+withdrawn, a postponement can be ended any morning.
+
+What keeps accruing while it waits is not a deadline but the thing this item opens with: the
+library has no external consumers, so [B-07](B-07-real-bot-in-production.md)'s argument about what
+a real consumer finds stays theoretical. That is a cost, and it is not an urgent one.
+
+**The `:telegram` half is reopened, and the section above it is wrong in its emphasis.** It answered
+"will Central accept it", and checking says probably yes: the
+[publishing requirements](https://central.sonatype.org/publish/requirements/) are javadoc and
+sources, checksums, PGP signatures and POM metadata; of dependencies they say only "strongly
+recommend you include the correct dependencies", and they discourage `<repositories>` in a POM,
+which Gradle does not emit anyway. No documented check that a dependency resolves from Central.
+Re-verified alongside it: kotlin-telegram-bot is on Central under no coordinate at all — a search
+for it returns nothing.
+
+But acceptance was the wrong question. **A library on Central that cannot be built without adding a
+third-party repository is bad citizenship, and in places where dependencies outside Central are
+disallowed by policy it is not usable at all.** That argument does not care what the validator does.
+
+So there is a third option, dismissed too quickly above: **drop `io.github.youndie.sborka.publish`
+from `:telegram` and `:router-telegram`.** Then everything published resolves from Central alone —
+`:core`, `:ktg`, `:router`, `:router-ktg`, `:persistence`, `:testing` — and those two stop being
+published anywhere, snapshots included. The cost is not compatibility, because nothing outside this
+account consumes them; the cost is that it is a decision about the module's future. `:ktg` is the
+recommended transport and `:telegram` is in maintenance, so the decision is smaller than it sounds,
+but it is not this item's to make.
+
+One thing that is settled either way: if `:telegram` is published, the README's JitPack block stays
+and stays explained. That part of the earlier section stands.

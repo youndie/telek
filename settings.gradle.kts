@@ -29,9 +29,6 @@ plugins {
 dependencyResolutionManagement {
     @Suppress("UnstableApiUsage")
     repositories {
-        // JitPack, filtered. An unfiltered repository takes part in resolving EVERY dependency, and
-        // when it is unreachable Gradle disables it and fails everything that had not resolved
-        // earlier in the list — artifacts that are perfectly fine included.
         // JitPack, filtered to the groups it actually answers for. An unfiltered repository takes
         // part in resolving EVERY dependency, and when it is unreachable Gradle disables it and fails
         // everything that had not resolved earlier in the list — artifacts that are perfectly fine
