@@ -41,6 +41,10 @@ public enum class EffectFailurePolicy {
  * (kotlin-telegram-bot's client) — this keeps them off whatever dispatcher [Telek]'s per-chat
  * workers run on. Async handlers (see [AsyncEffectHandler]) are handed to the caller-supplied
  * `dispatchAsync` as-is; where they actually run is up to the caller.
+ *
+ * @param logger defaults to [TelekLogger.NoOp], which discards everything. A synchronous handler's
+ * failure also reaches [TelekInterceptor.onError]; **an [AsyncEffectHandler]'s does not** — with
+ * the default logger it is reported nowhere at all. See [TelekLogger].
  */
 public class EffectExecutorImpl(
     private val effectRegistry: EffectRegistry,

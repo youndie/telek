@@ -59,10 +59,10 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 | [B-06](docs/backlog/B-06-github-release.md) `[ ]` | Tag the release and put the notes where a stranger looks for them | P1 | XS | B-05 |
 | [B-07](docs/backlog/B-07-real-bot-in-production.md) `[ ]` | A bot that is not a sample: telek in production, as a native binary on :ktg | P1 | L | B-05 |
 | [B-08](docs/backlog/B-08-state-slot.md) `[ ]` | StateSlot: a bot with a user profile has nowhere to put it | P2 | M | B-07 |
-| [B-14](docs/backlog/B-14-diagnostics-are-off-by-default.md) `[~]` | Every diagnostic the library emits is off by default, because the logger is NoOp | P2 | S | - |
 | [B-15](docs/backlog/B-15-first-example-uses-the-maintenance-transport.md) `[ ]` | The first worked example is written against the transport in maintenance | P2 | S | - |
+| [B-16](docs/backlog/B-16-async-effect-failure-never-reaches-the-interceptor.md) `[ ]` | An async effect that throws reaches no interceptor, only the logger | P2 | S | - |
 
-## Closed (9)
+## Closed (10)
 
 **Settle the input model**
 
@@ -75,6 +75,7 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 
 - [B-09](docs/backlog/B-09-effect-result-correlation.md) `[x]` - onEffectResults cannot say which result came from which effect
 - [B-13](docs/backlog/B-13-async-result-races-input.md) `[-]` - Auto-cancelling an async result when new input arrives
+- [B-14](docs/backlog/B-14-diagnostics-are-off-by-default.md) `[x]` - Every diagnostic the library emits is off by default, because the logger is NoOp
 
 **Why this, and not the two that exist**
 

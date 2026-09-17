@@ -7,6 +7,11 @@ import io.github.youndie.telek.EffectRegistry
 import io.github.youndie.telek.TelekLogger
 import io.github.youndie.telek.ktg.KtgContextSource
 
+/**
+ * @param logger defaults to [TelekLogger.NoOp], which discards everything. Three of telek's six
+ * diagnostics are reported nowhere else — see [TelekLogger] for the list and for what each one
+ * looks like when nobody hears it.
+ */
 public fun ktgEffectExecutor(
     contextSource: KtgContextSource,
     effectRegistry: EffectRegistry = defaultEffectRegistry(),

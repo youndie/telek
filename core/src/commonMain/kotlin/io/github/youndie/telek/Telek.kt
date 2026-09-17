@@ -8,6 +8,11 @@ import kotlin.reflect.KClass
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
+/**
+ * @param logger defaults to [TelekLogger.NoOp], which discards everything. Three of telek's six
+ * diagnostics are reported nowhere else — see [TelekLogger] for the list and for what each one
+ * looks like when nobody hears it.
+ */
 public class Telek(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default),
     private val userStateStore: UserStateStore = DefaultUserStateStore(),
