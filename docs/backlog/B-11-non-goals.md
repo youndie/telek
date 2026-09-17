@@ -1,7 +1,7 @@
 ---
 id: B-11
 title: "Write down the non-goals, because the unwritten ones get re-litigated"
-status: open
+status: done
 priority: P2
 size: XS
 stage: stage-4-positioning
@@ -31,3 +31,28 @@ contributor, including by the author six months later, and each time it is argue
 
 - AC: `README.md` has a non-goals section, and each entry states the reason, not just the refusal.
 - Anchors: `README.md`, `core/build.gradle.kts`.
+
+## Iteration 1 — 2026-09-17
+
+Done, as a `What telek is not` section at the end of `README.md` — five entries, each with its
+reason rather than its verdict, because the audience for a non-goal is the person about to propose
+it and what they need is the argument.
+
+Four came from the item; the fifth is [B-13](B-13-async-result-races-input.md), the implicit
+async-cancellation proposal that was filed as dropped. It belongs here for exactly the reason this
+item exists: a refusal that lives only in a closed backlog entry gets re-proposed by anyone who has
+not read the backlog, which is everyone.
+
+- **The `:telegram` entry carries B-12's sentence**, which that item left open when it could not
+  write into a section that did not exist yet. B-12's second acceptance criterion is now satisfiable
+  and is satisfied here.
+- **Two factual claims in the section were checked rather than asserted.** "Nothing in `:core`
+  imports a Telegram type" — grepped, and it is true. The JS exclusion's reason is stated inline
+  (it would force an `expect`/`actual` for `Dispatchers.IO`) instead of pointing a reader at
+  `core/build.gradle.kts`, which is where it was written and where nobody reading a README will go.
+- **Found, not fixed, and worth a decision rather than an item:** the README's own tagline says
+  telek is for "Telegram bots, wizard-flows, and other **interactive systems**", and the fourth
+  non-goal declines to sell exactly that. The non-goal is worded to be true anyway — it distinguishes
+  the *property* (the core is transport-agnostic, and that is real) from the *product* (adapters and
+  a general runtime, which is not on offer). The tagline is positioning and belongs to the
+  repository's owner, so it is left alone and named here instead of quietly rewritten.
