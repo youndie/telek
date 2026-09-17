@@ -24,6 +24,11 @@ dependencies {
     implementation(projects.routerTelegram)
     implementation(projects.routerKtg)
 
+    // The README's first example ships a test beside it, and that test is the claim the example
+    // exists to make -- a transition is a pure function, so it is checked without Telegram. Here it
+    // is compiled AND run by `./gradlew build`, which is a stronger promise than "it compiles".
+    testImplementation(kotlin("test"))
+
     implementation(libs.kotlinxCoroutines)
     implementation(libs.kotlinxSerializationJson)
     implementation(libs.kotlinTelegramBot)
