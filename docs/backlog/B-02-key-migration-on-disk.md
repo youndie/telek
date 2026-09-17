@@ -1,7 +1,7 @@
 ---
 id: B-02
 title: "FileStateStorage names each file after the key, so changing the key rewrites the disk"
-status: wip
+status: done
 priority: P1
 size: S/M
 stage: stage-0-input-model
@@ -35,3 +35,30 @@ for it. A file that is no longer found reads as a user who lost their place mid-
 - Anchors: `persistence/src/commonMain/kotlin/io/github/youndie/telek/persistence/FileStateStorage.kt`,
   `persistence/src/commonMain/kotlin/io/github/youndie/telek/persistence/PersistableUserStateStoreImpl.kt`,
   `RELEASE_NOTES.md`.
+
+## Iteration 1 — 2026-09-17
+
+Done, and the choice was the documented break rather than a migration on read — for the reason the
+item gives, sharpened by what [B-01](B-01-conversation-key.md) turned up: a chat key's file name is
+byte-identical to what every earlier version wrote, so `Keying.PerChat` is not a consolation prize
+but a working fallback that reads the old directory exactly as before. Migrating on read would
+rewrite files under new names to buy something a one-line configuration change already buys.
+
+The second acceptance criterion carried the actual work. `load` returning `null` for "superseded
+file, not found under this key" and for "nobody has ever written here" is the same `null`, and the
+upgrade is invisible at every other moment. So `FileStateStorage` now checks, on a miss for a key
+that carries a user, whether the chat-keyed file it supersedes exists, and names that path in a
+warning. Nothing is migrated, nothing is deleted.
+
+- **Verified against a mutation:** removing the call makes exactly one test fail — the one that
+  asserts the warning. The two silence controls (a genuinely new conversation, and a miss on a
+  chat key) pass with or without it, which is the point of having them: they show the warning is
+  conditional rather than emitted on every miss.
+- **The residual gap, and it is not this item's to close:** the warning goes to `TelekLogger`,
+  whose default is `NoOp`. A bot that configures no logger is still silent. That is a property of
+  the whole library rather than of this storage — the dropped-input warning and failed-effect
+  reporting have it too — so it is filed as [B-14](B-14-diagnostics-are-off-by-default.md) and
+  said plainly in `RELEASE_NOTES.md` instead of being quietly fixed here.
+- **Where it ran:** the WSL box was unreachable for this iteration (mutagen's beta connection
+  timed out during banner exchange), so the full multi-target build ran on CI rather than there;
+  `:persistence:jvmTest` ran locally, 25 tests, for the mutation check.
