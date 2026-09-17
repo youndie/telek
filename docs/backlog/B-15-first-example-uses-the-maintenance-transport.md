@@ -1,7 +1,7 @@
 ---
 id: B-15
 title: "The first worked example is written against the transport in maintenance"
-status: open
+status: wip
 priority: P2
 size: S
 stage: stage-4-positioning
