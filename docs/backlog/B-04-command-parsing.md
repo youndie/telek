@@ -1,7 +1,7 @@
 ---
 id: B-04
 title: "/cmd@botname and /cmd with an argument reach no dispatcher"
-status: open
+status: wip
 priority: P1
 size: S
 stage: stage-0-input-model
