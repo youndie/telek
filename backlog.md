@@ -58,13 +58,13 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 | [B-05](docs/backlog/B-05-maven-central.md) `[?]` | Publish to Maven Central — after the breaking changes, not before | P0 | S | B-01, B-03 |
 | [B-06](docs/backlog/B-06-github-release.md) `[ ]` | Tag the release and put the notes where a stranger looks for them | P1 | XS | B-05 |
 | [B-07](docs/backlog/B-07-real-bot-in-production.md) `[ ]` | A bot that is not a sample: telek in production, as a native binary on :ktg | P1 | L | B-05 |
-| [B-10](docs/backlog/B-10-readme-first-example.md) `[~]` | The first README example is stringly typed, in a type-safe toolkit | P1 | S | - |
 | [B-08](docs/backlog/B-08-state-slot.md) `[ ]` | StateSlot: a bot with a user profile has nowhere to put it | P2 | M | - |
 | [B-09](docs/backlog/B-09-effect-result-correlation.md) `[ ]` | onEffectResults cannot say which result came from which effect | P2 | S/M | - |
 | [B-11](docs/backlog/B-11-non-goals.md) `[ ]` | Write down the non-goals, because the unwritten ones get re-litigated | P2 | XS | - |
 | [B-14](docs/backlog/B-14-diagnostics-are-off-by-default.md) `[ ]` | Every diagnostic the library emits is off by default, because the logger is NoOp | P2 | S | - |
+| [B-15](docs/backlog/B-15-first-example-uses-the-maintenance-transport.md) `[ ]` | The first worked example is written against the transport in maintenance | P2 | S | - |
 
-## Closed (6)
+## Closed (7)
 
 **Settle the input model**
 
@@ -79,6 +79,7 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 
 **Why this, and not the two that exist**
 
+- [B-10](docs/backlog/B-10-readme-first-example.md) `[x]` - The first README example is stringly typed, in a type-safe toolkit
 - [B-12](docs/backlog/B-12-one-transport.md) `[x]` - Name :ktg the transport and put :telegram into maintenance
 
 <!-- END INDEX -->

@@ -8,9 +8,15 @@ import io.github.youndie.telek.State
 import io.github.youndie.telek.StateDispatcher
 import io.github.youndie.telek.TransitionResult
 import io.github.youndie.telek.noTransition
+import io.github.youndie.telek.router.Route
+import io.github.youndie.telek.router.RouteContext
+import io.github.youndie.telek.router.callback
+import io.github.youndie.telek.router.isRouteOf
+import io.github.youndie.telek.router.routes
 import io.github.youndie.telek.telegram.editMarkup
 import io.github.youndie.telek.telegram.sendMessage
 import io.github.youndie.telek.transition
+import kotlinx.serialization.Serializable
 
 sealed class ExampleState : State {
     data class WaitingString(
@@ -24,6 +30,22 @@ sealed class ExampleState : State {
 
     data object Done : ExampleState()
 }
+
+// The two buttons this flow can produce. A route is a type, so the compiler is what keeps the
+// button and the branch that handles it in step -- rename one and the other stops compiling.
+@RouteContext(scope = "example", action = "confirm")
+@Serializable
+class ExampleConfirm : Route
+
+@RouteContext(scope = "example", action = "cancel")
+@Serializable
+class ExampleCancel : Route
+
+val exampleRoutes =
+    routes {
+        register<ExampleConfirm>()
+        register<ExampleCancel>()
+    }
 
 // Dispatcher that manages the conversation flow (FSM) for the 'example' command
 class ExampleDispatcher : StateDispatcher<ExampleState>() {
@@ -42,24 +64,18 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
             // If waiting for a string, and receive a message input from user
             is ExampleState.WaitingString if (input is Message) -> {
                 transition {
-                    // Move to Confirming state, keep number, save input string
                     newState =
                         ExampleState.Confirming(
                             number = state.number,
                             string = input.text,
                         )
-                    // Send confirmation message with inline keyboard (Confirm/Cancel)
                     sendMessage(
                         input.chatId,
-                        message = {
-                            row {
-                                text("Confirm?")
-                            }
-                        },
+                        message = { row { text("Confirm?") } },
                         keyboard = {
                             row {
-                                callback(text = "Confirm", data = "example_confirm")
-                                callback(text = "Cancel", data = "example_cancel")
+                                callback(name = "Confirm", route = ExampleConfirm())
+                                callback(name = "Cancel", route = ExampleCancel())
                             }
                         },
                     )
@@ -69,12 +85,9 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
             // If in Confirming state and receive a callback from the inline keyboard
             is ExampleState.Confirming if (input is Callback) -> {
                 transition {
-                    // Move to Done state
                     newState = ExampleState.Done
-                    // Remove inline keyboard from message
                     editMarkup(input.chatId, input.messageId, null)
-                    // Respond with confirmation or cancellation based on callback data
-                    if (input.data.contains("example_confirm")) {
+                    if (input.isRouteOf<ExampleConfirm>(exampleRoutes)) {
                         sendMessage(input.chatId, "confirmed")
                     } else {
                         sendMessage(input.chatId, "canceled")

@@ -60,9 +60,25 @@ module metadata; nothing changes for JVM consumers.
 *telek* integrates seamlessly with [kotlin-telegram-bot](https://github.com/kotlin-telegram-bot/kotlin-telegram-bot)  
 Each **StateDispatcher** describes one conversational flow — for example, a multistep wizard
 
-Below is a simple dispatcher handling a confirmation dialog:
+Below is a simple dispatcher handling a confirmation dialog. The two buttons are **routes** — a
+route is a type, so the compiler keeps the button and the branch that handles it in step; rename one
+and the other stops compiling. See [Router module](#-router-module) for what else routes carry.
 
 ```kotlin
+// The two buttons this flow can produce
+@RouteContext(scope = "example", action = "confirm")
+@Serializable
+class ExampleConfirm : Route
+
+@RouteContext(scope = "example", action = "cancel")
+@Serializable
+class ExampleCancel : Route
+
+val exampleRoutes = routes {
+    register<ExampleConfirm>()
+    register<ExampleCancel>()
+}
+
 // Dispatcher that manages the conversation flow (FSM) for the 'example' command
 class ExampleDispatcher : StateDispatcher<ExampleState>() {
     // The command that starts this dispatcher flow
@@ -94,8 +110,8 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                         },
                         keyboard = {
                             row {
-                                callback(text = "Confirm", data = "example_confirm")
-                                callback(text = "Cancel", data = "example_cancel")
+                                callback(name = "Confirm", route = ExampleConfirm())
+                                callback(name = "Cancel", route = ExampleCancel())
                             }
                         },
                     )
@@ -108,8 +124,8 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
                     newState = ExampleState.Done
                     // Remove inline keyboard from message
                     editMarkup(input.chatId, input.messageId, null)
-                    // Respond with confirmation or cancellation based on callback data
-                    if (input.data.contains("example_confirm")) {
+                    // Respond with confirmation or cancellation based on which route it was
+                    if (input.isRouteOf<ExampleConfirm>(exampleRoutes)) {
                         sendMessage(input.chatId, "confirmed")
                     } else {
                         sendMessage(input.chatId, "canceled")
@@ -122,12 +138,45 @@ class ExampleDispatcher : StateDispatcher<ExampleState>() {
 }
 ```
 
+And here is the whole of what testing it takes. A transition is a pure function of state and
+input — no bot, no network, no coroutine:
+
+```kotlin
+class ExampleDispatcherTest {
+    private val dispatcher = ExampleDispatcher()
+
+    private fun answer(route: Route) = dispatcher.transition(
+        state = ExampleState.Confirming(number = 1, string = "hello"),
+        input = Callback(chatId = 42, messageId = 7, data = RouteUtils.encodeRouteDynamic(route)),
+    )
+
+    @Test
+    fun `confirming ends the flow and says so`() {
+        val result = answer(ExampleConfirm())
+
+        assertEquals(ExampleState.Done, result.newState)
+        assertEquals("confirmed", result.effects.filterIsInstance<SendMessageEffect>().single().text)
+    }
+
+    // The state is Done either way, so asserting only on it would pass with the two routes
+    // swapped. The reply is the only thing that tells them apart.
+    @Test
+    fun `cancelling ends the flow and says the other thing`() {
+        val result = answer(ExampleCancel())
+
+        assertEquals(ExampleState.Done, result.newState)
+        assertEquals("canceled", result.effects.filterIsInstance<SendMessageEffect>().single().text)
+    }
+}
+```
+
 This example shows how *telek* lets you:
 
 * 🧩 Define a finite-state flow per user
 * 💬 Send messages and inline keyboards declaratively
 * 🔁 Handle message and callback inputs as FSM transitions
-* ✨ Keep logic pure and testable — no Telegram API calls inside your states
+* ✨ Keep logic pure and testable — the test above is the whole of it, and it runs in this
+  repository on every build
 
 
 ### 🚀 Initialization

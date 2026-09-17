@@ -1,7 +1,7 @@
 ---
 id: B-10
 title: "The first README example is stringly typed, in a type-safe toolkit"
-status: wip
+status: done
 priority: P1
 size: S
 stage: stage-4-positioning
@@ -38,3 +38,23 @@ hundred lines below, where a reader who already closed the tab will not reach it
 - AC: a test of that example's transition appears in the same section, and compiles in
   `:docs-samples`.
 - Anchors: `README.md`, `docs-samples/`, `router/`, `router-ktg/`.
+
+## Iteration 1 — 2026-09-17
+
+Done. The first example's buttons are routes (`ExampleConfirm` / `ExampleCancel`), the branch that
+handles them is `input.isRouteOf<ExampleConfirm>(exampleRoutes)` rather than a substring match, and
+the reason is stated where a reader meets it: a route is a type, so the compiler keeps the button and
+its branch in step — rename one and the other stops compiling.
+
+- **The test beside it is not merely compiled, it runs.** `:docs-samples` had no test source set;
+  it has one now, so `./gradlew build` executes the README's test rather than only type-checking it.
+  That is a stronger promise than the acceptance criterion asked for, and it is the cheaper one to
+  keep honest — a sample that compiles can still assert nothing.
+- The test is deliberately four lines and touches no bot, no network and no coroutine, because that
+  is the claim the example exists to make and the one neither ktgbotapi's FSM nor a KSP wizard
+  generator makes for you.
+- **Found, not fixed here:** the example is still written against `:telegram`, which
+  [B-12](B-12-one-transport.md) put into maintenance two screens earlier in the same file. A reader
+  is told to depend on `:ktg` and then shown a page of `:telegram` code. That is a defect B-12
+  introduced and this item is not scoped to it, so it is filed as
+  [B-15](B-15-first-example-uses-the-maintenance-transport.md) rather than folded in.
