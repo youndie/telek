@@ -15,7 +15,7 @@ kotlinTelegramBot = "10.0.0"
 retrofit = "2.12.0"
 tgbotapi = "35.1.0"
 atomicfu = "0.33.0"
-okio = "3.18.1"
+okio = "3.18.2"
 mockk = "1.14.11"
 
 [libraries]
