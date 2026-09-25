@@ -3,7 +3,7 @@
 # The shared build conventions, and the compiler with them: the `wip` catalog this release
 # publishes carries `kotlin`, so there is no Kotlin version in this file to drift from the rest
 # of the portfolio.
-sborka = "0.4.0.87"
+sborka = "0.4.0.92"
 dokka = "2.2.0"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerializationJson = "1.11.0"
