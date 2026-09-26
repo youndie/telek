@@ -32,5 +32,8 @@ kotlin {
         commonMain.dependencies {
             api(projects.core)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlinxCoroutinesTest)
+        }
     }
 }
