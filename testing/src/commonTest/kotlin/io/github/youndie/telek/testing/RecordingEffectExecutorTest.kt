@@ -36,6 +36,6 @@ class RecordingEffectExecutorTest {
         }
 
     private companion object {
-        const val WRITES = 20_000
+        const val WRITES = 2_000
     }
 }

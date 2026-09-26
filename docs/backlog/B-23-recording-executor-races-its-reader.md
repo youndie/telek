@@ -30,9 +30,11 @@ binary could not start.
 - Rejected: a `Mutex`. The properties are plain getters, not `suspend`, and making them suspend would
   break every call site for a critical section that never suspends.
 
-- AC: `RecordingEffectExecutorTest` — a writer on `Dispatchers.Default` records 20 000 batches while
+- AC: `RecordingEffectExecutorTest` — a writer on `Dispatchers.Default` records 2 000 batches while
   the test reads both properties in a loop — passes on jvm and linuxX64, and **fails with
   `ConcurrentModificationException` on linuxX64 against the previous implementation** (checked by
-  swapping the old file back in).
+  swapping the old file back in: 8 runs of 8). Kept small on purpose — every read copies the whole
+  journal, so the test is quadratic in its size, and 20 000 ran into `runTest`'s timeout on the CI
+  runner.
 - Anchors: `testing/src/commonMain/kotlin/io/github/youndie/telek/testing/RecordingEffectExecutor.kt`,
   `testing/src/commonTest/kotlin/io/github/youndie/telek/testing/RecordingEffectExecutorTest.kt`.
