@@ -23,8 +23,11 @@ class RecordingEffectExecutorTest {
                 launch(Dispatchers.Default) {
                     repeat(WRITES) { executor.execute(listOf(Ping, Ping)) { _, _ -> } }
                 }
+            // Bounded as well as tied to the writer: a reader that can only stop when the writer
+            // does turns any stall on a busy runner into a test that never ends.
             withContext(Dispatchers.Default) {
-                while (writer.isActive) {
+                var reads = 0
+                while (writer.isActive && reads++ < MAX_READS) {
                     executor.effects.size
                     executor.executed.size
                 }
@@ -37,5 +40,6 @@ class RecordingEffectExecutorTest {
 
     private companion object {
         const val WRITES = 2_000
+        const val MAX_READS = 20_000
     }
 }

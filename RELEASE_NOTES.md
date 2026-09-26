@@ -44,8 +44,8 @@ maintenance is not stranded at the old ceiling.
 **`RecordingEffectExecutor` can be read while it records.** Its journal was a plain list written on
 the chat worker's thread and read on the test's, and a harness polling `effects` to see whether a
 bot had gone quiet got `ConcurrentModificationException`. Both properties now return a snapshot
-taken under a lock — which also means `executed` is no longer a live view: read the property again
-rather than keeping the list.
+of an immutable journal — which also means `executed` is no longer a live view: read the property
+again rather than keeping the list.
 
 **Documented: state that outlives a flow.** No API change. `UserStateStore`'s KDoc now says what the
 store owns and what a `FinalState` and a `clear` mean — *this flow is over*, not *this person is
