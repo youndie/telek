@@ -7,6 +7,8 @@ import io.github.youndie.telek.EffectOutcome
 import io.github.youndie.telek.EffectResult
 import io.github.youndie.telek.EffectSuccess
 import io.github.youndie.telek.Event
+import kotlinx.atomicfu.locks.SynchronizedObject
+import kotlinx.atomicfu.locks.synchronized
 
 /**
  * An [EffectExecutor] that records every batch of effects it was asked to run instead of
@@ -20,21 +22,29 @@ import io.github.youndie.telek.Event
  * [Event] instead of `null` for that effect — it's handed to `dispatchAsync` exactly as a real
  * `EffectExecutorImpl` would (along with the effect's [Debounced.debounceKey], if it has one), so
  * `Telek` routes the resulting event — and any debounce cancellation — back into the FSM for real.
+ *
+ * [executed] and [effects] are snapshots taken under a lock, safe to read from the test's thread
+ * while a chat worker is still recording: that is exactly how a harness waits for a bot to go quiet.
+ * A snapshot does not follow later recordings — read the property again rather than keeping the list.
  */
 public class RecordingEffectExecutor(
     private val resultsFor: (Effect) -> EffectResult = { EffectSuccess },
     private val asyncWorkFor: (Effect) -> (suspend () -> Event?)? = { null },
 ) : EffectExecutor {
+    // Written by whichever thread runs the chat worker, read by the test's own. A plain list here
+    // threw `ConcurrentModificationException` out of `effects` on both platforms.
+    private val lock = SynchronizedObject()
     private val _executed = mutableListOf<List<Effect>>()
-    public val executed: List<List<Effect>> get() = _executed
 
-    public val effects: List<Effect> get() = _executed.flatten()
+    public val executed: List<List<Effect>> get() = synchronized(lock) { _executed.toList() }
+
+    public val effects: List<Effect> get() = synchronized(lock) { _executed.flatten() }
 
     override suspend fun execute(
         effects: List<Effect>,
         dispatchAsync: (key: Any?, work: suspend () -> Event?) -> Unit,
     ): List<EffectOutcome> {
-        _executed += effects
+        synchronized(lock) { _executed += effects.toList() }
         val results = mutableListOf<EffectOutcome>()
         for (effect in effects) {
             val asyncWork = asyncWorkFor(effect)

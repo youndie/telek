@@ -57,7 +57,7 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 |---|---|---|---|---|
 | [B-21](docs/backlog/B-21-native-binary-claim-uncashed.md) `[ ]` | The README's native-binary claim has never been run | P2 | M | - |
 
-## Closed (21)
+## Closed (22)
 
 **Settle the input model**
 
@@ -78,6 +78,7 @@ that ordering with evidence, and an item it contradicts should be reordered, not
 **A bot that is not a sample**
 
 - [B-07](docs/backlog/B-07-real-bot-in-production.md) `[x]` - A bot that is not a sample: telek in production, as a native binary on :ktg
+- [B-23](docs/backlog/B-23-recording-executor-races-its-reader.md) `[x]` - RecordingEffectExecutor's journal is read and written from two threads without a lock
 
 **The debts that outlived the engine**
 
