@@ -13,6 +13,9 @@ plugins {
 val telekVersion: String = providers.gradleProperty("telek.version").get()
 
 kotlin {
+    // 21, and deliberately not the 25 telek itself now builds with: this is a consumer sitting on
+    // the floor `sborka.jvmFloor` promises, which is where a jar compiled for a newer Java would
+    // fail to load.
     jvmToolchain(21)
 
     jvm {
