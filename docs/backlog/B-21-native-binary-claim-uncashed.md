@@ -26,9 +26,16 @@ file-backed state store on a mounted volume. Those are where a native service ac
 something, and they are invisible to a build.
 
 [B-07](B-07-real-bot-in-production.md) got telek a real consumer and that consumer found real
-defects; its native image is built and published on every change, which keeps the shared code from
-acquiring `java.*` unnoticed. But the deployed workload is the JVM one, behind a manual switch that
-has not been thrown.
+defects. Its native image is built and published **only on a manual dispatch**, and the deployed
+workload is the JVM one, behind a manual switch that has not been thrown. *(Corrected 2026-10-02:
+this said the native image was "built and published on every change", which "keeps the shared code
+from acquiring `java.*` unnoticed". That was true for its first two days; on 2026-08-10, when the
+consumer moved its deployed bot to the JVM build, it took the native image workflow off its push
+trigger and left it on `workflow_dispatch`, which is how it has run since. So nothing on the
+consumer's side now catches its shared code acquiring `java.*` between dispatches. What does run on
+every change is this repository's own: `build.yaml` compiles and links every multiplatform module
+for `linuxX64` and `linuxArm64` on each pull request and each push to main, and runs the `linuxX64`
+tests.)*
 
 - **The decision and its reason.** Cash the claim or stop making it. A capability that is compiled
   but never run is the same shape as a deployed surface nobody calls: it looks like a feature and
@@ -68,8 +75,8 @@ container limit and startup are properties of a bot that is *running*, and a bot
 real Telegram token. Measuring an instance that fails to authenticate would produce a number for an
 idle process that never polls — the shape of a green run where nothing was exercised. So AC 1 and the
 rest of AC 2 need somebody to throw the switch: the native image is built and pushed on dispatch,
-the tag is bumped in the chart automatically, and `bot.native.enabled` is left to a person on
-purpose.
+the same run opens the pull request that bumps its tag in the chart, and `bot.native.enabled` is left
+to a person on purpose.
 
 What that person should watch for, so the run is not wasted: RSS at rest and under a burst of
 updates against the container's limit; time from start to first successful long poll; whether the

@@ -67,6 +67,18 @@ jobs:
             "+refs/heads/$GITHUB_BASE_REF:refs/remotes/origin/$GITHUB_BASE_REF"
           python3 scripts/backlog_index.py --against "origin/$GITHUB_BASE_REF"
 
+      # The snapshot workflow hands proba a list of coordinates to read back after every publish, and
+      # that list sits beside a set that grows by itself: a new module or target is a new coordinate.
+      # This compares the list with every publication the build registers, so proba cannot stay
+      # green over an artifact it never reads. Configuration only, no task of the build runs.
+      # `--no-configuration-cache` because a reused entry skips configuration and the listing with
+      # it; the script then sees nothing and fails rather than passing.
+      - run: |
+          set -o pipefail
+          ./gradlew -q --no-daemon --no-configuration-cache \
+            -I scripts/publications.init.gradle.kts help \
+            | python3 scripts/coordinates_listed.py
+
       # `build` rather than `test ktlintCheck`: the multiplatform modules have no `test` task at all
       # — they have `jvmTest` / `linuxX64Test` / `allTests` — so a bare `test` would silently cover
       # only :telegram and :router-telegram. `build` runs every target's tests, ktlint, and the
