@@ -54,6 +54,11 @@ id across every wizard a user finishes. The two shipped stores delete the entry,
 the state is all you keep; a bot with more implements the interface instead of running a second
 store beside it, and gets one writer per conversation rather than two.
 
+**`:persistence` declares `kotlinx-serialization-json` as `api`.** `FileStateStorage.json` is a
+`kotlinx.serialization.json.Json`, and the published metadata did not put that library on a
+consumer's compile classpath, so code touching it failed with "Cannot access class". Nothing breaks;
+a consumer that added the dependency itself can drop it.
+
 ## 0.4.0
 
 The conversation key, the input model, and the API surface a consumer actually sees. Most of what

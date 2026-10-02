@@ -32,11 +32,15 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // `api`: `StateStorage<S : State>` and `UserStateStore` are `:core` types, and every
-            // `State` a consumer stores must be `@Serializable`. The json FORMAT stays
-            // `implementation`.
+            // `State` a consumer stores must be `@Serializable`.
             api(projects.core)
             api(libs.kotlinxSerializationCore)
-            implementation(libs.kotlinxSerializationJson)
+            // `api` as well, and not by taste: `FileStateStorage.json` is public and its type is
+            // `kotlinx.serialization.json.Json`, so a consumer touching it needs the format on its
+            // compile classpath. B-18 kept the format `implementation` on the premise that no
+            // public signature names it; this one does. proba's first run against telek reported
+            // it as `api-unreachable` (see B-18, 2026-10-02).
+            api(libs.kotlinxSerializationJson)
             implementation(libs.kotlinxCoroutines)
             implementation(libs.atomicfu)
             api(libs.okio)

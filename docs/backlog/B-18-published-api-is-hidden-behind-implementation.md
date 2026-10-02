@@ -82,3 +82,18 @@ instances of one defect would have been shipping a half-fix, so all seven moved:
   it constructs a `Telek` with its own `CoroutineScope`, which it previously could not name. Cold
   cache, aimed at the locally published artefacts through `-Ptelek.repo`, native binary linked and
   run, exit 0.
+
+## Correction — 2026-10-02
+
+**`kotlinx-serialization-json` in `:persistence` is `api` now; "a consumer never names either" was
+wrong for that one.** `FileStateStorage.json` is public, and its type is
+`kotlinx.serialization.json.Json`. proba, run over every published coordinate for the first time
+(against `0.4.0.85`), reported it as `api-unreachable` on `persistence` and `persistence-jvm`: the
+published `jvmApiElements` lists `core`, `kotlinx-serialization-core` and `okio`, so a consumer that
+touches `FileStateStorage.json` gets "Cannot access class" while this build stays green.
+
+Promoted rather than hidden, by this item's own rule — promote exactly what the public API names —
+and because the other fix, making `json` internal, removes public API. If the format should stay out
+of the API after all, that is the change to make instead, with a release note saying what breaks.
+`-properties` in `:router` stays `implementation`: no public signature names it, and proba's run
+found nothing there.
