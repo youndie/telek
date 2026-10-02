@@ -33,6 +33,47 @@ jobs:
       konan-cache: true
       test-results: true
       dokka: true
+      # WHAT A STRANGER GETS, checked after every publish: sborka's `consumer` job runs proba over
+      # each line, with this run's version appended, against the snapshot repository — reading the
+      # metadata back from the server and resolving the coordinate with a JVM consumer build.
+      #
+      # Every publication the build registers, one per line: the root of each multiplatform module,
+      # its jvm / linuxx64 / linuxarm64 targets, and the two JVM-only modules. Derived, not typed:
+      # `scripts/publications.init.gradle.kts` prints the set, and `build.yaml` fails a pull request
+      # whose list and build disagree (`scripts/coordinates_listed.py`) — a new module or target is
+      # a new coordinate, and without that check proba would stay green while never reading it.
+      #
+      # The linuxx64 / linuxarm64 lines are read too, and answer "undetermined" for one check:
+      # proba's consumer build is a JVM project, which no klib variant matches. The checks that read
+      # the metadata and the files still run on them. Linking a native binary against the published
+      # coordinates is `ci/consumer`'s job, by hand.
+      coordinates: |
+        io.github.youndie.telek:core
+        io.github.youndie.telek:core-jvm
+        io.github.youndie.telek:core-linuxarm64
+        io.github.youndie.telek:core-linuxx64
+        io.github.youndie.telek:ktg
+        io.github.youndie.telek:ktg-jvm
+        io.github.youndie.telek:ktg-linuxarm64
+        io.github.youndie.telek:ktg-linuxx64
+        io.github.youndie.telek:persistence
+        io.github.youndie.telek:persistence-jvm
+        io.github.youndie.telek:persistence-linuxarm64
+        io.github.youndie.telek:persistence-linuxx64
+        io.github.youndie.telek:router
+        io.github.youndie.telek:router-jvm
+        io.github.youndie.telek:router-ktg
+        io.github.youndie.telek:router-ktg-jvm
+        io.github.youndie.telek:router-ktg-linuxarm64
+        io.github.youndie.telek:router-ktg-linuxx64
+        io.github.youndie.telek:router-linuxarm64
+        io.github.youndie.telek:router-linuxx64
+        io.github.youndie.telek:router-telegram
+        io.github.youndie.telek:telegram
+        io.github.youndie.telek:testing
+        io.github.youndie.telek:testing-jvm
+        io.github.youndie.telek:testing-linuxarm64
+        io.github.youndie.telek:testing-linuxx64
     # Named one by one rather than `secrets: inherit`: this hands them to a workflow in another
     # repository, and the two it needs are the two it gets.
     secrets:

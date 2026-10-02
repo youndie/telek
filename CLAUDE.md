@@ -60,7 +60,7 @@ person, not on work — it keeps the item out of the loop's reach.
 
 ## Guards that are not the build
 
-CI runs three checks over prose, and each exists because something drifted silently:
+CI runs four checks over hand-written lists, and each exists because something drifted silently:
 
 - `scripts/backlog_index.py --check` — the index against the items (`test -d docs/backlog` first,
   because with no directory the script exits 0 and a lost backlog scores as a pass).
@@ -68,6 +68,9 @@ CI runs three checks over prose, and each exists because something drifted silen
   `TelekLogger`'s KDoc states. It counts; it cannot tell whether the descriptions still fit, and it
   has already been green over a stale one.
 - `scripts/kotlin_version_documented.py` — the README's Kotlin badge against `ci/consumer`'s pin.
+- `scripts/coordinates_listed.py` — the `coordinates:` the snapshot workflow hands proba against
+  every publication the build registers (printed by `scripts/publications.init.gradle.kts`; the
+  command is in the script). Configuration only, `--no-configuration-cache` on purpose.
 
 ## Release
 
@@ -77,6 +80,14 @@ Version head in `gradle.properties`; CI appends its run number, so `0.4.0` is a 
 publishing to Maven Central was considered and **dropped** (`docs/backlog/B-05-maven-central.md`
 says why, and what to read first if it is ever reopened). There is no `sborka.central` flag here;
 adding it back is one line and a decision.
+
+Every snapshot publish is followed by sborka's proba job (`consumer` in `publish-wip.yaml`): it reads
+each coordinate listed under `coordinates:` in `publish-telek-snapshot.yaml` back from the snapshot
+repository and resolves it with a JVM consumer build. It is the outside view of metadata and
+resolution; it does not link a native binary — that is still `ci/consumer`, by hand. The list is
+every publication the build registers, one line per module and target; a new module or target is a
+new line there, and `scripts/coordinates_listed.py` fails the pull request that forgets it. The
+native-target lines answer "undetermined" for proba's consumer-build check, which is a JVM project.
 
 Releasing is by hand and small: tag the **published** version (`v0.4.0.72`, not `v0.4.0` — a tag
 spelling a version nobody can resolve points at nothing) and make its GitHub Release body that

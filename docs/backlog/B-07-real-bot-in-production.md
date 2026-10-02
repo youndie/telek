@@ -55,11 +55,13 @@ for, and it paid immediately.
   The same reasoning produced `ci/consumer` (B-17), which then found two more — B-18 and B-19 — and
   those are permanent instrumentation rather than a one-off.
 - **The first criterion is NOT met, and the difference is worth naming rather than rounding off.**
-  It asks for a `linuxX64` binary running in a container. The bot has a native build and publishes a
-  native image on every change — which is what keeps the shared code from quietly acquiring `java.*`,
-  and that is real value — but the deployed workload is the JVM image. The switch between them is a
-  manual flag, and it is off. Checked by looking at what is running, not at what is built: the
-  published native image proves it links, not that it runs.
+  It asks for a `linuxX64` binary running in a container. The bot has a native build and a native
+  image, published on a manual dispatch, but the deployed workload is the JVM image. The switch
+  between them is a manual flag, and it is off. Checked by looking at what is running, not at what is
+  built: the published native image proves it links, not that it runs. *(Corrected 2026-10-02: this
+  said the native image was published "on every change", keeping the shared code from quietly
+  acquiring `java.*`. The consumer took that workflow off its push trigger on 2026-08-10; see
+  [B-21](B-21-native-binary-claim-uncashed.md).)*
 
 So the README's sentence — "a bot can also ship as a native Linux binary" — is still a claim nobody
 has cashed. That is [B-21](B-21-native-binary-claim-uncashed.md), and it is small and specific,
