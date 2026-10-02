@@ -12,7 +12,12 @@ stage: stage-2-dogfood
 `README.md` says a bot "can also ship as a native Linux binary", and the multiplatform half of the
 library exists to make that true: `:core`, `:ktg`, `:router`, `:router-ktg`, `:persistence` and
 `:testing` publish for `linuxX64` and `linuxArm64`, and `ci/consumer` links a native binary against
-the published coordinates on every CI run.
+the published coordinates — when somebody runs it by hand. *(Corrected 2026-10-02: this said "on
+every CI run". No workflow runs `ci/consumer`; `build.yaml` and the publish workflow build only this
+repository's own modules, and the consumer runs as `CLAUDE.md` describes, against a publication
+pointed at with `-Ptelek.repo`. Wiring it into `build.yaml` would cost a publish to a local
+repository plus a second build that links a release binary — the link that once needed `-Xmx4g`
+(B-17) — on every pull request, which is why this note corrects the text instead.)*
 
 What none of that shows is a bot **running** that way. Linking proves the symbols resolve; it says
 nothing about what happens over days — the allocator's RSS against a container limit, a TLS client
@@ -28,9 +33,10 @@ has not been thrown.
 - **The decision and its reason.** Cash the claim or stop making it. A capability that is compiled
   but never run is the same shape as a deployed surface nobody calls: it looks like a feature and
   reports nothing when it stops working.
-- The rejected alternative is a longer `ci/consumer` — running the linked binary in CI for a minute.
-  That is worth having and is not this: a minute finds a startup failure, not a leak, and CI has no
-  container limit worth measuring against.
+- The rejected alternative is a longer `ci/consumer` — running the linked binary in CI for a minute
+  (which would first mean putting `ci/consumer` in CI at all; see above). That is worth having and is
+  not this: a minute finds a startup failure, not a leak, and CI has no container limit worth
+  measuring against.
 - Not covered: making the native build the default anywhere. The point is one run with somebody
   watching, not a migration.
 
