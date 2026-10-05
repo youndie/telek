@@ -15,7 +15,7 @@ jobs:
     # deploy Pages. The one step that needs it is the dokka deploy.
     permissions:
       contents: write
-    uses: youndie/sborka/.github/workflows/publish-wip.yaml@main
+    uses: youndie/sborka/.github/workflows/publish-wip.yaml@v0.5.0.130
     with:
       # `build` rather than `test ktlintCheck`: the multiplatform modules have no `test` task at all
       # (they have `jvmTest` / `linuxX64Test` / `allTests`), so a bare `test` would silently cover
