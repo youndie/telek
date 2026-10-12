@@ -25,13 +25,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: youndie/sborka/.github/actions/setup-kotlin@v0.5.0.130
+      - uses: youndie/sborka/.github/actions/setup-kotlin@v0.5.0.133
         with:
           konan-cache: "true"
 
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.14"
+          python-version: "3.15"
 
       - run: pip install pyyaml
 
