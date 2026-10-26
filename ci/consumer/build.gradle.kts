@@ -2,12 +2,12 @@ plugins {
     // Pinned to what the published metadata says telek was compiled with, because Kotlin metadata
     // compatibility is one-directional: an older compiler cannot read a newer one's classes. A
     // consumer discovering that is the point, so the version is written here rather than inherited.
-    kotlin("multiplatform") version "2.4.20"
+    kotlin("multiplatform") version "2.4.21"
 
     // A consumer always applies the serialization compiler plugin itself -- telek cannot apply it
     // on their behalf, and that part is not a defect. What IS a defect is that the annotation the
     // plugin processes is not on the compile classpath: see the dependency note below.
-    kotlin("plugin.serialization") version "2.4.20"
+    kotlin("plugin.serialization") version "2.4.21"
 }
 
 val telekVersion: String = providers.gradleProperty("telek.version").get()
