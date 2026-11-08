@@ -3,17 +3,17 @@
 # The shared build conventions, and the compiler with them: the `wip` catalog this release
 # publishes carries `kotlin`, so there is no Kotlin version in this file to drift from the rest
 # of the portfolio.
-sborka = "0.4.0.111"
+sborka = "0.5.0.135"
 dokka = "2.2.0"
 kotlinxCoroutines = "1.11.0"
-kotlinxSerializationJson = "1.11.0"
+kotlinxSerializationJson = "1.12.0"
 kotlinTelegramBot = "10.0.0"
 # Follows kotlin-telegram-bot, which pins it in its own POM -- telek names no retrofit type and
 # declares this only so the transport has it at runtime. Renovate is turned off for it in
 # .github/renovate.json5; bump it when kotlinTelegramBot above moves, and check its POM for the
 # number rather than taking the newest.
 retrofit = "2.12.0"
-tgbotapi = "35.1.0"
+tgbotapi = "37.1.0"
 atomicfu = "0.33.0"
 okio = "3.18.2"
 mockk = "1.14.11"
