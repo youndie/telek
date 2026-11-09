@@ -4,7 +4,7 @@
 # publishes carries `kotlin`, so there is no Kotlin version in this file to drift from the rest
 # of the portfolio.
 sborka = "0.5.0.135"
-dokka = "2.2.0"
+dokka = "2.3.0"
 kotlinxCoroutines = "1.11.0"
 kotlinxSerializationJson = "1.12.0"
 kotlinTelegramBot = "10.0.0"
@@ -16,7 +16,7 @@ retrofit = "2.12.0"
 tgbotapi = "37.1.0"
 atomicfu = "0.33.0"
 okio = "3.18.2"
-mockk = "1.14.11"
+mockk = "1.14.12"
 
 [libraries]
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
